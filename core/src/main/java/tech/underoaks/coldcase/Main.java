@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import java.nio.file.Path;
+
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
@@ -17,7 +19,10 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        map = Map.getEmptyMap(10, 10);
+
+        // map = Map.getEmptyMap(10, 10);
+        map = Map.getMap(Path.of("maps/test_plain/map.tiles"));
+
         viewport = new ExtendViewport(800, 800);
     }
 
