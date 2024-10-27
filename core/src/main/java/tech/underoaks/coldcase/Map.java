@@ -1,9 +1,11 @@
 package tech.underoaks.coldcase;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.lang.reflect.InvocationTargetException;
 
 public record Map(
-    Tile[][] groundTiles
+    Tile[][] tileArray
 ) {
     /**
      * Generates a new map without any tiles placed
@@ -12,11 +14,11 @@ public record Map(
      * @param width  Width of the map
      * @return Empty map
      */
-    public Map getEmptyMap(int height, int width) {
+    public static Map getEmptyMap(int height, int width) {
         return getMap(EmptyTile.class, height, width);
     }
 
-    public Map getPlainMap(int height, int width) {
+    public static Map getPlainMap(int height, int width) {
         return getMap(GroundTile.class, height, width);
     }
 
@@ -28,7 +30,7 @@ public record Map(
      * @param width Width of the map
      * @return New Map
      */
-    private Map getMap(Class<? extends  Tile> tile, int height, int width) {
+    private static Map getMap(Class<? extends  Tile> tile, int height, int width) {
         Tile[][] tileArray = new Tile[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -42,4 +44,14 @@ public record Map(
         }
         return new Map(tileArray);
     }
+
+    public void render(SpriteBatch batch) {
+        for (int y = 0; y < tileArray.length; y++) {
+            for (int x = 0; x < tileArray[y].length; x++) {
+                tileArray[y][x].render(batch, x * 32, y * 32);
+            }
+        }
+    }
+
+
 }

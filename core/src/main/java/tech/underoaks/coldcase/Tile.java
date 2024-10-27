@@ -25,4 +25,5 @@ public abstract class Tile {
     public void setTileContent(TileContent tileContent) {
         this.tileContent = tileContent;
     }
+
 }
