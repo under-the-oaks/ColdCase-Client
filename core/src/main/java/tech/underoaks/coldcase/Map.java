@@ -1,12 +1,16 @@
 package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import java.lang.reflect.InvocationTargetException;
 
 public record Map(
     Tile[][] tileArray
 ) {
+
+    static float tileSize = 16;
+
     /**
      * Generates a new map without any tiles placed
      *
@@ -48,9 +52,26 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                tileArray[y][x].render(batch, x * 32, y * 32);
+                float tempX = x * tileSize * -1;
+                float tempY = y * tileSize * -1;
+                Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
+                tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }
         }
+    }
+
+    public Vector2 isoTo2D(Vector2 pt){
+        Vector2 tempPt = new Vector2(0, 0);
+        tempPt.x = (2 * pt.y + pt.x) / 2;
+        tempPt.y = (2 * pt.y - pt.x) / 2;
+        return(tempPt);
+    }
+
+    public Vector2 twoDToIso(Vector2 pt){
+        Vector2 tempPt = new Vector2(0,0);
+        tempPt.x = pt.x - pt.y;
+        tempPt.y = (pt.x + pt.y) / 2;
+        return(tempPt);
     }
 
 
