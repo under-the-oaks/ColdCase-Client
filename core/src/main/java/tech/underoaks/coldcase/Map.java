@@ -14,7 +14,7 @@ public record Map(
         Tile[][] tileArray = new Tile[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                tileArray[y][x] = new VoidTile();
+                tileArray[y][x] = new EmptyTile();
             }
         }
         return new Map(tileArray);
