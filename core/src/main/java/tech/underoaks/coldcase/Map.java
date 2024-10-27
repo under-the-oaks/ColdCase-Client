@@ -3,7 +3,7 @@ package tech.underoaks.coldcase;
 import java.lang.reflect.InvocationTargetException;
 
 public record Map(
-    Tile[][] tileArray
+    Tile[][] groundTiles
 ) {
     /**
      * Generates a new map without any tiles placed

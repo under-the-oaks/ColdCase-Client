@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Tile {
 
+    private TileContent tileContent;
     private Texture texture;
 
     public Tile(Texture texture) {
