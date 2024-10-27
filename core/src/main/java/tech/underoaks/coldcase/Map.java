@@ -7,7 +7,7 @@ public record Map(
      * Generates a new map without any tiles placed
      *
      * @param height Height of the map
-     * @param width Width of the map
+     * @param width  Width of the map
      * @return Empty map
      */
     public Map getEmptyMap(int height, int width) {
