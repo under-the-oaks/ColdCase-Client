@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Tile {
-
     private TileContent tileContent;
     private Texture texture;
 
@@ -17,5 +16,13 @@ public abstract class Tile {
             return;
         }
         batch.draw(texture, x, y);
+    }
+
+    public TileContent getTileContent() {
+        return tileContent;
+    }
+
+    public void setTileContent(TileContent tileContent) {
+        this.tileContent = tileContent;
     }
 }
