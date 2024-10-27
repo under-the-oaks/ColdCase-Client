@@ -16,8 +16,5 @@ public class GroundTile extends Tile {
         super.render(batch);
     }
 
-    
-
-
 
 }
