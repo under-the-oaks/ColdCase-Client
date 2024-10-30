@@ -114,6 +114,13 @@ public record Map(
         return new Map(tileArray);
     }
 
+    /**
+     * Calls the render method of each tile of the map in the correct order and with the correct position in isometric coordinates.
+     * <br><br>
+     * This calls twoDToIso() to convert the 2D coordinates to isometric coordinates
+     *
+     * @param batch SpriteBatch to render the map
+     */
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
@@ -125,6 +132,12 @@ public record Map(
         }
     }
 
+    /**
+     * Converts a point in isometric coordinates to normal 2D coordinates
+     *
+     * @param pt Vector2 Point in isometric Coordinates to convert
+     * @return Converted point as a Vector2
+     */
     public Vector2 isoTo2D(Vector2 pt){
         Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = (2 * pt.y + pt.x) / 2;
@@ -132,6 +145,12 @@ public record Map(
         return(tempPt);
     }
 
+    /**
+     * Converts a point in normal 2D coordinates to isometric coordinates
+     *
+     * @param pt Vector2 Point in normal 2D coordinates to convert
+     * @return Converted point as a Vector2
+     */
     public Vector2 twoDToIso(Vector2 pt){
         Vector2 tempPt = new Vector2(0,0);
         tempPt.x = pt.x - pt.y;
