@@ -2,6 +2,8 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.enums.TileContents;
+import tech.underoaks.coldcase.enums.Tiles;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -40,17 +42,10 @@ public record Map(
 
     public static Map getMap(Path path) {
         List<List<Tile>> tiles = new ArrayList<>();
+        Path tilePath = Path.of(path + "/map.tiles");
+        Path contentPath = Path.of(path + "/map.content");
         try {
-            List<String> lines = Files.readAllLines(path);
-            List<List<Integer>> rawTiles = new ArrayList<>();
-
-            for (int i = 0; i < lines.size(); i++) {
-                String[] split = lines.get(i).split(" ");
-                rawTiles.add(new ArrayList<>());
-                for (String s : split) {
-                    rawTiles.get(i).add(Integer.parseInt(s));
-                }
-            }
+            List<List<Integer>> rawTiles = readMapFile(tilePath);
 
             for (int i = 0; i < rawTiles.size(); i++) {
                 tiles.add(new ArrayList<>());
@@ -58,9 +53,25 @@ public record Map(
                     tiles.get(i).add(Tiles.getNewTileClassByIndex(rawTiles.get(i).get(j)));
                 }
             }
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+
+    try {
+            List<List<Integer>> rawTiles = readMapFile(contentPath);
+
+            for (int i = 0; i < rawTiles.size(); i++) {
+                for (int j = 0; j < rawTiles.get(i).size(); j++) {
+                    int temp = rawTiles.get(i).get(j);
+                    if (temp != 0) {
+                        tiles.get(i).get(j).setTileContent(TileContents.getNewTileClassByIndex(rawTiles.get(i).get(j)));
+                    }
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
 
         // Convert 2D-List to 2D-Array
         Tile[][] tileArray = new Tile[tiles.size()][getMatrixWidth(tiles)];
@@ -69,8 +80,7 @@ public record Map(
                 Tile tile;
                 try {
                     tile = tiles.get(i).get(j);
-                }
-                catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     // If the template is not uniform,
                     // the remaining tiles will be filled up using EmptyTile
                     tile = new EmptyTile();
@@ -80,6 +90,27 @@ public record Map(
         }
 
         return new Map(tileArray);
+    }
+
+    private static List<List<Integer>> readMapFile(Path path) {
+        List<List<Integer>> rawTiles = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(path);
+            System.out.println(lines.size());
+            for (int i = 0; i < lines.size(); i++) {
+                String[] split = lines.get(i).split(" ");
+                rawTiles.add(new ArrayList<>());
+                for (String s : split) {
+                    rawTiles.get(i).add(Integer.parseInt(s));
+                }
+            }
+
+
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return rawTiles;
     }
 
     private static int getMatrixWidth(List<List<Tile>> matrix) {
@@ -138,11 +169,11 @@ public record Map(
      * @param pt Vector2 Point in isometric Coordinates to convert
      * @return Converted point as a Vector2
      */
-    public Vector2 isoTo2D(Vector2 pt){
+    public Vector2 isoTo2D(Vector2 pt) {
         Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = (2 * pt.y + pt.x) / 2;
         tempPt.y = (2 * pt.y - pt.x) / 2;
-        return(tempPt);
+        return (tempPt);
     }
 
     /**
@@ -151,11 +182,11 @@ public record Map(
      * @param pt Vector2 Point in normal 2D coordinates to convert
      * @return Converted point as a Vector2
      */
-    public Vector2 twoDToIso(Vector2 pt){
-        Vector2 tempPt = new Vector2(0,0);
+    public Vector2 twoDToIso(Vector2 pt) {
+        Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = pt.x - pt.y;
         tempPt.y = (pt.x + pt.y) / 2;
-        return(tempPt);
+        return (tempPt);
     }
 
 

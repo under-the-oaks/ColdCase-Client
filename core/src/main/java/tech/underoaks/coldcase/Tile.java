@@ -34,10 +34,14 @@ public abstract class Tile {
      * @param y the y-coordinate for rendering the tile
      */
     public void render(SpriteBatch batch, float x, float y) {
-        if (texture == null) {
-            return;
+        if (texture != null) {
+            batch.draw(texture, x, y);
         }
+
         batch.draw(texture, x, y);
+        if (tileContent != null) {
+            tileContent.render(batch, x, y);
+        }
     }
 
     public TileContent getTileContent() {

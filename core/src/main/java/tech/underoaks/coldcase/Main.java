@@ -19,7 +19,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        map = Map.getMap(Path.of("maps/test_plain/map.tiles"));
+        map = Map.getMap(Path.of("maps/test_plain"));
         viewport = new ExtendViewport(800, 800);
     }
 

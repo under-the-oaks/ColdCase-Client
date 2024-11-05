@@ -1,14 +1,17 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.enums;
+
+import tech.underoaks.coldcase.TileContent;
+import tech.underoaks.coldcase.Wall;
 
 import java.lang.reflect.InvocationTargetException;
 
-public enum Tiles {
-    EMPTY(0, EmptyTile.class), GROUND(1, GroundTile.class);
+public enum TileContents {
+    WALL(1, Wall.class);
 
     private final int index;
-    private final Class<? extends Tile> tileClass;
+    private final Class<? extends TileContent> tileClass;
 
-    Tiles(int index, Class<? extends Tile> tileClass) {
+    TileContents(int index, Class<? extends TileContent> tileClass) {
         this.index = index;
         this.tileClass = tileClass;
     }
@@ -17,11 +20,11 @@ public enum Tiles {
         return index;
     }
 
-    public Class<? extends Tile> getTileClass() {
+    public Class<? extends TileContent> getTileClass() {
         return tileClass;
     }
 
-    public Tile getNewTile() {
+    public TileContent getNewTileContent() {
         try {
             return tileClass.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -30,10 +33,10 @@ public enum Tiles {
         }
     }
 
-    public static Tile getNewTileClassByIndex(int index) {
-        for (Tiles tile : Tiles.values()) {
-            if (tile.getIndex() == index) {
-                return tile.getNewTile();
+    public static TileContent getNewTileClassByIndex(int index) {
+        for (TileContents tileContent : TileContents.values()) {
+            if (tileContent.getIndex() == index) {
+                return tileContent.getNewTileContent();
             }
         }
         throw new IllegalArgumentException("No tile class found for index: " + index);
