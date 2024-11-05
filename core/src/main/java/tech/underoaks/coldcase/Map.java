@@ -124,8 +124,8 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempX = x * tileSize * -1;
-                float tempY = y * tileSize * -1;
+                float tempY = x * tileSize * -1;
+                float tempX = y * tileSize * -1;
                 Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
                 tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }
