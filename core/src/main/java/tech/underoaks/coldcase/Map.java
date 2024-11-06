@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Map(
-    Tile[][] tileArray
+        Tile[][] tileArray
 ) {
 
     static float tileSize = 16;
@@ -40,6 +40,21 @@ public record Map(
         return getGenericMap(GroundTile.class, height, width);
     }
 
+    /**
+     * Generates a new map from a template file
+     * Each template files should be a text file with the following format:
+     * Each line represents a row of the map
+     * Each number represents a tile or tile content
+     * The numbers should be separated by a space
+     * The numbers should be the index of the tile/tileContent in the Tiles/TileContents enum
+     *
+     * @param path Path to the template folder
+     *             The folder should contain two files:
+     *             map.tiles: The file containing the tile layout
+     *             map.content: The file containing the tile content layout
+     *             The files should be in the format described above
+     * @return New Map
+     */
     public static Map getMap(Path path) {
         List<List<Tile>> tiles = new ArrayList<>();
         Path tilePath = Path.of(path + "/map.tiles");
@@ -57,7 +72,7 @@ public record Map(
             System.err.println(e.getMessage());
         }
 
-    try {
+        try {
             List<List<Integer>> rawTiles = readMapFile(contentPath);
 
             for (int i = 0; i < rawTiles.size(); i++) {
@@ -92,6 +107,12 @@ public record Map(
         return new Map(tileArray);
     }
 
+    /**
+     * Reads a map file and returns a 2D List of integers representing the map
+     *
+     * @param path Path to the file
+     * @return 2D List of integers representing the map
+     */
     private static List<List<Integer>> readMapFile(Path path) {
         List<List<Integer>> rawTiles = new ArrayList<>();
         try {

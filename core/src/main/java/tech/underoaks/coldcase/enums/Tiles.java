@@ -3,7 +3,6 @@ package tech.underoaks.coldcase.enums;
 import tech.underoaks.coldcase.EmptyTile;
 import tech.underoaks.coldcase.GroundTile;
 import tech.underoaks.coldcase.Tile;
-import tech.underoaks.coldcase.Wall;
 
 import java.lang.reflect.InvocationTargetException;
 

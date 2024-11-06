@@ -29,12 +29,23 @@ public abstract class TileContent {
         this.isObjectPassable = isObjectPassable;
     }
 
+
+    /**
+     * Renders the tileContent at the specified coordinates using the given {@code SpriteBatch}.
+     * If the tile has no texture, this method renders nothing.
+     *
+     * <p>If the tileContent has a {@code TileContent}, the render method of the content is called.
+     *
+     * @param batch the {@code SpriteBatch} used to render the tileContent
+     * @param x     the x-coordinate for rendering the tile
+     * @param y     the y-coordinate for rendering the tile
+     */
     public void render(SpriteBatch batch, float x, float y) {
         if (texture != null) {
-            batch.draw(texture, x, y+8);
+            batch.draw(texture, x, y + 8);
         }
 
-        if(tileContent != null) {
+        if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
     }
