@@ -163,4 +163,15 @@ public record Map(
     }
 
 
+    public void dispose() {
+        for (Tile[] tiles : tileArray) {
+            for (Tile tile : tiles) {
+                tile.dispose();
+            }
+        }
+    }
+
+    public void updatePlayer(float deltaTime) {
+        //player.update(deltaTime);
+    }
 }

@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.data.tileContent;
 
+import com.badlogic.gdx.graphics.Texture;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
 /**
@@ -17,4 +18,11 @@ import tech.underoaks.coldcase.data.tiles.Tile;
  */
 public abstract class TileContent {
 
+    private Texture texture;
+
+    public void dispose() {
+        if (texture != null) {
+            texture.dispose();
+        }
+    }
 }

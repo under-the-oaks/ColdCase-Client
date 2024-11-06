@@ -49,4 +49,13 @@ public abstract class Tile {
         this.tileContent = tileContent;
     }
 
+    public void dispose() {
+        if (texture != null) {
+            texture.dispose();
+        }
+        if (tileContent != null) {
+            tileContent.dispose();
+        }
+    }
+
 }
