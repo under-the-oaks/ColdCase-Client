@@ -1,4 +1,6 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data.tileContent;
+
+import tech.underoaks.coldcase.data.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

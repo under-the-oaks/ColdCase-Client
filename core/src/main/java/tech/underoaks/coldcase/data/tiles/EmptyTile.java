@@ -1,4 +1,4 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
 

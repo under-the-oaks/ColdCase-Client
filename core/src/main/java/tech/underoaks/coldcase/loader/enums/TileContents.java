@@ -1,7 +1,7 @@
-package tech.underoaks.coldcase.enums;
+package tech.underoaks.coldcase.loader.enums;
 
-import tech.underoaks.coldcase.TileContent;
-import tech.underoaks.coldcase.Wall;
+import tech.underoaks.coldcase.data.tileContent.TileContent;
+import tech.underoaks.coldcase.data.tileContent.Wall;
 
 import java.lang.reflect.InvocationTargetException;
 

@@ -1,8 +1,8 @@
-package tech.underoaks.coldcase.enums;
+package tech.underoaks.coldcase.loader.enums;
 
-import tech.underoaks.coldcase.EmptyTile;
-import tech.underoaks.coldcase.GroundTile;
-import tech.underoaks.coldcase.Tile;
+import tech.underoaks.coldcase.data.tiles.EmptyTile;
+import tech.underoaks.coldcase.data.tiles.GroundTile;
+import tech.underoaks.coldcase.data.tiles.Tile;
 
 import java.lang.reflect.InvocationTargetException;
 

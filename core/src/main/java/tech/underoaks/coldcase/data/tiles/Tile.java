@@ -1,7 +1,8 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import tech.underoaks.coldcase.data.tileContent.TileContent;
 
 /**
  * The {@code Tile} class represents a single tile on the game board.

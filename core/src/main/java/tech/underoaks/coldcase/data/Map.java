@@ -1,9 +1,12 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.enums.TileContents;
-import tech.underoaks.coldcase.enums.Tiles;
+import tech.underoaks.coldcase.loader.enums.Tiles;
+import tech.underoaks.coldcase.data.tiles.EmptyTile;
+import tech.underoaks.coldcase.data.tiles.GroundTile;
+import tech.underoaks.coldcase.data.tiles.Tile;
+import tech.underoaks.coldcase.loader.enums.TileContents;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
