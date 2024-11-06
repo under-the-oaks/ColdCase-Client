@@ -1,4 +1,8 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.loader;
+
+import tech.underoaks.coldcase.data.tiles.EmptyTile;
+import tech.underoaks.coldcase.data.tiles.GroundTile;
+import tech.underoaks.coldcase.data.tiles.Tile;
 
 import java.lang.reflect.InvocationTargetException;
 

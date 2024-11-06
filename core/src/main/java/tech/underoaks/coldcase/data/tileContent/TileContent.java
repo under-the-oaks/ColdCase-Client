@@ -1,4 +1,6 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data.tileContent;
+
+import tech.underoaks.coldcase.data.tiles.Tile;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
