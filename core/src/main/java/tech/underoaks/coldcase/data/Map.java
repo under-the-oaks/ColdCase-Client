@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
-import tech.underoaks.coldcase.data.tiles.GroundTile;
 import tech.underoaks.coldcase.data.tiles.Tile;
 import tech.underoaks.coldcase.loader.enums.TileContents;
 
@@ -18,29 +17,23 @@ import java.util.List;
 public record Map(
         Tile[][] tileArray
 ) {
-
+    /** TODO @MAX JAVADOC */
     static float tileSize = 16;
 
-    /**
-     * Generates a new map without any tiles placed
-     *
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return Empty map
-     */
-    public static Map getEmptyMap(int height, int width) {
-        return getGenericMap(EmptyTile.class, height, width);
+    public Tile getTile(int x, int y) {
+        return tileArray[x][y];
     }
 
-    /**
-     * Generates a new map without any special tiles
-     *
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return Empty map
-     */
-    public static Map getPlainMap(int height, int width) {
-        return getGenericMap(GroundTile.class, height, width);
+    public void setTile(int x, int y, Tile tile) {
+        tileArray[x][y] = tile;
+    }
+
+    public int getWidth() {
+        return tileArray[0].length;
+    }
+
+    public int getHeight() {
+        return tileArray.length;
     }
 
     /**
@@ -179,8 +172,8 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempX = x * tileSize * -1;
-                float tempY = y * tileSize * -1;
+                float tempY = x * tileSize * -1;
+                float tempX = y * tileSize * -1;
                 Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
                 tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }

@@ -19,7 +19,9 @@ import tech.underoaks.coldcase.data.tileContent.TileContent;
  * @see TileContent
  */
 public abstract class Tile {
+    /** The content placed on this Tile */
     private TileContent tileContent;
+
     private Texture texture;
 
     public Tile(Texture texture) {
@@ -54,5 +56,4 @@ public abstract class Tile {
     public void setTileContent(TileContent tileContent) {
         this.tileContent = tileContent;
     }
-
 }

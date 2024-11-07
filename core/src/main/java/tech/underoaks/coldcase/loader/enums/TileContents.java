@@ -1,12 +1,14 @@
 package tech.underoaks.coldcase.loader.enums;
 
+import tech.underoaks.coldcase.TestContent;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tileContent.Wall;
 
 import java.lang.reflect.InvocationTargetException;
 
+/** TODO @YASSINE JAVADOC */
 public enum TileContents {
-    WALL(1, Wall.class);
+    WALL(1, Wall.class), TEST(2, TestContent.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

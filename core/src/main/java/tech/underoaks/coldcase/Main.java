@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.data.Map;
@@ -14,13 +15,16 @@ import java.nio.file.Path;
  */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private Map map;
+    private GameController gameController;
     private ExtendViewport viewport;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        map = Map.getMap(Path.of("maps/test_plain"));
+
+        Map map = Map.getMap(Path.of("maps/test_plain"));
+        gameController = new GameController(map);
+
         viewport = new ExtendViewport(800, 800);
     }
 
@@ -33,8 +37,13 @@ public class Main extends ApplicationAdapter {
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
-        map.render(batch);
-        //batch.draw(textureRegion, 0, 0);
+
+        gameController.getCurrentMap().render(batch);
+        gameController.triggerAction(
+            new Vector2(0, 0),
+            new Vector2(1,2)
+        );
+
         batch.end();
     }
 

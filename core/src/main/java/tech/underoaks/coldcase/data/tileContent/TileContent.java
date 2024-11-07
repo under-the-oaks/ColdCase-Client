@@ -1,9 +1,11 @@
 package tech.underoaks.coldcase.data.tileContent;
 
+import tech.underoaks.coldcase.GameController;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import tech.underoaks.coldcase.enums.VisibilityStates;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
@@ -19,7 +21,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @see Tile
  */
 public abstract class TileContent {
-    private TileContent tileContent;
+    /** Reference to the next TileContent in the stack */
+    protected TileContent tileContent;
+
+    /** The visibility state of this TileContent */
+    protected VisibilityStates visibilityState;
+
     private Texture texture;
 
     private boolean isPlayerPassable;
@@ -51,6 +58,56 @@ public abstract class TileContent {
             tileContent.render(batch, x, y);
         }
     }
+
+    /**
+     * Performs the action associated with this TileContent when interacted with.
+     *
+     * @param controller The GameController managing the interaction.
+     */
+    public abstract void action(GameController controller);
+
+    /**
+     * Updates the state of this TileContent based on interactions.
+     *
+     * @param controller The GameController managing the interaction.
+     */
+    public abstract void update(GameController controller);
+
+    public void setNextContent(TileContent tileContent) {
+        this.tileContent = tileContent;
+    }
+
+    public TileContent getNextContent() {
+        return tileContent;
+    }
+
+    public void pushContent(TileContent tileContent) {
+        if(this.tileContent != null) {
+            this.tileContent.pushContent(tileContent);
+        }
+        else {
+            this.tileContent = tileContent;
+        }
+    }
+
+    public TileContent popContent() {
+        if(this.tileContent == null) {
+            return null;
+        }
+        if(this.tileContent.tileContent == null) {
+            return this.tileContent;
+        }
+        return this.tileContent.popContent();
+    }
+
+    public VisibilityStates getVisibilityState() {
+        return visibilityState;
+    }
+
+    public void setVisibilityState(VisibilityStates visibilityState) {
+        this.visibilityState = visibilityState;
+    }
+
 
     public boolean isObjectPassable() {
         return isObjectPassable;
