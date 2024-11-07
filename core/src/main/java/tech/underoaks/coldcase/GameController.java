@@ -2,6 +2,7 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.data.Map;
+import tech.underoaks.coldcase.data.tileContent.TileContent;
 
 /**
  * Central manager responsible for handling interactions within the game.
@@ -17,11 +18,13 @@ public class GameController {
         this.currentMap = currentMap;
     }
 
-    public void triggerAction(Vector2 position, Vector2 target) {
+    public void triggerAction(Vector2 position, Vector2 targetPos) {
         if(currentSnapshot != null) {
             throw new IllegalStateException("A snapshot is already initialized");
         }
         InteractionChain chain = createInteractionChain();
+
+        // TODO CHAIN OF COMMAND
 
         discardSnapshot();
     }

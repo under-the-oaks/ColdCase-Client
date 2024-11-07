@@ -1,6 +1,6 @@
 package tech.underoaks.coldcase.loader.enums;
 
-import tech.underoaks.coldcase.TestContent;
+import tech.underoaks.coldcase.data.tileContent.TestContent;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tileContent.Wall;
 

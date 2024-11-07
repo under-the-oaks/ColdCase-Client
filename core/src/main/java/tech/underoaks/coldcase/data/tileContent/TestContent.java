@@ -1,7 +1,7 @@
-package tech.underoaks.coldcase;
+package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
-import tech.underoaks.coldcase.data.tileContent.TileContent;
+import tech.underoaks.coldcase.GameController;
 
 public class TestContent extends TileContent {
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_050.png");
