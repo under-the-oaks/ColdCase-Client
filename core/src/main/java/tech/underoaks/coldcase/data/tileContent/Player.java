@@ -3,14 +3,13 @@ package tech.underoaks.coldcase.data.tileContent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Player extends TileContent{
+public class Player extends TileContent {
 
-    private Texture texture;
+    private static final Texture texture = new Texture("./isometric tileset/placholder_player.png");
 
-    public Player(String texturePath) {
-        texture = new Texture(texturePath);
+    public Player() {
+        super(texture, true, false);
     }
 
     public void update(float deltaTime) {
@@ -26,14 +25,6 @@ public class Player extends TileContent{
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             // not implemented - waiting on game Controller
         }
-    }
-
-    public void render(SpriteBatch batch, float x, float y) {
-        batch.draw(texture, x, y);
-    }
-
-    public void dispose() {
-        texture.dispose();
     }
 
 }

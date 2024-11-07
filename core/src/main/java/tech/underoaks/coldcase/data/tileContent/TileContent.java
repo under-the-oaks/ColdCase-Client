@@ -67,4 +67,8 @@ public abstract class TileContent {
     public void setPlayerPassable(boolean playerPassable) {
         isPlayerPassable = playerPassable;
     }
+
+    public void dispose() {
+        texture.dispose();
+    }
 }

@@ -2,6 +2,7 @@ package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.data.tileContent.Player;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
 import tech.underoaks.coldcase.data.tiles.GroundTile;
@@ -16,10 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Map(
-        Tile[][] tileArray
+    Tile[][] tileArray
 ) {
 
-    static float tileSize = 16;
+    static float tileSize = 32;
+
+    static Player player;
 
     /**
      * Generates a new map without any tiles placed
@@ -81,7 +84,16 @@ public record Map(
             for (int i = 0; i < rawTiles.size(); i++) {
                 for (int j = 0; j < rawTiles.get(i).size(); j++) {
                     int temp = rawTiles.get(i).get(j);
-                    if (temp != 0) {
+                    if (temp == 0) {
+                        continue;
+                    } else if (temp == 2) {
+                        try {
+                            player = new Player();
+                        } catch (IllegalArgumentException e) {
+                            System.err.println(e.getMessage());
+                        }
+                        tiles.get(i).get(j).setTileContent(player);
+                    } else {
                         tiles.get(i).get(j).setTileContent(TileContents.getNewTileClassByIndex(rawTiles.get(i).get(j)));
                     }
                 }
@@ -179,8 +191,8 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempX = x * tileSize * -1;
-                float tempY = y * tileSize * -1;
+                float tempX = x * tileSize / 2 * -1;
+                float tempY = y * tileSize / 2 * -1;
                 Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
                 tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }
@@ -214,15 +226,20 @@ public record Map(
     }
 
 
+    /**
+     * Updates the player. This gets called every frame by the Main class.
+     *
+     * @param deltaTime Time since last frame
+     */
+    public void updatePlayer(float deltaTime) {
+        player.update(deltaTime);
+    }
+
     public void dispose() {
         for (Tile[] tiles : tileArray) {
             for (Tile tile : tiles) {
                 tile.dispose();
             }
         }
-    }
-
-    public void updatePlayer(float deltaTime) {
-        //player.update(deltaTime);
     }
 }
