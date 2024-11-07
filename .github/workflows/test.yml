@@ -3,7 +3,7 @@ name: Test Project
 on:
   pull_request:
     branches:
-      - development 
+      - '*'
       
 jobs:
   test:
@@ -34,3 +34,10 @@ jobs:
         
       - name: Run tests
         run: ./gradlew test
+
+      - name: Upload test report
+        if: failure() 
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: core/build/reports/tests/test
