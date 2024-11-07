@@ -18,7 +18,7 @@ import tech.underoaks.coldcase.data.tileContent.TileContent;
  *
  * @see TileContent
  */
-public abstract class Tile {
+public abstract class Tile implements Cloneable {
     /** The content placed on this Tile */
     private TileContent tileContent;
 
@@ -55,5 +55,19 @@ public abstract class Tile {
 
     public void setTileContent(TileContent tileContent) {
         this.tileContent = tileContent;
+    }
+
+    @Override
+    public Tile clone() {
+        try {
+            Tile cloned = (Tile) super.clone();
+            if(this.tileContent != null) {
+                cloned.tileContent = this.tileContent.clone();
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 }

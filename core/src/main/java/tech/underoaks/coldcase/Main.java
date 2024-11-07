@@ -17,6 +17,7 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private GameController gameController;
     private ExtendViewport viewport;
+    private float timeSinceLastLog = 0f;
 
     @Override
     public void create() {
@@ -33,6 +34,14 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         float deltaTime = Gdx.graphics.getDeltaTime();
+        int fps = Gdx.graphics.getFramesPerSecond();
+
+        timeSinceLastLog += deltaTime;
+
+        if (timeSinceLastLog >= 2f) {
+            System.out.println("FPS: " + fps);
+            timeSinceLastLog = 0f;
+        }
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);

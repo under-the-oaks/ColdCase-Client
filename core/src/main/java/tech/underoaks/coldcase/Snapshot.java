@@ -20,7 +20,6 @@ public class Snapshot {
     }
 
     private static Map deepCopyMap(Map originalMap) {
-        // FIXME
-        throw new UnsupportedOperationException("Not supported yet.");
+        return originalMap.deepClone();
     }
 }

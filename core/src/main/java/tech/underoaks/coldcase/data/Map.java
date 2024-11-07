@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Map(
-        Tile[][] tileArray
+    Tile[][] tileArray
 ) {
-    /** TODO @MAX JAVADOC */
+    /**
+     * TODO @MAX JAVADOC
+     */
     static float tileSize = 16;
 
     public Tile getTile(int x, int y) {
@@ -206,5 +208,16 @@ public record Map(
         return (tempPt);
     }
 
+    public Map deepClone() {
+        Tile[][] clonedTileArray = new Tile[tileArray.length][];
 
+        for (int i = 0; i < tileArray.length; i++) {
+            clonedTileArray[i] = new Tile[tileArray[i].length];
+            for (int j = 0; j < tileArray[i].length; j++) {
+                clonedTileArray[i][j] = tileArray[i][j].clone();
+            }
+        }
+
+        return new Map(clonedTileArray);
+    }
 }

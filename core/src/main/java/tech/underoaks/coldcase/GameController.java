@@ -21,9 +21,9 @@ public class GameController {
         if(currentSnapshot != null) {
             throw new IllegalStateException("A snapshot is already initialized");
         }
-        //InteractionChain chain = createInteractionChain();
+        InteractionChain chain = createInteractionChain();
 
-
+        discardSnapshot();
     }
 
     private void createSnapshot() {
@@ -31,7 +31,7 @@ public class GameController {
     }
 
     public void discardSnapshot() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        currentSnapshot = null;
     }
 
     public Map getCurrentMap() {

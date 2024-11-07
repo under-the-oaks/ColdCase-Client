@@ -20,7 +20,7 @@ import tech.underoaks.coldcase.enums.VisibilityStates;
  *
  * @see Tile
  */
-public abstract class TileContent {
+public abstract class TileContent implements Cloneable {
     /** Reference to the next TileContent in the stack */
     protected TileContent tileContent;
 
@@ -123,5 +123,19 @@ public abstract class TileContent {
 
     public void setPlayerPassable(boolean playerPassable) {
         isPlayerPassable = playerPassable;
+    }
+
+    @Override
+    public TileContent clone() throws CloneNotSupportedException {
+        try {
+            TileContent cloned = (TileContent) super.clone();
+            if(this.tileContent != null) {
+                cloned.tileContent = this.tileContent.clone();
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 }
