@@ -1,4 +1,4 @@
-package tech.underoaks.coldcase.loader;
+package tech.underoaks.coldcase.loader.enums;
 
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
 import tech.underoaks.coldcase.data.tiles.GroundTile;
