@@ -30,6 +30,8 @@ public class Main extends ApplicationAdapter {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
+        map.updatePlayer(deltaTime);
+
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
         batch.begin();
@@ -45,6 +47,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        map.dispose();
         batch.dispose();
     }
 }
