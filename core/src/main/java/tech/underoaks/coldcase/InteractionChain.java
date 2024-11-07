@@ -27,9 +27,16 @@ public class InteractionChain {
      *
      * @param gsu The GameStateUpdate to add.
      */
-    public void addGameStateUpdate(GameStateUpdate gsu) {
-        // FIXME
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean addGameStateUpdate(GameStateUpdate gsu) {
+        try {
+            gsu.apply(snapshot.getSnapshotMap());
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
+        gsuQueue.add(gsu);
+        return true;
     }
 
     /**

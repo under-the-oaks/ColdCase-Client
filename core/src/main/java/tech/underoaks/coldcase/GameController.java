@@ -9,11 +9,17 @@ import tech.underoaks.coldcase.data.tiles.Tile;
  * Central manager responsible for handling interactions within the game.
  */
 public class GameController {
+    /** Singleton instance of GameController */
+    private static GameController instance;
+
     /** Active game map */
     private Map currentMap;
 
-    public GameController(Map currentMap) {
-        this.currentMap = currentMap;
+    public static GameController getInstance() {
+        if (instance == null) {
+            instance = new GameController();
+        }
+        return instance;
     }
 
     public void triggerAction(Vector2 position, Vector2 targetPos) {
@@ -33,13 +39,17 @@ public class GameController {
             return;
         }
 
-        targetTileContent.handleAction(this, position);
+        targetTileContent.handleAction(chain, position);
 
         // TODO if false -> Keine Interaktion -> Player Movement?
     }
 
     public Map getCurrentMap() {
         return currentMap;
+    }
+
+    public void setCurrentMap(Map map) {
+        this.currentMap = map;
     }
 
     public InteractionChain createInteractionChain() {

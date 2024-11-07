@@ -2,6 +2,7 @@ package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameController;
+import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +24,7 @@ import tech.underoaks.coldcase.enums.VisibilityStates;
  */
 public abstract class TileContent implements Cloneable {
     /** Reference to the next TileContent in the stack */
-    protected TileContent tileContent;
+    public TileContent tileContent;
 
     /** The visibility state of this TileContent */
     protected VisibilityStates visibilityState;
@@ -63,26 +64,26 @@ public abstract class TileContent implements Cloneable {
     /**
      * Tries to perform the action associated with this TileContent when interacted with.
      *
-     * @param controller The GameController managing the interaction.
+     * @param chain InteractionChain managing the snapshot.
      * @param origin The origin of the invoking TileContent
      * @return True if the action has been taken care of; False otherwise
      */
-    public boolean handleAction(GameController controller, Vector2 origin) {
-        if(tileContent != null && tileContent.handleAction(controller, origin)) {
+    public boolean handleAction(InteractionChain chain, Vector2 origin) {
+        if(tileContent != null && tileContent.handleAction(chain, origin)) {
             return true;
         }
 
-        return action(controller, origin);
+        return action(chain, origin);
     }
 
     /**
      * Performs the action associated with this TileContent when interacted with.
      *
-     * @param controller The GameController managing the interaction.
+     * @param chain InteractionChain managing the snapshot.
      * @param origin The origin of the invoking TileContent
      * @return True if the action has been taken care of; False otherwise
      */
-    public abstract boolean action(GameController controller, Vector2 origin);
+    public abstract boolean action(InteractionChain chain, Vector2 origin);
 
     /**
      * Updates the state of this TileContent based on interactions.
@@ -113,7 +114,9 @@ public abstract class TileContent implements Cloneable {
             return null;
         }
         if(this.tileContent.tileContent == null) {
-            return this.tileContent;
+            TileContent content = this.tileContent;
+            this.tileContent = null;
+            return content;
         }
         return this.tileContent.popContent();
     }

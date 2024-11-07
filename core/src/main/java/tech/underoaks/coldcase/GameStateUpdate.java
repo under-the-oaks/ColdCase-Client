@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase;
 
+import tech.underoaks.coldcase.data.Map;
 import tech.underoaks.coldcase.enums.UpdateTypes;
 
 /**
@@ -19,9 +20,9 @@ public abstract class GameStateUpdate {
     /**
      * Applies the GameStateUpdate to the game state.
      *
-     * @param controller The GameController managing the game state.
+     * @param map the map that will receive changes.
      */
-    public abstract void apply(GameController controller);
+    public abstract void apply(Map map);
 
     public UpdateTypes getUpdateType() {
         return updateType;

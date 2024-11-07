@@ -57,6 +57,29 @@ public abstract class Tile implements Cloneable {
         this.tileContent = tileContent;
     }
 
+    public void pushTileContent(TileContent tileContent) {
+        if(this.tileContent == null) {
+            this.tileContent = tileContent;
+        }
+        else {
+            this.tileContent.pushContent(tileContent);
+        }
+    }
+
+    public TileContent popTileContent() {
+        if(this.tileContent == null) {
+            return null;
+        }
+        else if (this.tileContent.tileContent == null) {
+            TileContent content = this.tileContent;
+            this.tileContent = null;
+            return content;
+        }
+        else {
+            return this.tileContent.popContent();
+        }
+    }
+
     @Override
     public Tile clone() {
         try {

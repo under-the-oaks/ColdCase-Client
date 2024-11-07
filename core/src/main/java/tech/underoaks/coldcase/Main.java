@@ -24,7 +24,8 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         Map map = Map.getMap(Path.of("maps/test_plain"));
-        gameController = new GameController(map);
+        gameController = GameController.getInstance();
+        gameController.setCurrentMap(map);
 
         viewport = new ExtendViewport(800, 800);
     }
