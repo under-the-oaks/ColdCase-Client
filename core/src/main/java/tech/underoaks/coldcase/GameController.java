@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.data.Map;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
+import tech.underoaks.coldcase.data.tiles.Tile;
 
 /**
  * Central manager responsible for handling interactions within the game.
@@ -11,30 +12,30 @@ public class GameController {
     /** Active game map */
     private Map currentMap;
 
-    /** Snapshot of the Map used for simulating interactions. */
-    private Snapshot currentSnapshot;
-
     public GameController(Map currentMap) {
         this.currentMap = currentMap;
     }
 
     public void triggerAction(Vector2 position, Vector2 targetPos) {
-        if(currentSnapshot != null) {
-            throw new IllegalStateException("A snapshot is already initialized");
-        }
         InteractionChain chain = createInteractionChain();
 
-        // TODO CHAIN OF COMMAND
+        // Requesting an action handler to respond to the triggered action
+        Tile targetTile = chain.getSnapshot().getSnapshotMap().getTile(
+            (int) targetPos.x,
+            (int) targetPos.y
+        );
+        if(targetTile == null) {
+            return;
+        }
 
-        discardSnapshot();
-    }
+        TileContent targetTileContent = targetTile.getTileContent();
+        if(targetTileContent == null) {
+            return;
+        }
 
-    private void createSnapshot() {
-        currentSnapshot = new Snapshot(currentMap);
-    }
+        targetTileContent.handleAction(this, position);
 
-    public void discardSnapshot() {
-        currentSnapshot = null;
+        // TODO if false -> Keine Interaktion -> Player Movement?
     }
 
     public Map getCurrentMap() {
@@ -42,7 +43,7 @@ public class GameController {
     }
 
     public InteractionChain createInteractionChain() {
-        createSnapshot();
-        return new InteractionChain(currentSnapshot);
+        Snapshot snapshot = new Snapshot(currentMap);
+        return new InteractionChain(snapshot);
     }
 }

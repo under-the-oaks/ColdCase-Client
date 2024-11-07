@@ -23,11 +23,11 @@ public record Map(
     static float tileSize = 16;
 
     public Tile getTile(int x, int y) {
-        return tileArray[x][y];
+        return tileArray[y][x];
     }
 
     public void setTile(int x, int y, Tile tile) {
-        tileArray[x][y] = tile;
+        tileArray[y][x] = tile;
     }
 
     public int getWidth() {

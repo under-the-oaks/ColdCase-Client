@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameController;
 
 public class Wall extends TileContent {
@@ -13,7 +14,7 @@ public class Wall extends TileContent {
 
 
     @Override
-    public void action(GameController controller) {
+    public boolean action(GameController controller, Vector2 position) {
         // TODO
         throw new UnsupportedOperationException("Not supported yet.");
     }

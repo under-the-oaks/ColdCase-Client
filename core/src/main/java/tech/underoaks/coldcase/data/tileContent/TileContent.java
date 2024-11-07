@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.data.tileContent;
 
+import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameController;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
@@ -60,11 +61,28 @@ public abstract class TileContent implements Cloneable {
     }
 
     /**
+     * Tries to perform the action associated with this TileContent when interacted with.
+     *
+     * @param controller The GameController managing the interaction.
+     * @param origin The origin of the invoking TileContent
+     * @return True if the action has been taken care of; False otherwise
+     */
+    public boolean handleAction(GameController controller, Vector2 origin) {
+        if(tileContent != null && tileContent.handleAction(controller, origin)) {
+            return true;
+        }
+
+        return action(controller, origin);
+    }
+
+    /**
      * Performs the action associated with this TileContent when interacted with.
      *
      * @param controller The GameController managing the interaction.
+     * @param origin The origin of the invoking TileContent
+     * @return True if the action has been taken care of; False otherwise
      */
-    public abstract void action(GameController controller);
+    public abstract boolean action(GameController controller, Vector2 origin);
 
     /**
      * Updates the state of this TileContent based on interactions.

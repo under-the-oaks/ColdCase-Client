@@ -11,11 +11,15 @@ public class InteractionChain {
     private Queue<GameStateUpdate> gsuQueue;
 
     /** Snapshot that will act as the testing environment */
-    private Snapshot snapshot;
+    private final Snapshot snapshot;
 
     public InteractionChain(Snapshot snapshot) {
         this.snapshot = snapshot;
         this.gsuQueue = new LinkedList<>();
+    }
+
+    public Snapshot getSnapshot() {
+        return snapshot;
     }
 
     /**

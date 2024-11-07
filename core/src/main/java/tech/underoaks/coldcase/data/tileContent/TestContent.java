@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameController;
 
 public class TestContent extends TileContent {
@@ -11,8 +12,9 @@ public class TestContent extends TileContent {
     }
 
     @Override
-    public void action(GameController controller) {
+    public boolean action(GameController controller, Vector2 position) {
         System.out.println(this.getClass().getSimpleName() + " action");
+        return true;
     }
 
     @Override
