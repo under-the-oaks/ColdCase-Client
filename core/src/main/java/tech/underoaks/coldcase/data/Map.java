@@ -2,10 +2,11 @@ package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.loader.Tiles;
+import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
 import tech.underoaks.coldcase.data.tiles.GroundTile;
 import tech.underoaks.coldcase.data.tiles.Tile;
+import tech.underoaks.coldcase.loader.enums.TileContents;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Map(
-    Tile[][] tileArray
+        Tile[][] tileArray
 ) {
 
     static float tileSize = 16;
@@ -42,19 +43,27 @@ public record Map(
         return getGenericMap(GroundTile.class, height, width);
     }
 
+    /**
+     * Generates a new map from a template file
+     * Each template files should be a text file with the following format:
+     * Each line represents a row of the map
+     * Each number represents a tile or tile content
+     * The numbers should be separated by a space
+     * The numbers should be the index of the tile/tileContent in the Tiles/TileContents enum
+     *
+     * @param path Path to the template folder
+     *             The folder should contain two files:
+     *             map.tiles: The file containing the tile layout
+     *             map.content: The file containing the tile content layout
+     *             The files should be in the format described above
+     * @return New Map
+     */
     public static Map getMap(Path path) {
         List<List<Tile>> tiles = new ArrayList<>();
+        Path tilePath = Path.of(path + "/map.tiles");
+        Path contentPath = Path.of(path + "/map.content");
         try {
-            List<String> lines = Files.readAllLines(path);
-            List<List<Integer>> rawTiles = new ArrayList<>();
-
-            for (int i = 0; i < lines.size(); i++) {
-                String[] split = lines.get(i).split(" ");
-                rawTiles.add(new ArrayList<>());
-                for (String s : split) {
-                    rawTiles.get(i).add(Integer.parseInt(s));
-                }
-            }
+            List<List<Integer>> rawTiles = readMapFile(tilePath);
 
             for (int i = 0; i < rawTiles.size(); i++) {
                 tiles.add(new ArrayList<>());
@@ -62,9 +71,25 @@ public record Map(
                     tiles.get(i).add(Tiles.getNewTileClassByIndex(rawTiles.get(i).get(j)));
                 }
             }
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+
+        try {
+            List<List<Integer>> rawTiles = readMapFile(contentPath);
+
+            for (int i = 0; i < rawTiles.size(); i++) {
+                for (int j = 0; j < rawTiles.get(i).size(); j++) {
+                    int temp = rawTiles.get(i).get(j);
+                    if (temp != 0) {
+                        tiles.get(i).get(j).setTileContent(TileContents.getNewTileClassByIndex(rawTiles.get(i).get(j)));
+                    }
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
 
         // Convert 2D-List to 2D-Array
         Tile[][] tileArray = new Tile[tiles.size()][getMatrixWidth(tiles)];
@@ -73,8 +98,7 @@ public record Map(
                 Tile tile;
                 try {
                     tile = tiles.get(i).get(j);
-                }
-                catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e) {
                     // If the template is not uniform,
                     // the remaining tiles will be filled up using EmptyTile
                     tile = new EmptyTile();
@@ -84,6 +108,33 @@ public record Map(
         }
 
         return new Map(tileArray);
+    }
+
+    /**
+     * Reads a map file and returns a 2D List of integers representing the map
+     *
+     * @param path Path to the file
+     * @return 2D List of integers representing the map
+     */
+    private static List<List<Integer>> readMapFile(Path path) {
+        List<List<Integer>> rawTiles = new ArrayList<>();
+        try {
+            List<String> lines = Files.readAllLines(path);
+            System.out.println(lines.size());
+            for (int i = 0; i < lines.size(); i++) {
+                String[] split = lines.get(i).split(" ");
+                rawTiles.add(new ArrayList<>());
+                for (String s : split) {
+                    rawTiles.get(i).add(Integer.parseInt(s));
+                }
+            }
+
+
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return rawTiles;
     }
 
     private static int getMatrixWidth(List<List<Tile>> matrix) {
@@ -142,11 +193,11 @@ public record Map(
      * @param pt Vector2 Point in isometric Coordinates to convert
      * @return Converted point as a Vector2
      */
-    public Vector2 isoTo2D(Vector2 pt){
+    public Vector2 isoTo2D(Vector2 pt) {
         Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = (2 * pt.y + pt.x) / 2;
         tempPt.y = (2 * pt.y - pt.x) / 2;
-        return(tempPt);
+        return (tempPt);
     }
 
     /**
@@ -155,11 +206,11 @@ public record Map(
      * @param pt Vector2 Point in normal 2D coordinates to convert
      * @return Converted point as a Vector2
      */
-    public Vector2 twoDToIso(Vector2 pt){
-        Vector2 tempPt = new Vector2(0,0);
+    public Vector2 twoDToIso(Vector2 pt) {
+        Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = pt.x - pt.y;
         tempPt.y = (pt.x + pt.y) / 2;
-        return(tempPt);
+        return (tempPt);
     }
 
 
