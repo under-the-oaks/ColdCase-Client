@@ -6,6 +6,10 @@ import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.TestUpdate;
 
+/**
+ * Represents a test content that can be placed on a tile.
+ * Used primarily for testing purposes.
+ */
 public class TestContent extends TileContent {
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_050.png");
 

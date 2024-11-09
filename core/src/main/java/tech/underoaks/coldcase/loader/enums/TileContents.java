@@ -6,7 +6,10 @@ import tech.underoaks.coldcase.data.tileContent.Wall;
 
 import java.lang.reflect.InvocationTargetException;
 
-/** TODO @YASSINE JAVADOC */
+/**
+ * Enum representing different types of tile contents.
+ * Used for mapping indices to tile content classes.
+ */
 public enum TileContents {
     WALL(1, Wall.class), TEST(2, TestContent.class);
 
@@ -22,6 +25,11 @@ public enum TileContents {
         return index;
     }
 
+    /**
+     * Creates a new instance of the tile content.
+     *
+     * @return A new TileContent instance.
+     */
     public TileContent getNewTileContent() {
         try {
             return tileClass.getDeclaredConstructor().newInstance();
@@ -31,6 +39,13 @@ public enum TileContents {
         }
     }
 
+    /**
+     * Retrieves a new TileContent instance based on the given index.
+     *
+     * @param index The index of the TileContent.
+     * @return A new TileContent instance.
+     * @throws IllegalArgumentException If no TileContent corresponds to the given index.
+     */
     public static TileContent getNewTileClassByIndex(int index) {
         for (TileContents tileContent : TileContents.values()) {
             if (tileContent.getIndex() == index) {

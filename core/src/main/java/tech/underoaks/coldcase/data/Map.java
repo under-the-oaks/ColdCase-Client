@@ -140,6 +140,12 @@ public record Map(
         return rawTiles;
     }
 
+    /**
+     * Determines the maximum width of the matrix (the longest row).
+     *
+     * @param matrix A List of Tiles representing the matrix.
+     * @return The maximum width (length of the longest row).
+     */
     private static int getMatrixWidth(List<List<Tile>> matrix) {
         int max = Integer.MIN_VALUE;
         for (List<Tile> row : matrix) {

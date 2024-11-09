@@ -6,6 +6,10 @@ import tech.underoaks.coldcase.data.tiles.Tile;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Enum representing different types of tiles.
+ * Used for mapping indices to tile classes.
+ */
 public enum Tiles {
     EMPTY(0, EmptyTile.class), GROUND(1, GroundTile.class);
 
@@ -21,6 +25,11 @@ public enum Tiles {
         return index;
     }
 
+    /**
+     * Creates a new instance of the tile.
+     *
+     * @return A new Tile instance.
+     */
     public Tile getNewTile() {
         try {
             return tileClass.getDeclaredConstructor().newInstance();
@@ -30,6 +39,13 @@ public enum Tiles {
         }
     }
 
+    /**
+     * Retrieves a new Tile instance based on the given index.
+     *
+     * @param index The index of the Tile.
+     * @return A new Tile instance.
+     * @throws IllegalArgumentException If no Tile corresponds to the given index.
+     */
     public static Tile getNewTileClassByIndex(int index) {
         for (Tiles tile : Tiles.values()) {
             if (tile.getIndex() == index) {

@@ -121,10 +121,14 @@ public abstract class TileContent implements Cloneable {
         this.tileContent = tileContent;
     }
 
+
     public TileContent getNextContent() {
         return tileContent;
     }
 
+    /**
+     * Adds a new content layer on top of the current stack of contents.
+     */
     public void pushContent(TileContent tileContent) {
         if (this.tileContent != null) {
             this.tileContent.pushContent(tileContent);
@@ -133,6 +137,9 @@ public abstract class TileContent implements Cloneable {
         }
     }
 
+    /**
+     * Removes the topmost content layer from the stack and returns it.
+     */
     public TileContent popContent() {
         if (this.tileContent == null) {
             return null;
@@ -152,7 +159,6 @@ public abstract class TileContent implements Cloneable {
     public void setVisibilityState(VisibilityStates visibilityState) {
         this.visibilityState = visibilityState;
     }
-
 
     public boolean isObjectPassable() {
         return isObjectPassable;

@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.InteractionChain;
 
+/**
+ * Represents a wall that blocks movement on a tile.
+ */
 public class Wall extends TileContent {
 
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_065.png");
