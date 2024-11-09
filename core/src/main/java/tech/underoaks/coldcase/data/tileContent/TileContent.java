@@ -67,6 +67,10 @@ public abstract class TileContent implements Cloneable {
     /**
      * Tries to perform the action associated with this TileContent when interacted with.
      *
+     * <p>{@code handleAction(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
+     * This means that the top most content gets the first chance to handle a triggered action.
+     * If a content handles the action no more contents will be able to accept it.
+     *
      * @param chain  InteractionChain managing the snapshot.
      * @param origin The origin of the invoking TileContent
      * @return True if the action has been taken care of; False otherwise
@@ -92,6 +96,9 @@ public abstract class TileContent implements Cloneable {
 
     /**
      * Tries to perform an update associated with this TileContent when triggered.
+     *
+     * <p>{@code handleUpdate(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
+     * This means that the top most content gets the first chance to handle a triggered update.
      *
      * @param chain InteractionChain managing the snapshot.
      * @return True if an update as been performed; False otherwise
@@ -120,7 +127,6 @@ public abstract class TileContent implements Cloneable {
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;
     }
-
 
     public TileContent getNextContent() {
         return tileContent;

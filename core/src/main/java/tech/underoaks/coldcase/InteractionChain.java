@@ -44,11 +44,6 @@ public class InteractionChain {
         gsuQueue.add(gsu);
     }
 
-    /**
-     * Validates the interaction chain within the snapshot.
-     *
-     * @return True if valid; False otherwise
-     */
     public Queue<GameStateUpdate> getGSUQueue() {
         return gsuQueue;
     }
