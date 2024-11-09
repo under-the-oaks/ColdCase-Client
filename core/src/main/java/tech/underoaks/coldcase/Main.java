@@ -22,13 +22,19 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        viewport = new ExtendViewport(800, 800);
 
         Map map = Map.getMap(Path.of("maps/test_plain"));
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
 
-        viewport = new ExtendViewport(800, 800);
+        gameController.triggerAction(
+            new Vector2(0, 0),
+            new Vector2(1,2)
+        );
     }
+
+
 
     @Override
     public void render() {
@@ -49,10 +55,6 @@ public class Main extends ApplicationAdapter {
         batch.begin();
 
         gameController.getCurrentMap().render(batch);
-        gameController.triggerAction(
-            new Vector2(0, 0),
-            new Vector2(1,2)
-        );
 
         batch.end();
     }

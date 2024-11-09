@@ -2,7 +2,7 @@ package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameController;
+import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.TestUpdate;
 
@@ -14,14 +14,13 @@ public class TestContent extends TileContent {
     }
 
     @Override
-    public boolean action(InteractionChain chain, Vector2 position) {
-        // System.out.println(this.getClass().getSimpleName() + " action");
-        chain.addGameStateUpdate(new TestUpdate());
+    public boolean action(InteractionChain chain, Vector2 position) throws GameStateUpdateException {
+        chain.addGameStateUpdate(new TestUpdate(new Vector2(3, 4)));
         return true;
     }
 
     @Override
-    public void update(GameController controller) {
-        System.out.println(this.getClass().getSimpleName() + " update");
+    public boolean update(InteractionChain chain) {
+        return false;
     }
 }

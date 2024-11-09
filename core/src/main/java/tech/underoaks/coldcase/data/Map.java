@@ -2,18 +2,23 @@ package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
 import tech.underoaks.coldcase.data.tiles.Tile;
 import tech.underoaks.coldcase.loader.enums.TileContents;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents the game map, which is a 2D array of {@link Tile} objects.
+ * Provides methods for accessing and modifying the map, rendering, and updating the map state.
+ */
 public record Map(
     Tile[][] tileArray
 ) {
@@ -24,6 +29,10 @@ public record Map(
 
     public Tile getTile(int x, int y) {
         return tileArray[y][x];
+    }
+
+    public Tile getTile(Vector2 position) {
+        return this.getTile((int) position.x, (int) position.y);
     }
 
     public void setTile(int x, int y, Tile tile) {
@@ -115,7 +124,6 @@ public record Map(
         List<List<Integer>> rawTiles = new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(path);
-            System.out.println(lines.size());
             for (int i = 0; i < lines.size(); i++) {
                 String[] split = lines.get(i).split(" ");
                 rawTiles.add(new ArrayList<>());
@@ -139,29 +147,6 @@ public record Map(
             max = Math.max(length, max);
         }
         return max;
-    }
-
-    /**
-     * Generates a new map that is filled with a specified type of tile
-     *
-     * @param tile   Class that will fill the map
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return New Map
-     */
-    private static Map getGenericMap(Class<? extends Tile> tile, int height, int width) {
-        Tile[][] tileArray = new Tile[height][width];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                try {
-                    tileArray[y][x] = tile.getDeclaredConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return new Map(tileArray);
     }
 
     /**
@@ -208,6 +193,51 @@ public record Map(
         return (tempPt);
     }
 
+    /**
+     * Continuously updates the map until no further updates are possible.
+     *
+     * <p>Keeps trying to update the map with the given {@code InteractionChain} until no more changes occur.</p>
+     *
+     * @param chain the {@code InteractionChain} used to manage interactions and snapshots during updates
+     * @throws IllegalStateException if the maximum iteration limit is exceeded, suggesting a potential cyclic dependency in {@code TileContent}.
+     * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
+     * triggers another in a cyclic manner, the loop may otherwise never terminate.
+     */
+    public void updateUntilStable(InteractionChain chain) {
+        int maxIteration = 100;
+        int iteration = 0;
+        while (this.updateMap(chain)) {
+            // Keep updating until no further updates occur
+            iteration++;
+            if (iteration > maxIteration) {
+                throw new IllegalStateException("Loop terminated due to excessive iterations; check for cyclic dependencies in TileContent.");
+            }
+        }
+    }
+
+    /**
+     * Updates the map by attempting to perform an update on each {@code Tile} in {@code tileArray}.
+     *
+     * <p>For each Tile with non-null {@code TileContent}, the {@code handleUpdate} method
+     * is invoked with the given {@code InteractionChain}.
+     *
+     * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
+     * @return true if at least one {@code TileContent} performs an update; false otherwise
+     * @see tech.underoaks.coldcase.data.tileContent.TileContent#handleUpdate(InteractionChain)
+     */
+    public boolean updateMap(InteractionChain chain) {
+        List<Boolean> results = Arrays.stream(tileArray)
+            .flatMap(Arrays::stream)
+            .map(tile -> tile.getTileContent() != null && tile.getTileContent().handleUpdate(chain))
+            .toList();
+        return results.contains(true);
+    }
+
+    /**
+     * Creates a deep clone of this {@code Map} instance.
+     *
+     * @return A new {@code Map} instance with a deep-cloned {@code Tile} array.
+     */
     public Map deepClone() {
         Tile[][] clonedTileArray = new Tile[tileArray.length][];
 

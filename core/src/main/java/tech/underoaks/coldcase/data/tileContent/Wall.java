@@ -2,7 +2,6 @@ package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameController;
 import tech.underoaks.coldcase.InteractionChain;
 
 public class Wall extends TileContent {
@@ -21,8 +20,8 @@ public class Wall extends TileContent {
     }
 
     @Override
-    public void update(GameController controller) {
+    public boolean update(InteractionChain chain) {
         // TODO
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 }

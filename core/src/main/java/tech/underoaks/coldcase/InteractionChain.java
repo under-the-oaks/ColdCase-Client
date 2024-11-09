@@ -8,7 +8,7 @@ import java.util.Queue;
  */
 public class InteractionChain {
     /** Queue of GameStateUpdates associated with this interaction chain. */
-    private Queue<GameStateUpdate> gsuQueue;
+    private final Queue<GameStateUpdate> gsuQueue;
 
     /** Snapshot that will act as the testing environment */
     private final Snapshot snapshot;
@@ -26,17 +26,19 @@ public class InteractionChain {
      * Adds a {@link GameStateUpdate} to the interactions chain.
      *
      * @param gsu The GameStateUpdate to add.
+     * @throws GameStateUpdateException If the update has failed.
      */
-    public boolean addGameStateUpdate(GameStateUpdate gsu) {
+    public void addGameStateUpdate(GameStateUpdate gsu) throws GameStateUpdateException {
+        // TODO Igler fragen ob das Pattern OK ist
         try {
-            gsu.apply(snapshot.getSnapshotMap());
+            if(gsu.UPDATE_TYPE.hasConsequences()) {
+                gsu.apply(snapshot.getSnapshotMap());
+            }
         }
         catch (Exception e) {
-            System.err.println(e.getMessage());
-            return false;
+            throw new GameStateUpdateException("Error updating the game state", e);
         }
         gsuQueue.add(gsu);
-        return true;
     }
 
     /**
@@ -45,7 +47,6 @@ public class InteractionChain {
      * @return True if valid; False otherwise
      */
     public Queue<GameStateUpdate> getGSUQueue() {
-        // FIXME
-        throw new UnsupportedOperationException("Not supported yet.");
+        return gsuQueue;
     }
 }

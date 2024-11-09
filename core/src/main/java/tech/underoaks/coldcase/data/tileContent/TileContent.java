@@ -1,7 +1,7 @@
 package tech.underoaks.coldcase.data.tileContent;
 
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameController;
+import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
@@ -23,10 +23,14 @@ import tech.underoaks.coldcase.enums.VisibilityStates;
  * @see Tile
  */
 public abstract class TileContent implements Cloneable {
-    /** Reference to the next TileContent in the stack */
+    /**
+     * Reference to the next TileContent in the stack
+     */
     public TileContent tileContent;
 
-    /** The visibility state of this TileContent */
+    /**
+     * The visibility state of this TileContent
+     */
     protected VisibilityStates visibilityState;
 
     private Texture texture;
@@ -39,7 +43,6 @@ public abstract class TileContent implements Cloneable {
         this.isPlayerPassable = isPlayerPassable;
         this.isObjectPassable = isObjectPassable;
     }
-
 
     /**
      * Renders the tileContent at the specified coordinates using the given {@code SpriteBatch}.
@@ -64,12 +67,13 @@ public abstract class TileContent implements Cloneable {
     /**
      * Tries to perform the action associated with this TileContent when interacted with.
      *
-     * @param chain InteractionChain managing the snapshot.
+     * @param chain  InteractionChain managing the snapshot.
      * @param origin The origin of the invoking TileContent
      * @return True if the action has been taken care of; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
-    public boolean handleAction(InteractionChain chain, Vector2 origin) {
-        if(tileContent != null && tileContent.handleAction(chain, origin)) {
+    public boolean handleAction(InteractionChain chain, Vector2 origin) throws GameStateUpdateException {
+        if (tileContent != null && tileContent.handleAction(chain, origin)) {
             return true;
         }
 
@@ -79,18 +83,39 @@ public abstract class TileContent implements Cloneable {
     /**
      * Performs the action associated with this TileContent when interacted with.
      *
-     * @param chain InteractionChain managing the snapshot.
+     * @param chain  InteractionChain managing the snapshot.
      * @param origin The origin of the invoking TileContent
      * @return True if the action has been taken care of; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
-    public abstract boolean action(InteractionChain chain, Vector2 origin);
+    public abstract boolean action(InteractionChain chain, Vector2 origin) throws GameStateUpdateException;
+
+    /**
+     * Tries to perform an update associated with this TileContent when triggered.
+     *
+     * @param chain InteractionChain managing the snapshot.
+     * @return True if an update as been performed; False otherwise
+     * @see TileContent#update(InteractionChain)
+     */
+    public boolean handleUpdate(InteractionChain chain) {
+        boolean result_a = false;
+        if (tileContent != null) {
+            result_a = tileContent.handleUpdate(chain);
+        }
+        boolean result_b = update(chain);
+        return result_a || result_b;
+    }
 
     /**
      * Updates the state of this TileContent based on interactions.
      *
-     * @param controller The GameController managing the interaction.
+     * @param chain InteractionChain managing the snapshot.
+     * @return True if an update as been performed; False otherwise
+     * @implNote Ensure this method returns {@code true} only for meaningful changes to avoid unnecessary processing.
+     * It should not always return {@code true} to prevent infinite loops in calling methods like
+     * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
      */
-    public abstract void update(GameController controller);
+    public abstract boolean update(InteractionChain chain);
 
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;
@@ -101,19 +126,18 @@ public abstract class TileContent implements Cloneable {
     }
 
     public void pushContent(TileContent tileContent) {
-        if(this.tileContent != null) {
+        if (this.tileContent != null) {
             this.tileContent.pushContent(tileContent);
-        }
-        else {
+        } else {
             this.tileContent = tileContent;
         }
     }
 
     public TileContent popContent() {
-        if(this.tileContent == null) {
+        if (this.tileContent == null) {
             return null;
         }
-        if(this.tileContent.tileContent == null) {
+        if (this.tileContent.tileContent == null) {
             TileContent content = this.tileContent;
             this.tileContent = null;
             return content;
@@ -150,12 +174,11 @@ public abstract class TileContent implements Cloneable {
     public TileContent clone() throws CloneNotSupportedException {
         try {
             TileContent cloned = (TileContent) super.clone();
-            if(this.tileContent != null) {
+            if (this.tileContent != null) {
                 cloned.tileContent = this.tileContent.clone();
             }
             return cloned;
-        }
-        catch (CloneNotSupportedException e) {
+        } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
     }
