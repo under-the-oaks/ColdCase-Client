@@ -21,10 +21,6 @@ public enum Tiles {
         return index;
     }
 
-    public Class<? extends Tile> getTileClass() {
-        return tileClass;
-    }
-
     public Tile getNewTile() {
         try {
             return tileClass.getDeclaredConstructor().newInstance();
