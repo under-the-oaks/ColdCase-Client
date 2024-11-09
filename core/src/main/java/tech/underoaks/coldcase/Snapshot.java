@@ -6,7 +6,9 @@ import tech.underoaks.coldcase.data.Map;
  * Represents a snapshot of the game state at a specific point in time.
  */
 public class Snapshot {
-    /** The copied state of the Map */
+    /**
+     * The copied state of the Map
+     */
     private final Map snapshotMap;
 
     /**

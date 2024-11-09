@@ -30,11 +30,9 @@ public class Main extends ApplicationAdapter {
 
         gameController.triggerAction(
             new Vector2(0, 0),
-            new Vector2(1,2)
+            new Vector2(1, 2)
         );
     }
-
-
 
     @Override
     public void render() {

@@ -15,7 +15,6 @@ public class Wall extends TileContent {
         super(texture, false, false);
     }
 
-
     @Override
     public boolean action(InteractionChain chain, Vector2 position) {
         // TODO

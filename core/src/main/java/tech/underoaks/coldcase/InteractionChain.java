@@ -7,10 +7,14 @@ import java.util.Queue;
  * Represents a sequence of interactions resulting from a player's action.
  */
 public class InteractionChain {
-    /** Queue of GameStateUpdates associated with this interaction chain. */
+    /**
+     * Queue of GameStateUpdates associated with this interaction chain.
+     */
     private final Queue<GameStateUpdate> gsuQueue;
 
-    /** Snapshot that will act as the testing environment */
+    /**
+     * Snapshot that will act as the testing environment
+     */
     private final Snapshot snapshot;
 
     public InteractionChain(Snapshot snapshot) {
@@ -31,11 +35,10 @@ public class InteractionChain {
     public void addGameStateUpdate(GameStateUpdate gsu) throws GameStateUpdateException {
         // TODO Igler fragen ob das Pattern OK ist
         try {
-            if(gsu.UPDATE_TYPE.hasConsequences()) {
+            if (gsu.UPDATE_TYPE.hasConsequences()) {
                 gsu.apply(snapshot.getSnapshotMap());
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new GameStateUpdateException("Error updating the game state", e);
         }
         gsuQueue.add(gsu);
