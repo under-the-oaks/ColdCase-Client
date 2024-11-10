@@ -40,8 +40,9 @@ jobs:
 
       - name: Upload test report
         if: always()
-        uses: actions/upload-test-report@v2
+        uses: actions/upload-artifact@v3
         with:
+          name: test-report
           path: '**/build/test-results/test/*.xml'
 
       - name: Upload code coverage report
