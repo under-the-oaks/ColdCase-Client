@@ -26,6 +26,7 @@ public class MovementGSU extends GameStateUpdate {
     public void apply(Map map) {
         TileContent sourceContent = map.getTileContentByIndex(sourcePosition, sourceIndex);
 
+
         Stack<TileContent> tileContents = new Stack<>();
 
         Tile sourceTile = map.getTile(sourcePosition);
