@@ -205,4 +205,28 @@ public abstract class TileContent implements Cloneable {
             throw new AssertionError(e);
         }
     }
+
+    public int getChildIndex(TileContent tileContent) {
+        if (this == tileContent) {
+            return 0;
+        }
+        if (this.tileContent == null) {
+            return -1;
+        }
+        int index = this.tileContent.getChildIndex(tileContent);
+        if (index == -1) {
+            return -1;
+        }
+        return index + 1;
+    }
+
+    public TileContent getTileContentByIndex(int i) {
+        if (i == 0) {
+            return this;
+        }
+        if (tileContent == null) {
+            throw new IllegalArgumentException("TileContent not found");
+        }
+        return tileContent.getTileContentByIndex(i - 1);
+    }
 }

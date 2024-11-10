@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
-import tech.underoaks.coldcase.data.tileContent.Player;
+import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
 import tech.underoaks.coldcase.data.tiles.Tile;
@@ -24,9 +24,9 @@ public record Map(
     Tile[][] tileArray
 ) {
     /**
-     * TODO @MAX JAVADOC
+     * The size of each tile in pixels
      */
-    static float tileSize = 16;
+    static float tileSize = 32;
 
     public Tile getTile(int x, int y) {
         return tileArray[y][x];
@@ -34,6 +34,17 @@ public record Map(
 
     public Tile getTile(Vector2 position) {
         return this.getTile((int) position.x, (int) position.y);
+    }
+
+    public Vector2 getTileContentByType(Class<? extends TileContent> type) {
+        for (int i = 0; i < tileArray.length; i++) {
+            for (int j = 0; j < tileArray[i].length; j++) {
+                if (type.isInstance(tileArray[i][j].getTileContent())) {
+                    return new Vector2(i, j);
+                }
+            }
+        }
+        return null;
     }
 
     public void setTile(int x, int y, Tile tile) {
@@ -156,6 +167,28 @@ public record Map(
         return max;
     }
 
+    public int getChildIndex(Vector2 tile, TileContent tileContent) {
+        return tileArray[(int) tile.y][(int) tile.x].getTileContent().getChildIndex(tileContent);
+    }
+
+    public TileContent getTileContentByIndex(Vector2 position, int index) {
+        if (index == -1) {
+            throw new IllegalArgumentException("Index out of bounds");
+        }
+
+        TileContent tileContent = this.getTile(position).getTileContent();
+
+        if (tileContent == null) {
+            throw new IllegalArgumentException("TileContent not found");
+        }
+
+        return tileContent.getTileContentByIndex(index);
+    }
+
+    public boolean isOutOfBounds(Vector2 position) {
+        return position.x < 0 || position.x >= getWidth() || position.y < 0 || position.y >= getHeight();
+    }
+
     /**
      * Calls the render method of each tile of the map in the correct order and with the correct position in isometric coordinates.
      * <br><br>
@@ -166,8 +199,8 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempY = x * tileSize * -1;
-                float tempX = y * tileSize * -1;
+                float tempY = x * tileSize / 2 * -1;
+                float tempX = y * tileSize / 2 * -1;
                 Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
                 tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }
@@ -234,9 +267,9 @@ public record Map(
      */
     public boolean updateMap(InteractionChain chain) throws GameStateUpdateException {
         boolean updated = false;
-        for(int i = 0; i < tileArray.length; i++) {
-            for(int j = 0; j < tileArray[i].length; j++) {
-                if(tileArray[i][j].getTileContent() == null) {
+        for (int i = 0; i < tileArray.length; i++) {
+            for (int j = 0; j < tileArray[i].length; j++) {
+                if (tileArray[i][j].getTileContent() == null) {
                     continue;
                 }
                 boolean result = tileArray[i][j].getTileContent().handleUpdate(

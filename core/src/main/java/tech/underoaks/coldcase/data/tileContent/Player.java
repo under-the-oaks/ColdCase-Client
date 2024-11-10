@@ -1,8 +1,11 @@
 package tech.underoaks.coldcase.data.tileContent;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.GameStateUpdateException;
+import tech.underoaks.coldcase.InteractionChain;
+import tech.underoaks.coldcase.MovementGSU;
+import tech.underoaks.coldcase.loader.enums.Direction;
 
 public class Player extends TileContent {
 
@@ -12,19 +15,27 @@ public class Player extends TileContent {
         super(texture, true, false);
     }
 
-    public void update(float deltaTime) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            // not implemented - waiting on game Controller
+    @Override
+    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+
+        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition, this);
+        Vector2 targetPosition = switch (actionDirection) {
+            case NORTH -> tilePosition.cpy().add(0, -1);
+            case SOUTH -> tilePosition.cpy().add(0, 1);
+            case EAST -> tilePosition.cpy().add(1, 0);
+            case WEST -> tilePosition.cpy().add(-1, 0);
+        };
+
+        if (chain.getSnapshot().getSnapshotMap().isOutOfBounds(targetPosition)) {
+            return false;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            // not implemented - waiting on game Controller
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            // not implemented - waiting on game Controller
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            // not implemented - waiting on game Controller
-        }
+        
+        chain.addGameStateUpdate(new MovementGSU(tilePosition, childIndex, targetPosition));
+        return true;
     }
 
+    @Override
+    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+        return false;
+    }
 }

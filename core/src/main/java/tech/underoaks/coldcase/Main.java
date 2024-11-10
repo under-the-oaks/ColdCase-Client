@@ -3,11 +3,10 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.loader.enums.Direction;
+import tech.underoaks.coldcase.data.tileContent.Player;
 
 import java.nio.file.Path;
 
@@ -29,10 +28,7 @@ public class Main extends ApplicationAdapter {
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
 
-        gameController.triggerAction(
-            new Vector2(1, 2),
-            Direction.SOUTH
-        );
+        PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
     }
 
     @Override
@@ -49,7 +45,7 @@ public class Main extends ApplicationAdapter {
             timeSinceLastLog = 0f;
         }
 
-        map.updatePlayer(deltaTime);
+        PlayerController.getInstance().inputUpdate();
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
@@ -67,7 +63,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        map.dispose();
+        gameController.getCurrentMap().dispose();
         batch.dispose();
     }
 }

@@ -19,7 +19,7 @@ public class Wall extends TileContent {
     @Override
     public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) {
         // TODO
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     @Override
