@@ -52,6 +52,10 @@ jobs:
           name: code-coverage-report
           path: '**/build/reports/jacoco/test/html'
 
+      - name: Summarize tests results
+        uses: jeantessier/test-summary-action@v1
+        if: ${{ always() }}
+
       - name: Archive built artifacts
         if: always()
         uses: actions/upload-artifact@v3
