@@ -124,10 +124,10 @@ public abstract class TileContent implements Cloneable {
      * @param chain        InteractionChain managing the snapshot.
      * @param tilePosition The position of the currently selected tile.
      * @return True if an update as been performed; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
      * @implNote Ensure this method returns {@code true} only for meaningful changes to avoid unnecessary processing.
      * It should not always return {@code true} to prevent infinite loops in calling methods like
      * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
-     * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
     public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException;
 
@@ -165,6 +165,13 @@ public abstract class TileContent implements Cloneable {
         return this.tileContent.popContent();
     }
 
+    public TileContent topContent() {
+        if (this.tileContent == null) {
+            return this;
+        }
+        return this.tileContent.topContent();
+    }
+
     public VisibilityStates getVisibilityState() {
         return visibilityState;
     }
@@ -189,6 +196,10 @@ public abstract class TileContent implements Cloneable {
         isPlayerPassable = playerPassable;
     }
 
+    public void dispose() {
+        texture.dispose();
+    }
+
     @Override
     public TileContent clone() throws CloneNotSupportedException {
         try {
@@ -200,5 +211,29 @@ public abstract class TileContent implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
+    }
+
+    public int getChildIndex(TileContent tileContent) {
+        if (this == tileContent) {
+            return 0;
+        }
+        if (this.tileContent == null) {
+            return -1;
+        }
+        int index = this.tileContent.getChildIndex(tileContent);
+        if (index == -1) {
+            return -1;
+        }
+        return index + 1;
+    }
+
+    public TileContent getTileContentByIndex(int i) {
+        if (i == 0) {
+            return this;
+        }
+        if (tileContent == null) {
+            throw new IllegalArgumentException("TileContent not found");
+        }
+        return tileContent.getTileContentByIndex(i - 1);
     }
 }

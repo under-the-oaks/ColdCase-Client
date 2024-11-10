@@ -37,22 +37,23 @@ public class GameController {
     /**
      * Initiates an action at a specified position targeting another position.
      *
-     * @param actionDirection  The direction in wich the action get triggered.
-     * @param targetPos The target position where the action is applied.
+     * @param actionDirection The direction in which the action get triggered.
+     * @param targetPos       The target position where the action is applied.
+     * @return True if the action was successfully triggered, false otherwise.
      */
-    public void triggerAction(Vector2 targetPos, Direction actionDirection) {
+    public boolean triggerAction(Vector2 targetPos, Direction actionDirection) {
         InteractionChain chain = createInteractionChain();
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
         // Requesting an action handler to respond to the triggered action
         Tile targetTile = snapshotMap.getTile(targetPos);
         if (targetTile == null) {
-            return;
+            return false;
         }
 
         TileContent targetTileContent = targetTile.getTileContent();
         if (targetTileContent == null) {
-            return;
+            return false;
         }
 
         // Actions will be handled inside a secured body to ensure only valid actions will be
@@ -60,15 +61,8 @@ public class GameController {
         try {
             // Trigger initial action
             boolean action = targetTileContent.handleAction(chain, targetPos, actionDirection);
-
             if (!action) {
-                System.out.println("Couldn't handle action");
-                // TODO @MAX Hier Movement?
-                // Wenn ja dann nach dem Movement nochmal updateUntilStable und action auf true setzen
-            }
-
-            if (!action) {
-                return;
+                return false;
             }
 
             // Update due to potential changes
@@ -76,10 +70,12 @@ public class GameController {
         } catch (GameStateUpdateException e) {
             System.err.println("Couldn't handle action");
             System.err.println(e.getMessage());
-            return;
+            return false;
         }
 
         applyGSUQueue(chain.getGSUQueue());
+
+        return true;
     }
 
     /**

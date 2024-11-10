@@ -79,6 +79,14 @@ public abstract class Tile implements Cloneable {
         }
     }
 
+    public TileContent topTileContent() {
+        if (this.tileContent == null) {
+            return null;
+        } else {
+            return this.tileContent.topContent();
+        }
+    }
+
     @Override
     public Tile clone() {
         try {
@@ -91,4 +99,14 @@ public abstract class Tile implements Cloneable {
             throw new AssertionError(e);
         }
     }
+
+    public void dispose() {
+        if (texture != null) {
+            texture.dispose();
+        }
+        if (tileContent != null) {
+            tileContent.dispose();
+        }
+    }
+
 }
