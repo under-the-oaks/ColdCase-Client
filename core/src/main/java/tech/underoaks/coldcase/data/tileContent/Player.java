@@ -30,14 +30,14 @@ public class Player extends TileContent {
 
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
-        //validation checks: if the target tile is out of bounds or the top target content is not player passable
+        //validation checks: if the target tile is out of bounds
         if (snapshotMap.isOutOfBounds(targetPosition)) {
             return false;
         }
 
+        //validation checks: if the target tile is not passable
         Tile targetTile = snapshotMap.getTile(targetPosition);
-        TileContent topTargetContent = targetTile.popTileContent();
-        targetTile.pushTileContent(topTargetContent);
+        TileContent topTargetContent = targetTile.topTileContent();
         if (topTargetContent != null && !topTargetContent.isPlayerPassable()) {
             return false;
         }
