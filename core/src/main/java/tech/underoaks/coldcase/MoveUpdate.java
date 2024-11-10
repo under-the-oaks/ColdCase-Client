@@ -8,14 +8,13 @@ import tech.underoaks.coldcase.enums.UpdateTypes;
 
 import java.util.Stack;
 
-public class MovementGSU extends GameStateUpdate {
+public class MoveUpdate extends GameStateUpdate {
 
     private final int sourceIndex;
     private final Vector2 sourcePosition;
     private final Vector2 targetPosition;
 
-
-    public MovementGSU(Vector2 sourcePosition, int sourceIndex, Vector2 targetPosition) {
+    public MoveUpdate(Vector2 sourcePosition, int sourceIndex, Vector2 targetPosition) {
         super(UpdateTypes.MAP_MODIFICATION);
         this.sourcePosition = sourcePosition;
         this.sourceIndex = sourceIndex;
@@ -25,7 +24,6 @@ public class MovementGSU extends GameStateUpdate {
     @Override
     public void apply(Map map) {
         TileContent sourceContent = map.getTileContentByIndex(sourcePosition, sourceIndex);
-
 
         Stack<TileContent> tileContents = new Stack<>();
 

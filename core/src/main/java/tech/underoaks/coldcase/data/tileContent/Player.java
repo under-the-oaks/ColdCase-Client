@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
-import tech.underoaks.coldcase.MovementGSU;
+import tech.underoaks.coldcase.MoveUpdate;
 import tech.underoaks.coldcase.data.Map;
 import tech.underoaks.coldcase.data.tiles.Tile;
 import tech.underoaks.coldcase.loader.enums.Direction;
@@ -42,9 +42,8 @@ public class Player extends TileContent {
             return false;
         }
 
-
         // adding the validated movement to the chain
-        chain.addGameStateUpdate(new MovementGSU(tilePosition, childIndex, targetPosition));
+        chain.addGameStateUpdate(new MoveUpdate(tilePosition, childIndex, targetPosition));
         return true;
     }
 
