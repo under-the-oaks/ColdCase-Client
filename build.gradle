@@ -29,6 +29,7 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
+  apply plugin: 'jacoco'
   sourceCompatibility = 21
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
@@ -53,6 +54,20 @@ configure(subprojects) {
 
   compileJava {
     options.incremental = true
+  }
+
+  // Configure JaCoCo report task
+  jacocoTestReport {
+    reports {
+      xml.required = true
+      html.required = true
+      csv.required = false
+    }
+    dependsOn test // tests are required to run before generating the report
+  }
+
+  test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
   }
 }
 
