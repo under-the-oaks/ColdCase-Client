@@ -18,8 +18,12 @@ import tech.underoaks.coldcase.data.tileContent.TileContent;
  *
  * @see TileContent
  */
-public abstract class Tile {
+public abstract class Tile implements Cloneable {
+    /**
+     * The content placed on this Tile
+     */
     private TileContent tileContent;
+
     private Texture texture;
 
     public Tile(Texture texture) {
@@ -55,4 +59,36 @@ public abstract class Tile {
         this.tileContent = tileContent;
     }
 
+    public void pushTileContent(TileContent tileContent) {
+        if (this.tileContent == null) {
+            this.tileContent = tileContent;
+        } else {
+            this.tileContent.pushContent(tileContent);
+        }
+    }
+
+    public TileContent popTileContent() {
+        if (this.tileContent == null) {
+            return null;
+        } else if (this.tileContent.tileContent == null) {
+            TileContent content = this.tileContent;
+            this.tileContent = null;
+            return content;
+        } else {
+            return this.tileContent.popContent();
+        }
+    }
+
+    @Override
+    public Tile clone() {
+        try {
+            Tile cloned = (Tile) super.clone();
+            if (this.tileContent != null) {
+                cloned.tileContent = this.tileContent.clone();
+            }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

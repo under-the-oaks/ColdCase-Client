@@ -2,45 +2,49 @@ package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.GameStateUpdateException;
+import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
-import tech.underoaks.coldcase.data.tiles.GroundTile;
 import tech.underoaks.coldcase.data.tiles.Tile;
 import tech.underoaks.coldcase.loader.enums.TileContents;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the game map, which is a 2D array of {@link Tile} objects.
+ * Provides methods for accessing and modifying the map, rendering, and updating the map state.
+ */
 public record Map(
-        Tile[][] tileArray
+    Tile[][] tileArray
 ) {
-
+    /**
+     * TODO @MAX JAVADOC
+     */
     static float tileSize = 16;
 
-    /**
-     * Generates a new map without any tiles placed
-     *
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return Empty map
-     */
-    public static Map getEmptyMap(int height, int width) {
-        return getGenericMap(EmptyTile.class, height, width);
+    public Tile getTile(int x, int y) {
+        return tileArray[y][x];
     }
 
-    /**
-     * Generates a new map without any special tiles
-     *
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return Empty map
-     */
-    public static Map getPlainMap(int height, int width) {
-        return getGenericMap(GroundTile.class, height, width);
+    public Tile getTile(Vector2 position) {
+        return this.getTile((int) position.x, (int) position.y);
+    }
+
+    public void setTile(int x, int y, Tile tile) {
+        tileArray[y][x] = tile;
+    }
+
+    public int getWidth() {
+        return tileArray[0].length;
+    }
+
+    public int getHeight() {
+        return tileArray.length;
     }
 
     /**
@@ -120,7 +124,6 @@ public record Map(
         List<List<Integer>> rawTiles = new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(path);
-            System.out.println(lines.size());
             for (int i = 0; i < lines.size(); i++) {
                 String[] split = lines.get(i).split(" ");
                 rawTiles.add(new ArrayList<>());
@@ -137,6 +140,12 @@ public record Map(
         return rawTiles;
     }
 
+    /**
+     * Determines the maximum width of the matrix (the longest row).
+     *
+     * @param matrix A List of Tiles representing the matrix.
+     * @return The maximum width (length of the longest row).
+     */
     private static int getMatrixWidth(List<List<Tile>> matrix) {
         int max = Integer.MIN_VALUE;
         for (List<Tile> row : matrix) {
@@ -144,29 +153,6 @@ public record Map(
             max = Math.max(length, max);
         }
         return max;
-    }
-
-    /**
-     * Generates a new map that is filled with a specified type of tile
-     *
-     * @param tile   Class that will fill the map
-     * @param height Height of the map
-     * @param width  Width of the map
-     * @return New Map
-     */
-    private static Map getGenericMap(Class<? extends Tile> tile, int height, int width) {
-        Tile[][] tileArray = new Tile[height][width];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                try {
-                    tileArray[y][x] = tile.getDeclaredConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return new Map(tileArray);
     }
 
     /**
@@ -179,8 +165,8 @@ public record Map(
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempX = x * tileSize * -1;
-                float tempY = y * tileSize * -1;
+                float tempY = x * tileSize * -1;
+                float tempX = y * tileSize * -1;
                 Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
                 tileArray[y][x].render(batch, tempPt.x, tempPt.y);
             }
@@ -213,5 +199,70 @@ public record Map(
         return (tempPt);
     }
 
+    /**
+     * Continuously updates the map until no further updates are possible.
+     *
+     * <p>Keeps trying to update the map with the given {@code InteractionChain} until no more changes occur.</p>
+     *
+     * @param chain the {@code InteractionChain} used to manage interactions and snapshots during updates
+     * @throws IllegalStateException if the maximum iteration limit is exceeded, suggesting a potential cyclic dependency in {@code TileContent}.
+     * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
+     * triggers another in a cyclic manner, the loop may otherwise never terminate.
+     */
+    public void updateUntilStable(InteractionChain chain) throws GameStateUpdateException {
+        int maxIteration = 100;
+        int iteration = 0;
+        while (this.updateMap(chain)) {
+            // Keep updating until no further updates occur
+            iteration++;
+            if (iteration > maxIteration) {
+                throw new IllegalStateException("Loop terminated due to excessive iterations; check for cyclic dependencies in TileContent.");
+            }
+        }
+    }
 
+    /**
+     * Updates the map by attempting to perform an update on each {@code Tile} in {@code tileArray}.
+     *
+     * <p>For each Tile with non-null {@code TileContent}, the {@code handleUpdate} method
+     * is invoked with the given {@code InteractionChain}.
+     *
+     * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
+     * @return true if at least one {@code TileContent} performs an update; false otherwise
+     * @see tech.underoaks.coldcase.data.tileContent.TileContent#handleUpdate(InteractionChain, Vector2)
+     */
+    public boolean updateMap(InteractionChain chain) throws GameStateUpdateException {
+        boolean updated = false;
+        for(int i = 0; i < tileArray.length; i++) {
+            for(int j = 0; j < tileArray[i].length; j++) {
+                if(tileArray[i][j].getTileContent() == null) {
+                    continue;
+                }
+                boolean result = tileArray[i][j].getTileContent().handleUpdate(
+                    chain,
+                    new Vector2(i, j)
+                );
+                updated = updated || result;
+            }
+        }
+        return updated;
+    }
+
+    /**
+     * Creates a deep clone of this {@code Map} instance.
+     *
+     * @return A new {@code Map} instance with a deep-cloned {@code Tile} array.
+     */
+    public Map deepClone() {
+        Tile[][] clonedTileArray = new Tile[tileArray.length][];
+
+        for (int i = 0; i < tileArray.length; i++) {
+            clonedTileArray[i] = new Tile[tileArray[i].length];
+            for (int j = 0; j < tileArray[i].length; j++) {
+                clonedTileArray[i][j] = tileArray[i][j].clone();
+            }
+        }
+
+        return new Map(clonedTileArray);
+    }
 }

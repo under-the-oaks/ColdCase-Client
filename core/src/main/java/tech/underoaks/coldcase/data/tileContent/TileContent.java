@@ -1,9 +1,14 @@
 package tech.underoaks.coldcase.data.tileContent;
 
+import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.GameStateUpdateException;
+import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import tech.underoaks.coldcase.enums.VisibilityStates;
+import tech.underoaks.coldcase.loader.enums.Direction;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
@@ -18,8 +23,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  * @see Tile
  */
-public abstract class TileContent {
-    private TileContent tileContent;
+public abstract class TileContent implements Cloneable {
+    /**
+     * Reference to the next TileContent in the stack
+     */
+    public TileContent tileContent;
+
+    /**
+     * The visibility state of this TileContent
+     */
+    protected VisibilityStates visibilityState;
+
     private Texture texture;
 
     private boolean isPlayerPassable;
@@ -30,7 +44,6 @@ public abstract class TileContent {
         this.isPlayerPassable = isPlayerPassable;
         this.isObjectPassable = isObjectPassable;
     }
-
 
     /**
      * Renders the tileContent at the specified coordinates using the given {@code SpriteBatch}.
@@ -52,6 +65,114 @@ public abstract class TileContent {
         }
     }
 
+    /**
+     * Tries to perform the action associated with this TileContent when interacted with.
+     *
+     * <p>{@code handleAction(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
+     * This means that the top most content gets the first chance to handle a triggered action.
+     * If a content handles the action no more contents will be able to accept it.
+     *
+     * @param chain           InteractionChain managing the snapshot.
+     * @param actionDirection The direction in wich the action get triggered.
+     * @param tilePosition    The position of the currently selected tile.
+     * @return True if the action has been taken care of; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     */
+    public boolean handleAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        if (tileContent != null && tileContent.handleAction(chain, tilePosition, actionDirection)) {
+            return true;
+        }
+
+        return action(chain, tilePosition, actionDirection);
+    }
+
+    /**
+     * Performs the action associated with this TileContent when interacted with.
+     *
+     * @param chain           InteractionChain managing the snapshot.
+     * @param actionDirection The direction in wich the action get triggered.
+     * @param tilePosition    The position of the currently selected tile.
+     * @return True if the action has been taken care of; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     */
+    public abstract boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException;
+
+    /**
+     * Tries to perform an update associated with this TileContent when triggered.
+     *
+     * <p>{@code handleUpdate(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
+     * This means that the top most content gets the first chance to handle a triggered update.
+     *
+     * @param chain        InteractionChain managing the snapshot.
+     * @param tilePosition The position of the currently selected tile.
+     * @return True if an update as been performed; False otherwise
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     * @see TileContent#update(InteractionChain, Vector2)
+     */
+    public boolean handleUpdate(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+        boolean result_child = false;
+        if (tileContent != null) {
+            result_child = tileContent.handleUpdate(chain, tilePosition);
+        }
+        boolean result_self = update(chain, tilePosition);
+        return result_child || result_self;
+    }
+
+    /**
+     * Updates the state of this TileContent based on interactions.
+     *
+     * @param chain        InteractionChain managing the snapshot.
+     * @param tilePosition The position of the currently selected tile.
+     * @return True if an update as been performed; False otherwise
+     * @implNote Ensure this method returns {@code true} only for meaningful changes to avoid unnecessary processing.
+     * It should not always return {@code true} to prevent infinite loops in calling methods like
+     * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
+     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     */
+    public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException;
+
+    public void setNextContent(TileContent tileContent) {
+        this.tileContent = tileContent;
+    }
+
+    public TileContent getNextContent() {
+        return tileContent;
+    }
+
+    /**
+     * Adds a new content layer on top of the current stack of contents.
+     */
+    public void pushContent(TileContent tileContent) {
+        if (this.tileContent != null) {
+            this.tileContent.pushContent(tileContent);
+        } else {
+            this.tileContent = tileContent;
+        }
+    }
+
+    /**
+     * Removes the topmost content layer from the stack and returns it.
+     */
+    public TileContent popContent() {
+        if (this.tileContent == null) {
+            return null;
+        }
+        if (this.tileContent.tileContent == null) {
+            TileContent content = this.tileContent;
+            this.tileContent = null;
+            return content;
+        }
+        return this.tileContent.popContent();
+    }
+
+    public VisibilityStates getVisibilityState() {
+        return visibilityState;
+    }
+
+    public void setVisibilityState(VisibilityStates visibilityState) {
+        this.visibilityState = visibilityState;
+    }
+
     public boolean isObjectPassable() {
         return isObjectPassable;
     }
@@ -66,5 +187,18 @@ public abstract class TileContent {
 
     public void setPlayerPassable(boolean playerPassable) {
         isPlayerPassable = playerPassable;
+    }
+
+    @Override
+    public TileContent clone() throws CloneNotSupportedException {
+        try {
+            TileContent cloned = (TileContent) super.clone();
+            if (this.tileContent != null) {
+                cloned.tileContent = this.tileContent.clone();
+            }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(e);
+        }
     }
 }
