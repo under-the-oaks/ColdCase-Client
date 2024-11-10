@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.data.Map;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tiles.Tile;
+import tech.underoaks.coldcase.loader.enums.Direction;
 
 import java.util.Queue;
 
@@ -36,10 +37,10 @@ public class GameController {
     /**
      * Initiates an action at a specified position targeting another position.
      *
-     * @param position  The origin position of the action.
+     * @param actionDirection  The direction in wich the action get triggered.
      * @param targetPos The target position where the action is applied.
      */
-    public void triggerAction(Vector2 position, Vector2 targetPos) {
+    public void triggerAction(Vector2 targetPos, Direction actionDirection) {
         InteractionChain chain = createInteractionChain();
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
@@ -58,7 +59,7 @@ public class GameController {
         // applied to the running instance
         try {
             // Trigger initial action
-            boolean action = targetTileContent.handleAction(chain, position);
+            boolean action = targetTileContent.handleAction(chain, targetPos, actionDirection);
 
             if (!action) {
                 System.out.println("Couldn't handle action");

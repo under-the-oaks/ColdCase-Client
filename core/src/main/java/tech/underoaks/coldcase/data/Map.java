@@ -2,6 +2,7 @@ package tech.underoaks.coldcase.data;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -209,7 +209,7 @@ public record Map(
      * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
      * triggers another in a cyclic manner, the loop may otherwise never terminate.
      */
-    public void updateUntilStable(InteractionChain chain) {
+    public void updateUntilStable(InteractionChain chain) throws GameStateUpdateException {
         int maxIteration = 100;
         int iteration = 0;
         while (this.updateMap(chain)) {
@@ -229,14 +229,23 @@ public record Map(
      *
      * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
      * @return true if at least one {@code TileContent} performs an update; false otherwise
-     * @see tech.underoaks.coldcase.data.tileContent.TileContent#handleUpdate(InteractionChain)
+     * @see tech.underoaks.coldcase.data.tileContent.TileContent#handleUpdate(InteractionChain, Vector2)
      */
-    public boolean updateMap(InteractionChain chain) {
-        List<Boolean> results = Arrays.stream(tileArray)
-            .flatMap(Arrays::stream)
-            .map(tile -> tile.getTileContent() != null && tile.getTileContent().handleUpdate(chain))
-            .toList();
-        return results.contains(true);
+    public boolean updateMap(InteractionChain chain) throws GameStateUpdateException {
+        boolean updated = false;
+        for(int i = 0; i < tileArray.length; i++) {
+            for(int j = 0; j < tileArray[i].length; j++) {
+                if(tileArray[i][j].getTileContent() == null) {
+                    continue;
+                }
+                boolean result = tileArray[i][j].getTileContent().handleUpdate(
+                    chain,
+                    new Vector2(i, j)
+                );
+                updated = updated || result;
+            }
+        }
+        return updated;
     }
 
     /**

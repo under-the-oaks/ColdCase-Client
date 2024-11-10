@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.data.Map;
+import tech.underoaks.coldcase.loader.enums.Direction;
 
 import java.nio.file.Path;
 
@@ -29,8 +30,8 @@ public class Main extends ApplicationAdapter {
         gameController.setCurrentMap(map);
 
         gameController.triggerAction(
-            new Vector2(0, 0),
-            new Vector2(1, 2)
+            new Vector2(1, 2),
+            Direction.SOUTH
         );
     }
 
@@ -43,7 +44,7 @@ public class Main extends ApplicationAdapter {
 
         timeSinceLastLog += deltaTime;
 
-        if (timeSinceLastLog >= 2f) {
+        if (timeSinceLastLog >= 0.5f) {
             System.out.println("FPS: " + fps);
             timeSinceLastLog = 0f;
         }

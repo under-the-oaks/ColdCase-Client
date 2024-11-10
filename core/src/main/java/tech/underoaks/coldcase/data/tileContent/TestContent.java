@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
 import tech.underoaks.coldcase.TestUpdate;
+import tech.underoaks.coldcase.loader.enums.Direction;
 
 /**
  * Represents a test content that can be placed on a tile.
@@ -18,13 +19,13 @@ public class TestContent extends TileContent {
     }
 
     @Override
-    public boolean action(InteractionChain chain, Vector2 position) throws GameStateUpdateException {
+    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction direction) throws GameStateUpdateException {
         chain.addGameStateUpdate(new TestUpdate(new Vector2(3, 4)));
         return true;
     }
 
     @Override
-    public boolean update(InteractionChain chain) {
+    public boolean update(InteractionChain chain, Vector2 tilePosition) {
         return false;
     }
 }
