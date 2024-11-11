@@ -1,13 +1,18 @@
 package tech.underoaks.coldcase.loader.enums;
 
+import tech.underoaks.coldcase.data.tileContent.Player;
+import tech.underoaks.coldcase.data.tileContent.TestContent;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tileContent.*;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Enum representing different types of tile contents.
+ * Used for mapping indices to tile content classes.
+ */
 public enum TileContents {
-    WALL(1, Wall.class),
-    TEST_ITEM(2, TestItem.class);
+    WALL(1, Wall.class), TEST(2, TestContent.class), PLAYER(3, Player.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
@@ -21,10 +26,11 @@ public enum TileContents {
         return index;
     }
 
-    public Class<? extends TileContent> getTileClass() {
-        return tileClass;
-    }
-
+    /**
+     * Creates a new instance of the tile content.
+     *
+     * @return A new TileContent instance.
+     */
     public TileContent getNewTileContent() {
         try {
             return tileClass.getDeclaredConstructor().newInstance();
@@ -34,6 +40,13 @@ public enum TileContents {
         }
     }
 
+    /**
+     * Retrieves a new TileContent instance based on the given index.
+     *
+     * @param index The index of the TileContent.
+     * @return A new TileContent instance.
+     * @throws IllegalArgumentException If no TileContent corresponds to the given index.
+     */
     public static TileContent getNewTileClassByIndex(int index) {
         for (TileContents tileContent : TileContents.values()) {
             if (tileContent.getIndex() == index) {
