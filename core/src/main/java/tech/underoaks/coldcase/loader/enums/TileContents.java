@@ -12,7 +12,10 @@ import java.lang.reflect.InvocationTargetException;
  * Used for mapping indices to tile content classes.
  */
 public enum TileContents {
-    WALL(1, Wall.class), TEST(2, TestContent.class), PLAYER(3, Player.class);
+    WALL(1, Wall.class),
+    TEST(2, TestContent.class),
+    PLAYER(3, Player.class),
+    TEST_ITEM(4,TestItem.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
