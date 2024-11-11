@@ -1,9 +1,6 @@
 package tech.underoaks.coldcase.loader.enums;
 
-import tech.underoaks.coldcase.data.tileContent.Player;
-import tech.underoaks.coldcase.data.tileContent.TestContent;
-import tech.underoaks.coldcase.data.tileContent.TileContent;
-import tech.underoaks.coldcase.data.tileContent.Wall;
+import tech.underoaks.coldcase.data.tileContent.*;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -12,7 +9,10 @@ import java.lang.reflect.InvocationTargetException;
  * Used for mapping indices to tile content classes.
  */
 public enum TileContents {
-    WALL(1, Wall.class), TEST(2, TestContent.class), PLAYER(3, Player.class);
+    WALL(1, Wall.class),
+    TEST(2, TestContent.class),
+    PLAYER(3, Player.class),
+    movableBlock(4, movableBlock.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
