@@ -24,7 +24,7 @@ public class ItemObject extends TileContent{
             PlayerController.getInstance().setInventory(this);
 
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition, childIndex));
-            //TODO add item dropping / switching
+            chain.addGameStateUpdate(new AddTileContentUpdate(tilePosition, playerInventoryItem));
         }
 
         return false;
