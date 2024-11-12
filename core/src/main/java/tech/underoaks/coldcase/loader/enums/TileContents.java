@@ -1,8 +1,5 @@
 package tech.underoaks.coldcase.loader.enums;
 
-import tech.underoaks.coldcase.data.tileContent.Player;
-import tech.underoaks.coldcase.data.tileContent.TestContent;
-import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tileContent.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,8 +12,9 @@ public enum TileContents {
     WALL(1, Wall.class),
     TEST(2, TestContent.class),
     PLAYER(3, Player.class),
-    TEST_ITEM(4,TestItem.class),
-    TEST_ITEM02(5,TestItem02.class);
+    MOVABLE_BLOCK(4, movableBlock.class),
+    TEST_ITEM(5,TestItem.class),
+    TEST_ITEM02(6,TestItem02.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

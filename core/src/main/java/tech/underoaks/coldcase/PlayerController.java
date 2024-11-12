@@ -9,8 +9,8 @@ import tech.underoaks.coldcase.loader.enums.Direction;
 public class PlayerController {
 
     private static PlayerController instance;
-
     private Vector2 playerPosition;
+    private Direction lookDirection;
 
     private Direction playerHeading ;
 
@@ -40,18 +40,21 @@ public class PlayerController {
                 playerPosition.y -= 1;
                 playerHeading = Direction.NORTH;
             }
+            lookDirection = Direction.NORTH;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.SOUTH)) {
                 playerPosition.y += 1;
                 playerHeading = Direction.SOUTH;
             }
+            lookDirection = Direction.SOUTH;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.WEST)) {
                 playerPosition.x -= 1;
                 playerHeading = Direction.WEST;
             }
+            lookDirection = Direction.WEST;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.EAST)) {
@@ -80,6 +83,10 @@ public class PlayerController {
                 }
 
             }
+            lookDirection = Direction.EAST;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            GameController.getInstance().triggerAction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection);
         }
     }
 
