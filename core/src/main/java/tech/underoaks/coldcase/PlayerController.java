@@ -63,6 +63,7 @@ public class PlayerController {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             GameController.getInstance().triggerAction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection);
         }
+
     }
 
     public void setPlayerPosition(Vector2 playerPosition) {

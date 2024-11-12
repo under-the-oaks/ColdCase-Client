@@ -8,6 +8,11 @@ import tech.underoaks.coldcase.enums.UpdateTypes;
 
 import java.util.Stack;
 
+/**
+ * The RemoveTileContentUpdate class represents a game state update that removes
+ * specific tile content from a map. This class extends GameStateUpdate.
+ */
+
 public class RemoveTileContentUpdate extends GameStateUpdate{
 
     private final int sourceIndex;

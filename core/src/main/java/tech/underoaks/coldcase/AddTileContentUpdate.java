@@ -6,6 +6,11 @@ import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.data.tiles.Tile;
 import tech.underoaks.coldcase.enums.UpdateTypes;
 
+/**
+ * The AddTileContentUpdate class represents a game state update that adds
+ * specific tile content to a map.
+ */
+
 public class AddTileContentUpdate extends GameStateUpdate{
     private final Vector2 targetPosition;
     private final TileContent targetTileContent;

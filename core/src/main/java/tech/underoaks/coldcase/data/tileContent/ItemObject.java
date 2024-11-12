@@ -14,12 +14,12 @@ public class ItemObject extends TileContent{
     public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition, this);
 
-
+        //no item in inventory
         if(PlayerController.getInstance().getInventory() == null){
             PlayerController.getInstance().setInventory(this);
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition, childIndex));
             return true;
-        }else{
+        }else{//item switching if item in inventory is not null
             TileContent playerInventoryItem = PlayerController.getInstance().getInventory();
             PlayerController.getInstance().setInventory(this);
 
