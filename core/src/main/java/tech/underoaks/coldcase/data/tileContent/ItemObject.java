@@ -25,9 +25,10 @@ public class ItemObject extends TileContent{
 
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition, childIndex));
             chain.addGameStateUpdate(new AddTileContentUpdate(tilePosition, playerInventoryItem));
+            return true;
         }
 
-        return false;
+        //return false;
     }
 
     @Override
