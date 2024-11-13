@@ -46,6 +46,9 @@ public class GameController {
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
         // Requesting an action handler to respond to the triggered action
+        if (snapshotMap.isOutOfBounds(targetPos)) {
+            return false;
+        }
         Tile targetTile = snapshotMap.getTile(targetPos);
         if (targetTile == null) {
             return false;

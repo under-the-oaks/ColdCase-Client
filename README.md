@@ -1,5 +1,7 @@
 # Cold Case
 
+[![CI für ColdCase](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml/badge.svg)](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml)
+
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.

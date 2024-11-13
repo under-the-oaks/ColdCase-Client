@@ -130,7 +130,7 @@ public record Map(
      * Reads a map file and returns a 2D List of integers representing the map
      *
      * @param path Path to the file
-     * @return 2D List of integers representing the map
+     * @return 2D-List of integers representing the map
      */
     private static List<List<Integer>> readMapFile(Path path) {
         List<List<Integer>> rawTiles = new ArrayList<>();
