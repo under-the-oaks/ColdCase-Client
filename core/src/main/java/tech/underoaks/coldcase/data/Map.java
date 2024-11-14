@@ -186,7 +186,10 @@ public record Map(
     }
 
     public boolean isOutOfBounds(Vector2 position) {
-        return position.x < 0 || position.x >= getWidth() || position.y < 0 || position.y >= getHeight();
+        return position.x < 0
+            || position.y < 0
+            || position.x >= getWidth()
+            || position.y >= getHeight();
     }
 
     /**
