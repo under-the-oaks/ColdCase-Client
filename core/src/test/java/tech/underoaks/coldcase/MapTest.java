@@ -29,6 +29,10 @@ class MapTest{
     static TileContent mockTileContent;
 
     // "Empty" Update
+
+    /**
+     * A GamesStateUpdate constructed to work with {@code TestTileContent}
+     */
     static class EmptyUpdate extends GameStateUpdate{
 
         protected EmptyUpdate() {
@@ -56,6 +60,12 @@ class MapTest{
 
     // Fake TileContent Klasse erstellen
 
+    /**
+     * A TileContent used for testing purposes using a mockTexture instead of an actual.
+     *
+     * The action method adds a BrokenTileContent on top of one tile to change the map
+     * for testing. It did not work as intended though.
+     */
     static class TestTileContent extends TileContent {
 
         public TestTileContent() {
@@ -86,6 +96,12 @@ class MapTest{
         }
     }
 
+    /**
+     * A TileContent used for testing purposes mainly for {@code UpdateMapUntilStable}.
+     *
+     * The action method always returns true making it run the method run into it's maximum
+     * amount of iteration.
+     */
     static class BrokenTileContent extends TileContent {
 
         public BrokenTileContent() {
@@ -127,10 +143,11 @@ class MapTest{
     @Test
     public void GetTileContentByTypeTest(){
 
-        // TODO - Soll das so sein?
-        // Map emptyMap = new Map(null); Leere Map wird nicht gehandled
-        // System.out.println( emptyMap.getTileContentByType( TestTileContent.class ) );
-        // Assertions.assertNull( emptyMap.getTileContentByType( TestTileContent.class ) );
+        /* TODO - Soll das so sein?
+         Map emptyMap = new Map(null); //Leere Map wird nicht gehandled
+         System.out.println( emptyMap.getTileContentByType( TestTileContent.class ) );
+         Assertions.assertNull( emptyMap.getTileContentByType( TestTileContent.class ) );
+         */
 
         // Finden
         Assertions.assertEquals( new Vector2(0,0), mockMap.getTileContentByType( TestTileContent.class ));
