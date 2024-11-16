@@ -10,6 +10,20 @@ import tech.underoaks.coldcase.data.tileContent.Player;
 
 import java.nio.file.Path;
 
+/**
+ * {@code HeadlessApplicationListener} ist eine Implementierung der Hauptanwendung
+ * für eine kopflose Umgebung (ohne grafische Ausgabe).
+ * <p>
+ * Diese Klasse erweitert {@link Main} und wird verwendet, um das Spiel im
+ * "Headless"-Modus zu starten, was nützlich für Tests oder Server-Betrieb sein kann.
+ * Sie lädt die Karte, initialisiert den {@link GameController} und setzt die
+ * Position des Spielers.
+ * </p>
+ *
+ * @see Main
+ * @see GameController
+ * @see Map
+ */
 public class HeadlessApplicationListener extends Main {
 
     public GameController gameController;
