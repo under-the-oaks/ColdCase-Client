@@ -41,7 +41,7 @@ public class Main extends ApplicationAdapter {
         timeSinceLastLog += deltaTime;
 
         if (timeSinceLastLog >= 0.5f) {
-            System.out.println("FPS: " + fps);
+            //System.out.println("FPS: " + fps);
             timeSinceLastLog = 0f;
         }
 

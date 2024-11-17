@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.loader.enums.Direction;
 
 public class PlayerController {
@@ -10,6 +11,20 @@ public class PlayerController {
     private static PlayerController instance;
     private Vector2 playerPosition;
     private Direction lookDirection;
+
+
+
+    public TileContent getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(TileContent inventory) {
+        this.inventory = inventory;
+        //debug
+        System.out.println("Inventory:"+this.inventory.toString());
+    }
+
+    private TileContent inventory;
 
     public static PlayerController getInstance() {
         if (instance == null) {
@@ -44,9 +59,11 @@ public class PlayerController {
             }
             lookDirection = Direction.EAST;
         }
+        // Interact
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             GameController.getInstance().triggerAction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection);
         }
+
     }
 
     public void setPlayerPosition(Vector2 playerPosition) {
