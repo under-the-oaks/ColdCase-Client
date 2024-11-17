@@ -30,11 +30,11 @@ public class HeadlessApplicationListener extends Main {
 
     @Override
     public void create() {
-        Map map = Map.getMap(Path.of("maps/test_plain"));
-        gameController = GameController.getInstance();
-        gameController.setCurrentMap(map);
-
-        PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
+//        Map map = Map.getMap(Path.of("maps/test_plain"));
+//        gameController = GameController.getInstance();
+//        gameController.setCurrentMap(map);
+//
+//        PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
     }
 
     @Override

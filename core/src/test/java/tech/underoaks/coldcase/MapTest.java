@@ -124,7 +124,8 @@ class MapTest{
 
     @BeforeEach
     public void setUp(){
-        game = new HeadlessApplicationListener();
+        //das kann alles mit mockito gemacht werden, der headless application listener ist nicht notwendig
+        //game = new HeadlessApplicationListener();
 
         // Mock Variablen befüllen
 

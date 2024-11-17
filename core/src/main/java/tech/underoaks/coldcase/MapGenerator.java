@@ -1,0 +1,146 @@
+package tech.underoaks.coldcase;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
+import tech.underoaks.coldcase.data.Map;
+import tech.underoaks.coldcase.data.tiles.EmptyTile;
+import tech.underoaks.coldcase.data.tiles.Tile;
+import tech.underoaks.coldcase.loader.enums.TileContents;
+import tech.underoaks.coldcase.loader.enums.Tiles;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Class for generating maps from text files.
+ * <p>
+ * This class is a singleton, and can be accessed using the {@link #getInstance()} method.
+ * It provides methods for serializing and deserializing maps to and from JSON.
+ * The JSON format used is the one provided by the {@link Json} class provided by libGDX.
+ */
+public class MapGenerator {
+
+    private static MapGenerator instance;
+
+    public static MapGenerator getInstance() {
+        if (instance == null) {
+            instance = new MapGenerator();
+        }
+        return instance;
+    }
+
+    Json json = new Json();
+
+    /**
+     * Serializes the map from text files to JSON format.
+     * <p>
+     * The map is read from the text files located at the given path.
+     *
+     * @param path        The path to the directory containing the map text files.
+     *                    The map files should be named "map.detective" and "map.ghost".
+     * @param isDetective Whether the map is for the detective or the ghost.
+     *                    If true, the detective map is serialized. Otherwise, the ghost map is serialized.
+     * @return A {@link Map} Object.
+     */
+    public Map serializeContentToMap(Path path, boolean isDetective) {
+        Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
+        List<String> lines = null;
+        // Read the file into a list of strings
+        try {
+            lines = Files.readAllLines(tilePath);
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+
+        assert lines != null;
+
+        // Split the lines into layers
+        // Each layer is separated by a line containing only "---"
+        // layer 0 is the metadata layer containing the x and y size of the map,
+        // layer 1 is the tile layer,
+        // layer 2 and all following layers are the tile content layers
+        List<List<String>> mapLayers = new ArrayList<>();
+
+        // The size of the current partition, used to count the number of lines in each partition
+        int partitionSize = 0;
+
+        // Split the lines into layers using the "---" separator and partitionSize variable
+        for (int i = 0; i < lines.size(); i++) {
+            if (!lines.get(i).equals("---")) {
+                partitionSize++;
+            } else {
+                mapLayers.add(new ArrayList<>(lines.subList(i - partitionSize, i)));
+                partitionSize = 0;
+            }
+        }
+
+        // extract the metadata layer
+        String[] rawMapSize = mapLayers.getFirst().getFirst().split(" ");
+        Vector2 mapSize = new Vector2(Integer.parseInt(rawMapSize[0]), Integer.parseInt(rawMapSize[1]));
+
+        // extract the tile layer
+        List<String> tiles = mapLayers.get(1);
+        Tile[][] tileArray = new Tile[(int) mapSize.x][(int) mapSize.y];
+
+        // create the tile Objects and insert into tileArray
+        for (int i = 0; i < mapSize.x; i++) {
+            // if the map size x is larger than the actual number of lines,
+            // reduce the map size - no need to create a whole row of empty tiles
+            if (tiles.get(i) == null) {
+                mapSize.x--;
+                continue;
+            }
+            String[] tileRow = tiles.get(i).split(" ");
+            for (int j = 0; j < mapSize.y; j++) {
+                // if the map size y is larger than the actual number of tiles in the row,
+                // fill the rest of the row with empty tiles
+                try {
+                    tileArray[i][j] = Tiles.getNewTileClassByIndex(Integer.parseInt(tileRow[j]));
+                } catch (IndexOutOfBoundsException e) {
+                    tileArray[i][j] = Tiles.getNewTileClassByIndex(0);
+                }
+            }
+        }
+
+        // extract the tile content layers
+        for (int i = 2; i < mapLayers.size(); i++) {
+            List<String> tileContents = mapLayers.get(i);
+            for (int j = 0; j < mapSize.x; j++) {
+                String[] tileContentRow = tileContents.get(j).split(" ");
+                for (int k = 0; k < mapSize.y; k++) {
+                    // if the Tile is an instance of EmptyTile, push a Invisible Wall to it so the player cant walk on it
+                    if (tileArray[j][k] instanceof EmptyTile) {
+                        tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(5));
+                    }
+                    tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(Integer.parseInt(tileContentRow[k])));
+                }
+            }
+        }
+
+        return new Map(tileArray);
+    }
+
+    /**
+     * Serializes a {@link Map} object to JSON format. This is planed to be used for saving the Map to a file.
+     * Note that this does not include the PlayerController or the GameController which are not part of the Map.
+     *
+     * @param map The {@link Map} to serialize.
+     */
+    public String serializeMapToJson(Map map) {
+        return json.toJson(map);
+    }
+
+    /**
+     * Deserializes a {@link Map} object from JSON format.
+     *
+     * @param jsonMap The JSON string to deserialize.
+     * @return The deserialized {@link Map} object.
+     */
+    public Map deserialize(String jsonMap) {
+        return json.fromJson(Map.class, jsonMap);
+    }
+
+}

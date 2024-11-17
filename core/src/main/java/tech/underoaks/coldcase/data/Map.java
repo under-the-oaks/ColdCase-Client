@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
+import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.data.tileContent.TileContent;
 import tech.underoaks.coldcase.loader.enums.Tiles;
 import tech.underoaks.coldcase.data.tiles.EmptyTile;
@@ -20,20 +21,31 @@ import java.util.List;
  * Represents the game map, which is a 2D array of {@link Tile} objects.
  * Provides methods for accessing and modifying the map, rendering, and updating the map state.
  */
-public record Map(
-    Tile[][] tileArray
-) {
+public class Map {
+
+    public Tile[][] tileArray;
+
     /**
      * The size of each tile in pixels
      */
     static float tileSize = 32;
+
+    /**
+     * Default constructor for Map needed for deserialization in {@link MapGenerator}
+     */
+    public Map() {
+    }
+
+    public Map(Tile[][] tileArray) {
+        this.tileArray = tileArray;
+    }
 
     public Tile getTile(int x, int y) {
         return tileArray[y][x];
     }
 
     public Tile getTile(Vector2 position) {
-        return this.getTile((int) position.x, (int) position.y);
+        return this.getTile((int) position.y, (int) position.x);
     }
 
     public Vector2 getTileContentByType(Class<? extends TileContent> type) {
@@ -168,7 +180,7 @@ public record Map(
     }
 
     public int getChildIndex(Vector2 tile, TileContent tileContent) {
-        return tileArray[(int) tile.y][(int) tile.x].getTileContent().getChildIndex(tileContent);
+        return tileArray[(int) tile.x][(int) tile.y].getTileContent().getChildIndex(tileContent);
     }
 
     public TileContent getTileContentByIndex(Vector2 position, int index) {
@@ -186,10 +198,7 @@ public record Map(
     }
 
     public boolean isOutOfBounds(Vector2 position) {
-        return position.x < 0
-            || position.y < 0
-            || position.x >= getWidth()
-            || position.y >= getHeight();
+        return position.x < 0 || position.y < 0 || position.x >= getWidth() || position.y >= getHeight();
     }
 
     /**
@@ -275,10 +284,7 @@ public record Map(
                 if (tileArray[i][j].getTileContent() == null) {
                     continue;
                 }
-                boolean result = tileArray[i][j].getTileContent().handleUpdate(
-                    chain,
-                    new Vector2(i, j)
-                );
+                boolean result = tileArray[i][j].getTileContent().handleUpdate(chain, new Vector2(i, j));
                 updated = updated || result;
             }
         }
