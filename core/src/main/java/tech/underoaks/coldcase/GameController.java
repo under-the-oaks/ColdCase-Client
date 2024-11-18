@@ -21,6 +21,7 @@ public class GameController {
      * Active game map
      */
     private Map currentMap;
+    private InteractionChain remoteInteractionCain;
 
     /**
      * Retrieves the singleton instance of the GameController.
@@ -108,5 +109,26 @@ public class GameController {
     public InteractionChain createInteractionChain() {
         Snapshot snapshot = new Snapshot(currentMap);
         return new InteractionChain(snapshot);
+    }
+
+    //InteractionChain remoteInteractionCain = null;
+
+    public void handleCreateRemoteInteractionChain(){
+        remoteInteractionCain = createInteractionChain();
+        System.out.println("handleCreateRemoteInteractionChain Called");
+    }
+
+    public void handleAbortRemoteInteractionChain(){
+        remoteInteractionCain = null;
+        System.out.println("handleAbortRemoteInteractionChain Called");
+    }
+
+    public boolean handleAppendRemoteInteraction(){
+        System.out.println("handleAppendRemoteInteraction Called");
+        return true;
+    }
+
+    public void handleApplyRemoteGSUs(){
+        System.out.println("handleApplyRemoteGSUs Called");
     }
 }

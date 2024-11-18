@@ -3,6 +3,7 @@ package tech.underoaks.coldcase.data.tileContent;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.GameStateUpdateException;
 import tech.underoaks.coldcase.InteractionChain;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.data.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -36,6 +37,7 @@ public abstract class TileContent implements Cloneable {
 
     private Texture texture;
 
+    protected boolean isTranscendent = false;
     private boolean isPlayerPassable;
     private boolean isObjectPassable;
 
@@ -82,7 +84,9 @@ public abstract class TileContent implements Cloneable {
         if (tileContent != null && tileContent.handleAction(chain, tilePosition, actionDirection)) {
             return true;
         }
-
+        if(isTranscendent){
+            return remoteAction(chain, tilePosition, actionDirection);
+        }
         return action(chain, tilePosition, actionDirection);
     }
 
@@ -96,6 +100,26 @@ public abstract class TileContent implements Cloneable {
      * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
     public abstract boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException;
+
+
+    public boolean remoteAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException{
+        //check local action
+        if(!action(chain, tilePosition,actionDirection)){
+            return false;
+        }
+
+        WebSocketClient client = WebSocketClient.getInstance();
+
+        client.createRemoteInteractionChain();
+
+        if (client.appendRemoteInteraction()){
+            client.applyRemoteGSUs();
+            return true;
+        }
+        client.abortRemoteInteractionChain();
+        return false;
+    }
+
 
     /**
      * Tries to perform an update associated with this TileContent when triggered.

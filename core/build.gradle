@@ -5,6 +5,8 @@ dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
   api "com.github.tommyettinger:anim8-gdx:$anim8Version"
 
+
+
   testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
 
   test {
@@ -14,4 +16,6 @@ dependencies {
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+
+  implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:2.2.0'
 }
