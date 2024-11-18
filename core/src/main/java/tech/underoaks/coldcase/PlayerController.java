@@ -70,7 +70,7 @@ public class PlayerController {
         this.playerPosition = playerPosition;
     }
 
-    public String getPlayerPosition() {
-        return playerPosition.toString();
+    public Vector2 getPlayerPosition() {
+        return playerPosition;
     }
 }

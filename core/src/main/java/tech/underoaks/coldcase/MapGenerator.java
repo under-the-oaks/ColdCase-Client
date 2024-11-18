@@ -54,7 +54,6 @@ public class MapGenerator {
         } catch (IOException e) {
             System.out.println("Error reading file: " + e.getMessage());
         }
-
         assert lines != null;
 
         // Split the lines into layers
@@ -111,7 +110,7 @@ public class MapGenerator {
             for (int j = 0; j < mapSize.x; j++) {
                 String[] tileContentRow = tileContents.get(j).split(" ");
                 for (int k = 0; k < mapSize.y; k++) {
-                    // if the Tile is an instance of EmptyTile, push a Invisible Wall to it so the player cant walk on it
+                    // if the Tile is an instance of EmptyTile, push an Invisible Wall to it so the player cant walk on it
                     if (tileArray[j][k] instanceof EmptyTile) {
                         tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(5));
                     }
@@ -139,7 +138,7 @@ public class MapGenerator {
      * @param jsonMap The JSON string to deserialize.
      * @return The deserialized {@link Map} object.
      */
-    public Map deserialize(String jsonMap) {
+    public Map deserializeMap(String jsonMap) {
         return json.fromJson(Map.class, jsonMap);
     }
 
