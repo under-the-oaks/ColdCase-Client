@@ -37,6 +37,12 @@ public record Map(
     }
 
     public Vector2 getTileContentByType(Class<? extends TileContent> type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Type cannot be null");
+        }
+        if (tileArray == null || tileArray.length == 0) {
+            return null;
+        }
         for (int i = 0; i < tileArray.length; i++) {
             for (int j = 0; j < tileArray[i].length; j++) {
                 if (type.isInstance(tileArray[i][j].getTileContent())) {
