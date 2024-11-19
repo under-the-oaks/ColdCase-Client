@@ -7,14 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tech.underoaks.coldcase.data.tileContent.TileContent;
-import tech.underoaks.coldcase.data.tileContent.Wall;
-import tech.underoaks.coldcase.data.tiles.Tile;
-import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.enums.UpdateTypes;
-import tech.underoaks.coldcase.loader.enums.Direction;
-
-import java.nio.file.Path;
+import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.tileContent.TileContent;
+import tech.underoaks.coldcase.state.tileContent.Wall;
+import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.updates.UpdateTypes;
+import tech.underoaks.coldcase.state.updates.GameStateUpdate;
+import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,7 +34,7 @@ class MapTest{
     /**
      * A GamesStateUpdate constructed to work with {@code TestTileContent}
      */
-    static class EmptyUpdate extends GameStateUpdate{
+    static class EmptyUpdate extends GameStateUpdate {
 
         protected EmptyUpdate() {
             super(UpdateTypes.MAP_MODIFICATION);
