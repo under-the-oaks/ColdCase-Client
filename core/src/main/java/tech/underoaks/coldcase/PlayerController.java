@@ -13,7 +13,6 @@ public class PlayerController {
     private Direction lookDirection;
 
 
-
     public TileContent getInventory() {
         return inventory;
     }
@@ -21,7 +20,7 @@ public class PlayerController {
     public void setInventory(TileContent inventory) {
         this.inventory = inventory;
         //debug
-        System.out.println("Inventory:"+this.inventory.toString());
+        System.out.println("Inventory:" + this.inventory.toString());
     }
 
     private TileContent inventory;
@@ -69,4 +68,7 @@ public class PlayerController {
     public void setPlayerPosition(Vector2 playerPosition) {
         this.playerPosition = playerPosition;
     }
+
+    public Vector2 getPlayerPosition() { return playerPosition; }
+
 }
