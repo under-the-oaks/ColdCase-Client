@@ -1,10 +1,10 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameStateUpdateException;
-import tech.underoaks.coldcase.InteractionChain;
+
+
 import tech.underoaks.coldcase.remote.WebSocketClient;
-import tech.underoaks.coldcase.data.tiles.Tile;
+
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tiles.Tile;

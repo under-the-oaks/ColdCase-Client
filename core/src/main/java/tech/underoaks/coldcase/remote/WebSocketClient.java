@@ -2,8 +2,9 @@ package tech.underoaks.coldcase.remote;
 
 import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
-import tech.underoaks.coldcase.GameController;
-import tech.underoaks.coldcase.InteractionChain;
+import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.state.InteractionChain;
+
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,13 +1,15 @@
-package tech.underoaks.coldcase.data.tileContent;
+package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameStateUpdateException;
-import tech.underoaks.coldcase.InteractionChain;
-import tech.underoaks.coldcase.MoveUpdate;
-import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.data.tiles.Tile;
-import tech.underoaks.coldcase.loader.enums.Direction;
+
+
+import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
+import tech.underoaks.coldcase.state.updates.MoveUpdate;
 
 public class movableBlockTrancendent extends TileContent{
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_067.png");
@@ -43,7 +45,7 @@ public class movableBlockTrancendent extends TileContent{
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) {
+    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
         return false;
     }
 }
