@@ -26,6 +26,8 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(800, 800);
 
+        Gdx.input.setInputProcessor(PlayerController.getInstance());
+
         Map map = Map.getMap(Path.of("maps/test_plain"));
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
@@ -46,8 +48,6 @@ public class Main extends ApplicationAdapter {
             //System.out.println("FPS: " + fps);
             timeSinceLastLog = 0f;
         }
-
-        PlayerController.getInstance().inputUpdate();
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
