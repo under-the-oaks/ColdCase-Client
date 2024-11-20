@@ -9,7 +9,7 @@ public class PlayerController {
 
     private static PlayerController instance;
     private Vector2 playerPosition;
-    private Direction lookDirection;
+    private Direction lookDirection = Direction.NORTH;
 
 
 
