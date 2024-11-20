@@ -2,6 +2,7 @@ package tech.underoaks.coldcase.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tiles;
@@ -242,6 +243,7 @@ public record Map(
     }
 
     /**
+     * FIXME JavaDoc
      * Continuously updates the map until no further updates are possible.
      *
      * <p>Keeps trying to update the map with the given {@code InteractionChain} until no more changes occur.</p>
@@ -251,10 +253,10 @@ public record Map(
      * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
      * triggers another in a cyclic manner, the loop may otherwise never terminate.
      */
-    public void updateUntilStable(InteractionChain chain) throws GameStateUpdateException {
-        int maxIteration = 100;
+    public void updateUntilStable(InteractionChain chain) throws GameStateUpdateException, UpdateTileContentException {
+        int maxIteration = 25;
         int iteration = 0;
-        while (this.updateMap(chain)) {
+        while (!this.updateMap(chain).isEmpty()) {
             // Keep updating until no further updates occur
             iteration++;
             if (iteration > maxIteration) {
@@ -264,6 +266,7 @@ public record Map(
     }
 
     /**
+     * FIXME JavaDoc
      * Updates the map by attempting to perform an update on each {@code Tile} in {@code tileArray}.
      *
      * <p>For each Tile with non-null {@code TileContent}, the {@code handleUpdate} method
@@ -273,18 +276,17 @@ public record Map(
      * @return true if at least one {@code TileContent} performs an update; false otherwise
      * @see TileContent#handleUpdate(InteractionChain, Vector2)
      */
-    public boolean updateMap(InteractionChain chain) throws GameStateUpdateException {
-        boolean updated = false;
+    public List<TileContent> updateMap(InteractionChain chain) throws GameStateUpdateException, UpdateTileContentException {
+        List<TileContent> updated = new ArrayList<>();
         for (int i = 0; i < tileArray.length; i++) {
             for (int j = 0; j < tileArray[i].length; j++) {
                 if (tileArray[i][j].getTileContent() == null) {
                     continue;
                 }
-                boolean result = tileArray[i][j].getTileContent().handleUpdate(
+                updated.addAll(tileArray[i][j].getTileContent().handleUpdate(
                     chain,
                     new Vector2(i, j)
-                );
-                updated = updated || result;
+                ));
             }
         }
         return updated;

@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tech.underoaks.coldcase.game.Direction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
  * This content can be an item, a static object like a wall, or any other entity that occupies
@@ -70,6 +73,7 @@ public abstract class TileContent implements Cloneable {
     }
 
     /**
+     * FIXME JavaDoc
      * Tries to perform the action associated with this TileContent when interacted with.
      *
      * <p>{@code handleAction(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
@@ -82,14 +86,16 @@ public abstract class TileContent implements Cloneable {
      * @return True if the action has been taken care of; False otherwise
      * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
-    public boolean handleAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
-        if (tileContent != null && tileContent.handleAction(chain, tilePosition, actionDirection)) {
-            return true;
+    public TileContent handleAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        TileContent handler;
+        if (tileContent != null) {
+            handler = tileContent.handleAction(chain, tilePosition, actionDirection);
+            if (handler != null) {
+                return handler;
+            }
         }
-        if(isTranscendent){
-            return remoteAction(chain, tilePosition, actionDirection);
-        }
-        return action(chain, tilePosition, actionDirection);
+
+        return action(chain, tilePosition, actionDirection) ? this : null;
     }
 
     /**
@@ -124,6 +130,7 @@ public abstract class TileContent implements Cloneable {
 
 
     /**
+     * FIXME JavaDoc
      * Tries to perform an update associated with this TileContent when triggered.
      *
      * <p>{@code handleUpdate(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
@@ -133,15 +140,19 @@ public abstract class TileContent implements Cloneable {
      * @param tilePosition The position of the currently selected tile.
      * @return True if an update as been performed; False otherwise
      * @throws GameStateUpdateException If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
      * @see TileContent#update(InteractionChain, Vector2)
      */
-    public boolean handleUpdate(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
-        boolean result_child = false;
-        if (tileContent != null) {
-            result_child = tileContent.handleUpdate(chain, tilePosition);
+    public List<TileContent> handleUpdate(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException {
+        List<TileContent> handlers = tileContent != null ?
+            tileContent.handleUpdate(chain, tilePosition) :
+            new ArrayList<>();
+
+        if(update(chain, tilePosition)) {
+            handlers.add(this);
         }
-        boolean result_self = update(chain, tilePosition);
-        return result_child || result_self;
+
+        return handlers;
     }
 
     /**
@@ -151,11 +162,12 @@ public abstract class TileContent implements Cloneable {
      * @param tilePosition The position of the currently selected tile.
      * @return True if an update has been performed; False otherwise
      * @throws GameStateUpdateException If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If the TileContent couldn't be updated (due to a failing validation)
      * @implNote Ensure this method returns {@code true} only for meaningful changes to avoid unnecessary processing.
      * It should not always return {@code true} to prevent infinite loops in calling methods like
      * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
      */
-    public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException;
+    public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException;
 
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;

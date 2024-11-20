@@ -1,5 +1,9 @@
 package tech.underoaks.coldcase.state;
 
+import com.badlogic.gdx.math.Vector2;
+import org.glassfish.grizzly.utils.Pair;
+import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
@@ -16,6 +20,16 @@ public class InteractionChain {
     private final Queue<GameStateUpdate> gsuQueue;
 
     /**
+     * TODO JavaDoc
+     */
+    private final Queue<Pair<Vector2, Direction>> pendingActions;
+
+    /**
+     * TODO JavaDoc
+     */
+    private final Queue<Pair<Vector2, Direction>> pendingRemoteActions;
+
+    /**
      * Snapshot that will act as the testing environment
      */
     private final Snapshot snapshot;
@@ -23,10 +37,21 @@ public class InteractionChain {
     public InteractionChain(Snapshot snapshot) {
         this.snapshot = snapshot;
         this.gsuQueue = new LinkedList<>();
+        this.pendingActions = new LinkedList<>();
+        this.pendingRemoteActions = new LinkedList<>();
     }
 
     public Snapshot getSnapshot() {
         return snapshot;
+    }
+
+    /**
+     * TODO JavaDoc
+     * @param targetPos
+     * @param actionDirection
+     */
+    public void addAction(Vector2 targetPos, Direction actionDirection) {
+        pendingActions.add(new Pair<>(targetPos, actionDirection));
     }
 
     /**
@@ -36,7 +61,6 @@ public class InteractionChain {
      * @throws GameStateUpdateException If the update has failed.
      */
     public void addGameStateUpdate(GameStateUpdate gsu) throws GameStateUpdateException {
-        // TODO Igler fragen ob das Pattern OK ist
         try {
             if (gsu.UPDATE_TYPE.hasConsequences()) {
                 gsu.apply(snapshot.getSnapshotMap());
@@ -49,5 +73,13 @@ public class InteractionChain {
 
     public Queue<GameStateUpdate> getGSUQueue() {
         return gsuQueue;
+    }
+
+    public Queue<Pair<Vector2, Direction>> getPendingActions() {
+        return pendingActions;
+    }
+
+    public Queue<Pair<Vector2, Direction>> getPendingRemoteActions() {
+        return pendingRemoteActions;
     }
 }

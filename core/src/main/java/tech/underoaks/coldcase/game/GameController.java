@@ -1,15 +1,21 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.math.Vector2;
+import org.glassfish.grizzly.utils.Pair;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.RemoteGameController;
 import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
+import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
+import tech.underoaks.coldcase.state.tileContent.VisibilityStates;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
+import java.util.Stack;
 import java.util.Queue;
+import java.util.LinkedList;
 
 /**
  * Central manager responsible for handling interactions within the game.
@@ -24,7 +30,11 @@ public class GameController {
      * Active game map
      */
     private Map currentMap;
-    private InteractionChain remoteInteractionCain;
+
+    /**
+     * TODO JavaDoc
+     */
+    private final Stack<InteractionChain> interactions = new Stack<>();
 
     /**
      * Retrieves the singleton instance of the GameController.
@@ -39,50 +49,127 @@ public class GameController {
     }
 
     /**
+     * TODO
+     * @param targetPos
+     * @param actionDirection
+     * @return
+     */
+    public boolean triggerAction(Vector2 targetPos, Direction actionDirection) {
+        InteractionChain chain = createInteractionChain();
+
+        // Trigger local action
+        try {
+            InteractionChain testChain = createInteractionChain(chain);
+            interactions.push(testChain);
+            boolean result = triggerAction(testChain, targetPos, actionDirection);
+            if(!result) {
+                return false;
+            }
+
+            triggerQueuedLocalActions(chain);
+            triggerQueuedRemoteActions(chain);
+
+            // Apply local changes
+            chain.getGSUQueue().addAll(testChain.getGSUQueue());
+        }
+        finally {
+            interactions.pop();
+        }
+
+        applyGSUQueue(currentMap, chain.getGSUQueue());
+        return true;
+    }
+
+    /**
+     * FIXME JavaDoc
+     * @param targetPos
+     * @param actionDirection
+     * @return
+     */
+    public boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection) {
+        RemoteGameController remote = null;
+        try {
+            TileContent handler = triggerLocalAction(testChain, targetPos, actionDirection);
+            if(handler == null) {
+                return false;
+            }
+
+            // If local action was transcendent, trigger remote action
+            if(handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
+                remote = new RemoteGameController();
+                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);;
+                testChain.getPendingRemoteActions().addAll(newRemoteActions);
+            }
+
+            return true;
+        }
+        finally {
+            if(remote != null) {
+                remote.close();
+            }
+        }
+    }
+
+    /**
+     * FIXME JavaDoc
      * Initiates an action at a specified position targeting another position.
      *
      * @param actionDirection The direction in which the action get triggered.
      * @param targetPos       The target position where the action is applied.
      * @return True if the action was successfully triggered, false otherwise.
      */
-    public boolean triggerAction(Vector2 targetPos, Direction actionDirection) {
-        InteractionChain chain = createInteractionChain();
+    public TileContent triggerLocalAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
         // Requesting an action handler to respond to the triggered action
         if (snapshotMap.isOutOfBounds(targetPos)) {
-            return false;
+            return null;
         }
         Tile targetTile = snapshotMap.getTile(targetPos);
         if (targetTile == null) {
-            return false;
+            return null;
         }
 
         TileContent targetTileContent = targetTile.getTileContent();
         if (targetTileContent == null) {
-            return false;
+            return null;
         }
 
         // Actions will be handled inside a secured body to ensure only valid actions will be
         // applied to the running instance
+        TileContent handler;
         try {
             // Trigger initial action
-            boolean action = targetTileContent.handleAction(chain, targetPos, actionDirection);
-            if (!action) {
-                return false;
+            handler = targetTileContent.handleAction(chain, targetPos, actionDirection);
+            if (handler == null) {
+                return null;
             }
 
             // Update due to potential changes
             snapshotMap.updateUntilStable(chain);
-        } catch (GameStateUpdateException e) {
-            System.err.println("Couldn't handle action");
+        }
+        catch (UpdateTileContentException e) {
+            System.err.println("Update tile content failed");
             System.err.println(e.getMessage());
-            return false;
+            return null;
+        }
+        catch (GameStateUpdateException e) {
+            throw new RuntimeException("Couldn't handle action", e);
         }
 
-        applyGSUQueue(chain.getGSUQueue());
+        return handler;
+    }
 
-        return true;
+    /**
+     * FIXME JavaDoc
+     * @param targetPos
+     * @param actionDirection
+     */
+    public void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
+        try(RemoteGameController remote = new RemoteGameController()) {
+            Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);;
+            chain.getPendingRemoteActions().addAll(newRemoteActions);
+        }
     }
 
     /**
@@ -90,9 +177,9 @@ public class GameController {
      *
      * @param queue The queue of GameStateUpdates to apply.
      */
-    private void applyGSUQueue(Queue<GameStateUpdate> queue) {
+    private void applyGSUQueue(Map map, Queue<GameStateUpdate> queue) {
         for (GameStateUpdate gsu : queue) {
-            gsu.apply(currentMap);
+            gsu.apply(map);
         }
     }
 
@@ -109,29 +196,79 @@ public class GameController {
      *
      * @return A new InteractionChain instance.
      */
-    public InteractionChain createInteractionChain() {
+    private InteractionChain createInteractionChain() {
         Snapshot snapshot = new Snapshot(currentMap);
         return new InteractionChain(snapshot);
     }
 
-    //InteractionChain remoteInteractionCain = null;
-
-    public void handleCreateRemoteInteractionChain(){
-        remoteInteractionCain = createInteractionChain();
-        System.out.println("handleCreateRemoteInteractionChain Called");
+    /**
+     * FIXME JavaDoc
+     * @param chain
+     * @return
+     */
+    private InteractionChain createInteractionChain(InteractionChain chain) {
+        Snapshot snapshot = new Snapshot(chain.getSnapshot().getSnapshotMap());
+        return new InteractionChain(snapshot);
     }
 
-    public void handleAbortRemoteInteractionChain(){
-        remoteInteractionCain = null;
-        System.out.println("handleAbortRemoteInteractionChain Called");
-    }
+    // REMOTE HANDLING
 
-    public boolean handleAppendRemoteInteraction(){
+    /**
+     * FIXME JavaDoc
+     * @param targetPos
+     * @param actionDirection
+     * @return
+     */
+    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection){
         System.out.println("handleAppendRemoteInteraction Called");
-        return true;
+        // Remote called initial action
+        if(interactions.isEmpty()) {
+            InteractionChain chain = createInteractionChain();
+            boolean result = triggerAction(chain, targetPos, actionDirection);
+            if(!result) {
+                return new LinkedList<>();
+            }
+
+            applyGSUQueue(currentMap, chain.getGSUQueue());
+            return chain.getPendingActions();
+        }
+        // Local called initial action -> This is a response
+        else {
+            InteractionChain currentChain = interactions.peek();
+            InteractionChain chain = createInteractionChain(currentChain);
+
+            boolean result = triggerAction(currentChain, targetPos, actionDirection);
+            if(!result) {
+                return new LinkedList<>();
+            }
+
+            currentChain.getGSUQueue().addAll(chain.getGSUQueue());
+            return chain.getPendingActions();
+        }
     }
 
-    public void handleApplyRemoteGSUs(){
-        System.out.println("handleApplyRemoteGSUs Called");
+    /**
+     * FIXME JavaDoc
+     * @param chain
+     * @return
+     */
+    private void triggerQueuedLocalActions(InteractionChain chain) {
+        // Trigger locally queued actions
+        Pair<Vector2, Direction> action;
+        while((action = chain.getPendingActions().poll()) != null) {
+            triggerAction(chain, action.getFirst(), action.getSecond());
+        }
+    }
+
+    /**
+     * FIXME JavaDoc
+     * @param chain
+     */
+    private void triggerQueuedRemoteActions(InteractionChain chain) {
+        // Trigger locally queued remote actions
+        Pair<Vector2, Direction> action;
+        while((action = chain.getPendingRemoteActions().poll()) != null) {
+            triggerRemoteAction(chain, action.getFirst(), action.getSecond());
+        }
     }
 }
