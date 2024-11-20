@@ -97,7 +97,7 @@ public class GameController {
             // If local action was transcendent, trigger remote action
             if(handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
-                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);;
+                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
                 testChain.getPendingRemoteActions().addAll(newRemoteActions);
             }
 
@@ -167,7 +167,7 @@ public class GameController {
      */
     public void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
         try(RemoteGameController remote = new RemoteGameController()) {
-            Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);;
+            Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
             chain.getPendingRemoteActions().addAll(newRemoteActions);
         }
     }
@@ -219,7 +219,7 @@ public class GameController {
      * @param actionDirection
      * @return
      */
-    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection){
+    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection) {
         System.out.println("handleAppendRemoteInteraction Called");
         // Remote called initial action
         if(interactions.isEmpty()) {
@@ -229,6 +229,7 @@ public class GameController {
                 return new LinkedList<>();
             }
 
+            // FIXME hier wird die chain zu früh auf die current map ausgeführt
             applyGSUQueue(currentMap, chain.getGSUQueue());
             return chain.getPendingActions();
         }
@@ -237,7 +238,7 @@ public class GameController {
             InteractionChain currentChain = interactions.peek();
             InteractionChain chain = createInteractionChain(currentChain);
 
-            boolean result = triggerAction(currentChain, targetPos, actionDirection);
+            boolean result = triggerAction(chain, targetPos, actionDirection);
             if(!result) {
                 return new LinkedList<>();
             }
@@ -256,7 +257,14 @@ public class GameController {
         // Trigger locally queued actions
         Pair<Vector2, Direction> action;
         while((action = chain.getPendingActions().poll()) != null) {
-            triggerAction(chain, action.getFirst(), action.getSecond());
+            try {
+                InteractionChain testChain = createInteractionChain(chain);
+                interactions.add(testChain);
+                triggerAction(chain, action.getFirst(), action.getSecond());
+            }
+            finally {
+                interactions.pop();
+            }
         }
     }
 
