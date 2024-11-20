@@ -59,18 +59,14 @@ public class GameController {
 
         // Trigger local action
         try {
-            InteractionChain testChain = createInteractionChain(chain);
-            interactions.push(testChain);
-            boolean result = triggerAction(testChain, targetPos, actionDirection);
+            interactions.push(chain);
+            boolean result = triggerAction(chain, targetPos, actionDirection);
             if(!result) {
                 return false;
             }
 
             triggerQueuedLocalActions(chain);
             triggerQueuedRemoteActions(chain);
-
-            // Apply local changes
-            chain.getGSUQueue().addAll(testChain.getGSUQueue());
         }
         finally {
             interactions.pop();
