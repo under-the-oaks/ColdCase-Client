@@ -1,12 +1,9 @@
 package tech.underoaks.coldcase;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.data.tileContent.Player;
+import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tileContent.Player;
 
 import java.nio.file.Path;
 
