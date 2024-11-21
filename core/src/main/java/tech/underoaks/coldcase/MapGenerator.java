@@ -2,11 +2,12 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
-import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.data.tiles.EmptyTile;
-import tech.underoaks.coldcase.data.tiles.Tile;
-import tech.underoaks.coldcase.loader.enums.TileContents;
-import tech.underoaks.coldcase.loader.enums.Tiles;
+import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tileContent.TileContent;
+import tech.underoaks.coldcase.state.tileContent.TileContents;
+import tech.underoaks.coldcase.state.tiles.EmptyTile;
+import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.tiles.Tiles;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,7 +69,8 @@ public class MapGenerator {
 
         // Split the lines into layers using the "---" separator and partitionSize variable
         for (int i = 0; i < lines.size(); i++) {
-            if (!lines.get(i).equals("---")) {
+            if (!lines.get(i).contains("---")) {
+                assert lines.get(i).matches("^(\\d+ ?)*$") : "Invalid map file format";
                 partitionSize++;
             } else {
                 mapLayers.add(new ArrayList<>(lines.subList(i - partitionSize, i)));
@@ -88,9 +90,13 @@ public class MapGenerator {
         for (int i = 0; i < mapSize.x; i++) {
             // if the map size x is larger than the actual number of lines,
             // reduce the map size - no need to create a whole row of empty tiles
-            if (tiles.get(i) == null) {
-                mapSize.x--;
-                continue;
+            try {
+                if (tiles.get(i) == null) {
+                    mapSize.x--;
+                    continue;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                tiles.add("0");
             }
             String[] tileRow = tiles.get(i).split(" ");
             for (int j = 0; j < mapSize.y; j++) {
@@ -108,13 +114,26 @@ public class MapGenerator {
         for (int i = 2; i < mapLayers.size(); i++) {
             List<String> tileContents = mapLayers.get(i);
             for (int j = 0; j < mapSize.x; j++) {
-                String[] tileContentRow = tileContents.get(j).split(" ");
+                String[] tileContentRow;
+                try {
+                    tileContentRow = tileContents.get(j).split(" ");
+                } catch (IndexOutOfBoundsException e) {
+                    continue;
+                }
                 for (int k = 0; k < mapSize.y; k++) {
                     // if the Tile is an instance of EmptyTile, push an Invisible Wall to it so the player cant walk on it
                     if (tileArray[j][k] instanceof EmptyTile) {
-                        tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(5));
+                        tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(7));
                     }
-                    tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(Integer.parseInt(tileContentRow[k])));
+
+                    // if the tileContentRow[k] is empty, skip it
+                    // -> gets caused by the metadata size being larger than the actual map size
+                    // this interaction between the metadata and the actual map size is intended
+                    try {
+                        TileContent newTileContent = TileContents.getNewTileClassByIndex(Integer.parseInt(tileContentRow[k]));
+                        tileArray[j][k].pushTileContent(newTileContent);
+                    } catch (IndexOutOfBoundsException ignored) {}
+
                 }
             }
         }

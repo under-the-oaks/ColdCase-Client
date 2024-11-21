@@ -1,8 +1,10 @@
-package tech.underoaks.coldcase.data.tileContent;
+package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.InteractionChain;
-import tech.underoaks.coldcase.loader.enums.Direction;
+import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
+
 
 public class InvisibleWall extends TileContent {
 
@@ -11,7 +13,7 @@ public class InvisibleWall extends TileContent {
     }
 
     @Override
-    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) {
+    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
         return false;
     }
 
