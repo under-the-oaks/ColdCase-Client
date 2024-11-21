@@ -61,15 +61,15 @@ public class WebSocketClient {
         Object deserializedObject = json.fromJson(Object.class, message);
 
         if (deserializedObject instanceof CreateRemoteInteractionChainMessage) {
-            GameController.getInstance().handleCreateRemoteInteractionChain();
+            //GameController.getInstance().handleCreateRemoteInteractionChain();
         } else if (deserializedObject instanceof AbortRemoteInteractionChainMessage) {
-            GameController.getInstance().handleAbortRemoteInteractionChain();
+            //GameController.getInstance().handleAbortRemoteInteractionChain();
         } else if (deserializedObject instanceof AppendRemoteInteractionMessage) {
 
             try {
                 AppendRemoteInteractionResponseMessage returnMessage = new AppendRemoteInteractionResponseMessage();
-                boolean test = GameController.getInstance().handleAppendRemoteInteraction();
-                returnMessage.setSuccess(test); //WTF only gets includet if true
+                //boolean test = GameController.getInstance().handleAppendRemoteInteraction();
+                //returnMessage.setSuccess(test); //WTF only gets includet if true
                 String responseMessage = json.toJson(returnMessage, Object.class);
                 session.getBasicRemote().sendText(responseMessage);
             } catch (IOException e) {
@@ -86,7 +86,7 @@ public class WebSocketClient {
                 System.out.println("Countdown latch after: " + latch.getCount());
             }
         } else if (deserializedObject instanceof ApplyRemoteGSUsMessage) {
-            GameController.getInstance().handleApplyRemoteGSUs();
+            //GameController.getInstance().handleApplyRemoteGSUs();
         } else {
             System.out.println("unown message");
         }

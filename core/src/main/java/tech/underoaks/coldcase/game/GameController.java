@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import org.glassfish.grizzly.utils.Pair;
 import tech.underoaks.coldcase.state.InteractionChain;
@@ -60,13 +61,13 @@ public class GameController {
         // Trigger local action
         try {
             interactions.push(chain);
-            boolean result = triggerAction(chain, targetPos, actionDirection);
+            boolean result = GameController.triggerAction(chain, targetPos, actionDirection);
             if(!result) {
                 return false;
             }
 
-            triggerQueuedLocalActions(chain);
-            triggerQueuedRemoteActions(chain);
+            GameController.triggerQueuedLocalActions(interactions, chain);
+            GameController.triggerQueuedRemoteActions(chain);
         }
         finally {
             interactions.pop();
@@ -82,10 +83,10 @@ public class GameController {
      * @param actionDirection
      * @return
      */
-    public boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection) {
+    public static boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection) {
         RemoteGameController remote = null;
         try {
-            TileContent handler = triggerLocalAction(testChain, targetPos, actionDirection);
+            TileContent handler = GameController.triggerLocalAction(testChain, targetPos, actionDirection);
             if(handler == null) {
                 return false;
             }
@@ -114,7 +115,7 @@ public class GameController {
      * @param targetPos       The target position where the action is applied.
      * @return True if the action was successfully triggered, false otherwise.
      */
-    public TileContent triggerLocalAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
+    public static TileContent triggerLocalAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
         // Requesting an action handler to respond to the triggered action
@@ -161,7 +162,7 @@ public class GameController {
      * @param targetPos
      * @param actionDirection
      */
-    public void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
+    public static void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
         try(RemoteGameController remote = new RemoteGameController()) {
             Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
             chain.getPendingRemoteActions().addAll(newRemoteActions);
@@ -202,7 +203,7 @@ public class GameController {
      * @param chain
      * @return
      */
-    private InteractionChain createInteractionChain(InteractionChain chain) {
+    private static InteractionChain createInteractionChain(InteractionChain chain) {
         Snapshot snapshot = new Snapshot(chain.getSnapshot().getSnapshotMap());
         return new InteractionChain(snapshot);
     }
@@ -220,13 +221,13 @@ public class GameController {
         // Remote called initial action
         if(interactions.isEmpty()) {
             InteractionChain chain = createInteractionChain();
-            boolean result = triggerAction(chain, targetPos, actionDirection);
+            boolean result = GameController.triggerAction(chain, targetPos, actionDirection);
             if(!result) {
                 return new LinkedList<>();
             }
 
             // FIXME hier wird die chain zu früh auf die current map ausgeführt
-            applyGSUQueue(currentMap, chain.getGSUQueue());
+            // applyGSUQueue(currentMap, chain.getGSUQueue());
             return chain.getPendingActions();
         }
         // Local called initial action -> This is a response
@@ -249,12 +250,12 @@ public class GameController {
      * @param chain
      * @return
      */
-    private void triggerQueuedLocalActions(InteractionChain chain) {
+    private static void triggerQueuedLocalActions(Stack<InteractionChain> interactions, InteractionChain chain) {
         // Trigger locally queued actions
         Pair<Vector2, Direction> action;
         while((action = chain.getPendingActions().poll()) != null) {
             try {
-                InteractionChain testChain = createInteractionChain(chain);
+                InteractionChain testChain = GameController.createInteractionChain(chain);
                 interactions.add(testChain);
                 triggerAction(chain, action.getFirst(), action.getSecond());
             }
@@ -268,11 +269,11 @@ public class GameController {
      * FIXME JavaDoc
      * @param chain
      */
-    private void triggerQueuedRemoteActions(InteractionChain chain) {
+    private static void triggerQueuedRemoteActions(InteractionChain chain) {
         // Trigger locally queued remote actions
         Pair<Vector2, Direction> action;
         while((action = chain.getPendingRemoteActions().poll()) != null) {
-            triggerRemoteAction(chain, action.getFirst(), action.getSecond());
+            GameController.triggerRemoteAction(chain, action.getFirst(), action.getSecond());
         }
     }
 }

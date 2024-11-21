@@ -50,6 +50,7 @@ public abstract class TileContent implements Cloneable {
         this.texture = texture;
         this.isPlayerPassable = isPlayerPassable;
         this.isObjectPassable = isObjectPassable;
+        this.visibilityState = VisibilityStates.PLAYER_ONE_ONLY; // FIXME als Parameter callen
     }
 
     /**
