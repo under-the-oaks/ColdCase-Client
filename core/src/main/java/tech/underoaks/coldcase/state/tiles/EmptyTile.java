@@ -7,16 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class EmptyTile extends Tile {
 
-    private static Texture texture;
+    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_101.png");
 
     public EmptyTile() {
-        super(getTexture());
-    }
-
-    private static Texture getTexture() {
-        if (texture == null) {
-            texture = new Texture("./isometric tileset/separated images/tile_101.png");
-        }
-        return texture;
+        super(texture);
     }
 }

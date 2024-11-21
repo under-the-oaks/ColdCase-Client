@@ -18,22 +18,12 @@ import java.util.List;
 /**
  * Class for generating maps from text files.
  * <p>
- * This class is a singleton, and can be accessed using the {@link #getInstance()} method.
  * It provides methods for serializing and deserializing maps to and from JSON.
  * The JSON format used is the one provided by the {@link Json} class provided by libGDX.
  */
-public class MapGenerator {
+public final class MapGenerator {
 
-    private static MapGenerator instance;
-
-    public static MapGenerator getInstance() {
-        if (instance == null) {
-            instance = new MapGenerator();
-        }
-        return instance;
-    }
-
-    Json json = new Json();
+    static Json json = new Json();
 
     /**
      * Serializes the map from text files to JSON format.
@@ -46,7 +36,7 @@ public class MapGenerator {
      *                    If true, the detective map is serialized. Otherwise, the ghost map is serialized.
      * @return A {@link Map} Object.
      */
-    public Map serializeContentToMap(Path path, boolean isDetective) {
+    public static Map serializeContentToMap(Path path, boolean isDetective) {
         Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
         List<String> lines = null;
         // Read the file into a list of strings
@@ -147,7 +137,7 @@ public class MapGenerator {
      *
      * @param map The {@link Map} to serialize.
      */
-    public String serializeMapToJson(Map map) {
+    public static String serializeMapToJson(Map map) {
         return json.toJson(map);
     }
 
@@ -157,7 +147,7 @@ public class MapGenerator {
      * @param jsonMap The JSON string to deserialize.
      * @return The deserialized {@link Map} object.
      */
-    public Map deserializeMap(String jsonMap) {
+    public static Map deserializeMap(String jsonMap) {
         return json.fromJson(Map.class, jsonMap);
     }
 

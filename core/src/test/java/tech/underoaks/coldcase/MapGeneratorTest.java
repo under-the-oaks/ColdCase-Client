@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import tech.underoaks.coldcase.data.Map;
-import tech.underoaks.coldcase.data.tileContent.TileContent;
-import tech.underoaks.coldcase.data.tiles.Tile;
-import tech.underoaks.coldcase.loader.enums.TileContents;
-import tech.underoaks.coldcase.loader.enums.Tiles;
+import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tileContent.TileContent;
+import tech.underoaks.coldcase.state.tileContent.TileContents;
+import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.tiles.Tiles;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,21 +19,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class MapGeneratorTest {
-    private MapGenerator mapGenerator;
     Tile mockedTile = mock(Tile.class);
     TileContent mockedTileContent = mock(TileContent.class);
 
     @BeforeEach
     void setUp() {
-        mapGenerator = MapGenerator.getInstance();
         when(mockedTile.topTileContent()).thenReturn(mockedTileContent);
-    }
-
-    @Test
-    void testSingletonInstance() {
-        MapGenerator instance1 = MapGenerator.getInstance();
-        MapGenerator instance2 = MapGenerator.getInstance();
-        assertSame(instance1, instance2, "MapGenerator should be a singleton.");
     }
 
     @Test
@@ -52,7 +43,7 @@ public class MapGeneratorTest {
 
             tileContentsMockedStatic.when(() -> TileContents.getNewTileClassByIndex(anyInt())).thenReturn(mockedTileContent);
 
-            Map result = mapGenerator.serializeContentToMap(mockPath, true);
+            Map result = MapGenerator.serializeContentToMap(mockPath, true);
 
             assertNotNull(result, "Map should not be null.");
             Tile[][] tileArray = result.tileArray;
@@ -109,6 +100,6 @@ public class MapGeneratorTest {
 
     @Test
     public void testSerializeContentToMap_null() {
-        assertThrows(AssertionError.class, () -> mapGenerator.serializeContentToMap(null, true));
+        assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
     }
 }
