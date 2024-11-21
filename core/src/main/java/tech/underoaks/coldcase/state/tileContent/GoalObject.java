@@ -1,12 +1,14 @@
-package tech.underoaks.coldcase.data.tileContent;
+package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.GameController;
-import tech.underoaks.coldcase.GameStateUpdateException;
-import tech.underoaks.coldcase.InteractionChain;
-import tech.underoaks.coldcase.loader.enums.Direction;
-import tech.underoaks.coldcase.PlayerController;
+import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.state.InteractionChain;
+
+import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
+
 
 public class GoalObject extends TileContent {
 
@@ -27,7 +29,7 @@ public class GoalObject extends TileContent {
         return false; //No Action performed
     }
 
-    @Override   
+    @Override
     public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
         if (isPlayerOnTile(tilePosition)) { //Check if the player is on the same tile
 
