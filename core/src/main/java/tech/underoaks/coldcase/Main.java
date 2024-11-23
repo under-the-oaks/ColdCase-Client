@@ -2,13 +2,16 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
+import tech.underoaks.coldcase.state.tileContent.UITextures;
 
 import java.nio.file.Path;
 
@@ -55,6 +58,8 @@ public class Main extends ApplicationAdapter {
 
         gameController.getCurrentMap().render(batch);
 
+        renderInventory(80, new Vector2(0,0) );
+
         batch.end();
     }
 
@@ -67,5 +72,25 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         gameController.getCurrentMap().dispose();
         batch.dispose();
+    }
+
+    void renderInventory( float inventoryDimension, Vector2 inventoryOffset ) {
+
+        batch.draw( new Texture("./isometric tileset/separated images/TEST_INVENTORY.png") , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
+
+        if ( PlayerController.getInstance().getInventory() != null ) {
+
+            UITextures uiTexture = UITextures.getUITexture(PlayerController.getInstance().getInventory());
+
+            if ( uiTexture != null ) {
+
+                Texture inventoryTexture = uiTexture.getTexture();
+
+                if (inventoryTexture != null) {
+                    batch.draw( inventoryTexture , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
+                }
+
+            }
+        }
     }
 }
