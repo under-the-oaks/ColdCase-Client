@@ -50,8 +50,6 @@ public class GoalObject extends TileContent {
 
     private boolean isPlayerOnTile(Vector2 tilePosition) {
         Vector2 playerPosition = PlayerController.getInstance().getPlayerPosition();
-        System.out.println(playerPosition);
-        System.out.println(tilePosition);
         return playerPosition.equals(tilePosition);
 
     }
