@@ -42,7 +42,6 @@ public abstract class TileContent implements Cloneable {
 
     private Texture texture;
 
-    protected boolean isTranscendent = false;
     private boolean isPlayerPassable;
     private boolean isObjectPassable;
 
@@ -111,7 +110,8 @@ public abstract class TileContent implements Cloneable {
     public abstract boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException;
 
 
-    public boolean remoteAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException{
+    public boolean remoteAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException{//TODO @Danmyrer old code ????
+
         //check local action
         if(!action(chain, tilePosition,actionDirection)){
             return false;
@@ -119,13 +119,15 @@ public abstract class TileContent implements Cloneable {
 
         WebSocketClient client = WebSocketClient.getInstance();
 
-        client.createRemoteInteractionChain();
+        //client.createRemoteInteractionChain(); //TODO @Danmyrer old code ????
 
-        if (client.appendRemoteInteraction()){
-            client.applyRemoteGSUs();
-            return true;
-        }
-        client.abortRemoteInteractionChain();
+        //if (client.appendRemoteInteraction()){
+            //client.applyRemoteGSUs();//TODO @Danmyrer old code ????
+
+            //return true;
+        //}
+        //client.abortRemoteInteractionChain();//TODO @Danmyrer old code ????
+
         return false;
     }
 

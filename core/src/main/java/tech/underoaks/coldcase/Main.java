@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
 
@@ -31,6 +32,7 @@ public class Main extends ApplicationAdapter {
         gameController.setCurrentMap(map);
 
         PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
+        WebSocketClient.getInstance();
     }
 
     @Override

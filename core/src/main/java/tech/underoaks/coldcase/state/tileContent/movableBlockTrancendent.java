@@ -17,7 +17,7 @@ public class movableBlockTrancendent extends TileContent{
     public movableBlockTrancendent() {
 
         super(texture, false, false);
-        this.isTranscendent = true;
+        this.visibilityState = VisibilityStates.TRANSCENDENT;
     }
 
     @Override

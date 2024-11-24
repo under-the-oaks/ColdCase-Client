@@ -95,7 +95,7 @@ public class GameController {
             if(handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
                 Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
-                testChain.getPendingRemoteActions().addAll(newRemoteActions);
+                testChain.getPendingRemoteActions().addAll(newRemoteActions);   //TODO handling getting null back or is that an error
             }
 
             return true;
