@@ -13,7 +13,8 @@ public enum TileContents {
     MOVABLE_BLOCK(4, movableBlock.class),
     TEST_ITEM(5,TestItem.class),
     TEST_ITEM02(6, TestItem02.class),
-    GLOVE_ITEM(7, GloveItem.class);
+    GLOVE_ITEM(7, GloveItem.class),
+    GOALOBJECT(8,GoalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
