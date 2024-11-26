@@ -10,7 +10,7 @@ public class PlayerController implements InputProcessor {
 
     private static PlayerController instance;
     private Vector2 playerPosition;
-    private Direction lookDirection;
+    private Direction lookDirection = Direction.NORTH;
 
     public TileContent getInventory() {
         return inventory;
@@ -18,8 +18,11 @@ public class PlayerController implements InputProcessor {
 
     public void setInventory(TileContent inventory) {
         this.inventory = inventory;
+
         //debug
-        System.out.println("Inventory:" + this.inventory.toString());
+        if (inventory != null) {
+            System.out.println("Inventory:"+this.inventory.toString());
+        }
     }
 
     private TileContent inventory;
@@ -46,28 +49,28 @@ public class PlayerController implements InputProcessor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             lookDirection = Direction.NORTH;
             if (GameController.getInstance().triggerAction(playerPosition, Direction.NORTH)) {
-                playerPosition.y -= 1;
+                playerPosition.add(Direction.NORTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             lookDirection = Direction.SOUTH;
             if (GameController.getInstance().triggerAction(playerPosition, Direction.SOUTH)) {
-                playerPosition.y += 1;
+                playerPosition.add(Direction.SOUTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             lookDirection = Direction.WEST;
             if (GameController.getInstance().triggerAction(playerPosition, Direction.WEST)) {
-                playerPosition.x -= 1;
+                playerPosition.add(Direction.WEST.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             lookDirection = Direction.EAST;
             if (GameController.getInstance().triggerAction(playerPosition, Direction.EAST)) {
-                playerPosition.x += 1;
+                playerPosition.add(Direction.EAST.getVector());
                 return true;
             }
         }

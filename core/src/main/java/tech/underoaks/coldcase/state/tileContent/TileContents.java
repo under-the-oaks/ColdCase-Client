@@ -11,8 +11,11 @@ public enum TileContents {
     TEST(2, TestContent.class),
     PLAYER(3, Player.class),
     MOVABLE_BLOCK(4, movableBlock.class),
-    TEST_ITEM(5,TestItem.class),
-    TEST_ITEM02(6, TestItem02.class);
+    TEST_ITEM(5, TestItem.class),
+    TEST_ITEM02(6, TestItem02.class),
+    INVISIBLE_WALL(7, InvisibleWall.class),
+    GLOVE_ITEM(8, GloveItem.class),
+    GOALOBJECT(9,GoalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
@@ -48,6 +51,10 @@ public enum TileContents {
      * @throws IllegalArgumentException If no TileContent corresponds to the given index.
      */
     public static TileContent getNewTileClassByIndex(int index) {
+        if (index == 0) {
+            return null;
+        }
+
         for (TileContents tileContent : TileContents.values()) {
             if (tileContent.getIndex() == index) {
                 return tileContent.getNewTileContent();
