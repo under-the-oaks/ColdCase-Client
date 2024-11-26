@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tileContent.InvisibleWall;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.TileContents;
 import tech.underoaks.coldcase.state.tiles.EmptyTile;
@@ -104,16 +105,17 @@ public final class MapGenerator {
         for (int i = 2; i < mapLayers.size(); i++) {
             List<String> tileContents = mapLayers.get(i);
             for (int j = 0; j < mapSize.x; j++) {
-                String[] tileContentRow;
+                String[] tileContentRow = new String[0];
                 try {
                     tileContentRow = tileContents.get(j).split(" ");
                 } catch (IndexOutOfBoundsException e) {
-                    continue;
+                    System.out.println("Index out of bounds: " + e.getMessage());
                 }
                 for (int k = 0; k < mapSize.y; k++) {
                     // if the Tile is an instance of EmptyTile, push an Invisible Wall to it so the player cant walk on it
                     if (tileArray[j][k] instanceof EmptyTile) {
-                        tileArray[j][k].pushTileContent(TileContents.getNewTileClassByIndex(7));
+                        tileArray[j][k].pushTileContent(new InvisibleWall());
+                        continue;
                     }
 
                     // if the tileContentRow[k] is empty, skip it
@@ -122,7 +124,8 @@ public final class MapGenerator {
                     try {
                         TileContent newTileContent = TileContents.getNewTileClassByIndex(Integer.parseInt(tileContentRow[k]));
                         tileArray[j][k].pushTileContent(newTileContent);
-                    } catch (IndexOutOfBoundsException ignored) {}
+                    } catch (IndexOutOfBoundsException ignored) {
+                    }
 
                 }
             }

@@ -52,52 +52,6 @@ public class MapGeneratorTest {
         }
     }
 
-    // wenn jemand diesen test hinbekommt hut ab, ich habs nicht geschafft
-//    @Test
-//    void testEmptyTilePushesInvisibleWall() {
-//        Path mockPath = Path.of("mock/directory");
-//        List<String> mockLines = Arrays.asList(
-//                "1 1", // Metadata layer (map size)
-//                "---",
-//                "0", // Tile layer (0 = EmptyTile)
-//                "---",
-//                "0",  // Tile content layer
-//                "---"
-//        );
-//
-//        try (MockedStatic<Files> mockedFiles = mockStatic(Files.class);
-//             MockedStatic<Tiles> mockedTiles = mockStatic(Tiles.class);
-//             MockedStatic<TileContents> mockedTileContents = mockStatic(TileContents.class)) {
-//
-//            // Mock Gdx.files
-//            Gdx.files = mock(com.badlogic.gdx.Files.class);
-//            FileHandle mockFileHandle = mock(FileHandle.class);
-//
-//            // Mock the behavior of Gdx.files.internal
-//            when(Gdx.files.internal(Mockito.anyString())).thenReturn(mockFileHandle);
-//
-//            // Mock FileHandle path and Texture loading
-//            when(mockFileHandle.path()).thenReturn("mock_texture_path");
-//
-//            mockedFiles.when(() -> Files.readAllLines(any())).thenReturn(mockLines);
-//
-//            InvisibleWall mockedInvisibleWall = mock(InvisibleWall.class);
-//
-//            EmptyTile mockedEmptyTile = mock(EmptyTile.class);
-//            doNothing().when(mockedEmptyTile).pushTileContent(any());
-//            doNothing().when(mockedEmptyTile).setTileContent(mockedInvisibleWall);
-//
-//            mockedTiles.when(() -> Tiles.getNewTileClassByIndex(0)).thenReturn(mockedEmptyTile);
-//            mockedTileContents.when(() -> TileContents.getNewTileClassByIndex(7)).thenReturn(mockedInvisibleWall);
-//
-//            Map result = mapGenerator.serializeContentToMap(mockPath, true);
-//
-//            assertNotNull(result, "Map should not be null.");
-//            System.out.println(result.tileArray[0][0]);
-//            verify(mockedEmptyTile, times(1)).pushTileContent(any());
-//        }
-//    }
-
     @Test
     public void testSerializeContentToMap_null() {
         assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
