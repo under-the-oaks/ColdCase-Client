@@ -13,7 +13,9 @@ public enum TileContents {
     MOVABLE_BLOCK(4, movableBlock.class),
     TEST_ITEM(5, TestItem.class),
     TEST_ITEM02(6, TestItem02.class),
-    INVISIBLE_WALL(7, InvisibleWall.class);
+    INVISIBLE_WALL(7, InvisibleWall.class),
+    GLOVE_ITEM(8, GloveItem.class),
+    GOALOBJECT(9,GoalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
