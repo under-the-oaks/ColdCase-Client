@@ -38,6 +38,10 @@ public class PlayerController implements InputProcessor {
         this.playerPosition = playerPosition;
     }
 
+    public Vector2 getPlayerPosition() {
+        return playerPosition;
+    }
+
     /**
      * Called when a key was pressed
      *
