@@ -19,8 +19,11 @@ public class PlayerController {
 
     public void setInventory(TileContent inventory) {
         this.inventory = inventory;
+
         //debug
-        System.out.println("Inventory:"+this.inventory.toString());
+        if (inventory != null) {
+            System.out.println("Inventory:"+this.inventory.toString());
+        }
     }
 
     private TileContent inventory;
