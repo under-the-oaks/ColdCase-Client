@@ -7,10 +7,12 @@ dependencies {
 
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
   testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
 
-  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  // these are needed for headless tests
+  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 
-  testImplementation 'org.mockito:mockito-core:4.8.0'
 
   test {
     useJUnitPlatform()
