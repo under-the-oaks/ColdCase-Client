@@ -12,7 +12,8 @@ public enum TileContents {
     PLAYER(3, Player.class),
     MOVABLE_BLOCK(4, movableBlock.class),
     TEST_ITEM(5,TestItem.class),
-    TEST_ITEM02(6, TestItem02.class);
+    TEST_ITEM02(6, TestItem02.class),
+    GLOVE_ITEM(7, GloveItem.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
