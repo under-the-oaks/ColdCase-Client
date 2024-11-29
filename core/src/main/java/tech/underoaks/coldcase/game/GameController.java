@@ -193,12 +193,16 @@ public class GameController {
      * @param queue The queue of GameStateUpdates to apply.
      */
     private void applyGSUQueue(Map map, Queue<GameStateUpdate> queue) {
-        for (GameStateUpdate gsu : queue) {
+        while(!queue.isEmpty()) {
+            GameStateUpdate gsu = queue.remove();
             gsu.apply(map);
-            try {
-                Thread.sleep(100);
+            if(!queue.isEmpty())
+            {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException ignored) { }
             }
-            catch (InterruptedException ignored) { }
         }
     }
 
