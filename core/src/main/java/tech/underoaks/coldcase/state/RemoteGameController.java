@@ -32,7 +32,7 @@ public class RemoteGameController implements AutoCloseable {
         String tmpRemoteInteractionChainId = null;
 
         try {
-            Object returnObj = future.get(60, TimeUnit.SECONDS);// Block until the response is provided
+            Object returnObj = future.get(60, TimeUnit.MINUTES);// Block until the response is provided
             if(returnObj instanceof Messages.CreateRemoteInteractionChainResponseMessage messageObj){
                 tmpRemoteInteractionChainId = messageObj.getRemoteInteractionChainId();
             }
