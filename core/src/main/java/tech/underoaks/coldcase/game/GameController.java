@@ -107,7 +107,10 @@ public class GameController {
             if(!suppressTranscendentFollowUp && handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
                 Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection, true); // Suppress Transcended Trigger
-                testChain.getPendingRemoteActions().addAll(newRemoteActions);   //TODO handling getting null back or is that an error
+                if(newRemoteActions != null)
+                {
+                    testChain.getPendingRemoteActions().addAll(newRemoteActions);
+                }
             }
 
             return true;
