@@ -27,7 +27,7 @@ public class WebSocketClient {
 
             try {
                 WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-                URI uri = new URI("ws://localhost:8080/?session=12345");  // TODO handle session UID for now static
+                URI uri = new URI("ws://82.165.30.116:8080/?session=12345");  // TODO handle session UID for now static
                 System.out.println("Connecting to WebSocket server...");
                 session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
                 System.out.println("Connected to WebSocket server.");
