@@ -208,13 +208,21 @@ public class GameController {
      * TODO JavaDoc
      * @return if there are any following gameStateUpdates that need to be applied
      */
-    public boolean applyNextPendingGSU() {
+    public void applyNextPendingGSU() {
         if(pendingUpdates.isEmpty()) {
-           return false;
+           return;
         }
         GameStateUpdate gsu = pendingUpdates.remove();
         gsu.apply(currentMap);
-        return !pendingUpdates.isEmpty();
+    }
+
+    /**
+     * TODO JavaDoc
+     * @return
+     */
+    public boolean isPendingGSUQueueEmpty()
+    {
+        return pendingUpdates.isEmpty();
     }
 
     public Map getCurrentMap() {
