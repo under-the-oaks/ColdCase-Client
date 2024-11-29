@@ -49,6 +49,7 @@ public class Main extends ApplicationAdapter {
             timeSinceLastLog = 0f;
         }
 
+        gameController.applyNextPendingGSU();
         PlayerController.getInstance().inputUpdate();
 
         viewport.apply();

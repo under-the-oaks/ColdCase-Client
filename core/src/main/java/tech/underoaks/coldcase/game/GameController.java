@@ -37,6 +37,8 @@ public class GameController {
      */
     private final Stack<InteractionChain> interactions = new Stack<>();
 
+    private final Queue<GameStateUpdate> pendingUpdates = new LinkedList<>();
+
     /**
      * Retrieves the singleton instance of the GameController.
      *
@@ -193,17 +195,26 @@ public class GameController {
      * @param queue The queue of GameStateUpdates to apply.
      */
     private void applyGSUQueue(Map map, Queue<GameStateUpdate> queue) {
-        while(!queue.isEmpty()) {
+        if(map != currentMap)
+        {
             GameStateUpdate gsu = queue.remove();
             gsu.apply(map);
-            if(!queue.isEmpty())
-            {
-                try {
-                    Thread.sleep(100);
-                }
-                catch (InterruptedException ignored) { }
-            }
+            return;
         }
+        pendingUpdates.addAll(queue);
+    }
+
+    /**
+     * TODO JavaDoc
+     * @return if there are any following gameStateUpdates that need to be applied
+     */
+    public boolean applyNextPendingGSU() {
+        if(pendingUpdates.isEmpty()) {
+           return false;
+        }
+        GameStateUpdate gsu = pendingUpdates.remove();
+        gsu.apply(currentMap);
+        return !pendingUpdates.isEmpty();
     }
 
     public Map getCurrentMap() {
