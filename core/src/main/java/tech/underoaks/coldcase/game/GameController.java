@@ -219,19 +219,25 @@ public class GameController {
     public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection) {
         System.out.println("handleAppendRemoteInteraction Called");
         // Remote called initial action
-        if(interactions.isEmpty()) {
-            InteractionChain chain = createInteractionChain();
-            boolean result = GameController.triggerAction(chain, targetPos, actionDirection);
-            if(!result) {
-                return new LinkedList<>();
-            }
-
-            // FIXME hier wird die chain zu früh auf die current map ausgeführt
-            // applyGSUQueue(currentMap, chain.getGSUQueue());
-            return chain.getPendingActions();
-        }
+//        if(interactions.isEmpty()) {
+//            InteractionChain chain = createInteractionChain();
+//            try {
+//                interactions.push(chain);
+//                boolean result = GameController.triggerAction(chain, targetPos, actionDirection);
+//                if(!result) {
+//                    return new LinkedList<>();
+//                }
+//
+//                // FIXME hier wird die chain zu früh auf die current map ausgeführt
+//                // applyGSUQueue(currentMap, chain.getGSUQueue());
+//                return chain.getPendingActions();
+//            }
+//            finally {
+//                interactions.pop();
+//            }
+//        }
         // Local called initial action -> This is a response
-        else {
+        //else {
             InteractionChain currentChain = interactions.peek();
             InteractionChain chain = createInteractionChain(currentChain);
             try {
@@ -248,7 +254,29 @@ public class GameController {
 
             currentChain.getGSUQueue().addAll(chain.getGSUQueue());
             return chain.getPendingActions();
+        //}
+    }
+
+    public void handleCreateRemoteInteractionChain()
+    {
+        if(!interactions.isEmpty()) {
+            throw new RuntimeException("Another Interaction is currently running");
         }
+        interactions.push(createInteractionChain());
+    }
+
+    public void handleApplyRemoteGSUsMessage()
+    {
+        // Vorbedingung: Es befindet sich genau eine Chain in dem Interaction-Stack
+        if(interactions.size() != 1) {
+            throw new RuntimeException("Only one Chain is allowed in the Stack");
+        }
+        applyGSUQueue(currentMap, interactions.pop().getGSUQueue());
+    }
+
+    public void handleAbortRemoteGSUsMessage()
+    {
+        interactions.clear();
     }
 
     /**

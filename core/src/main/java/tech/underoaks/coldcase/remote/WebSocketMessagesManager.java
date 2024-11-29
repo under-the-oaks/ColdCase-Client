@@ -64,7 +64,7 @@ public class WebSocketMessagesManager {
                 switch (deserializedObject) {
                     case Messages.CreateRemoteInteractionChainMessage messageObj -> {
                         String remoteInteractionChainId = "TEST" + UUID.randomUUID().toString(); // Handle logic here
-                        System.out.println("CreateRemoteInteractionChainMessage called but function is missing for now");
+                        GameController.getInstance().handleCreateRemoteInteractionChain();
                         WebSocketClient.getInstance().send(json.toJson(new Messages.CreateRemoteInteractionChainResponseMessage(messageObj.getRemoteGameControllerInstanceId(), remoteInteractionChainId), Object.class));
                     }
                     case Messages.AppendRemoteInteractionMessage messageObj -> {
@@ -72,11 +72,11 @@ public class WebSocketMessagesManager {
                         WebSocketClient.getInstance().send(json.toJson(new Messages.AppendRemoteInteractionResponseMessage(messageObj.getRemoteGameControllerInstanceId(), interactions), Object.class));
                     }
                     case Messages.ApplyRemoteGSUsMessage messageObj -> {
-                        //GameController.getInstance().handleApplyRemoteGSUsMessage();
+                        GameController.getInstance().handleApplyRemoteGSUsMessage();
                         System.out.println("ApplyRemoteGSUs called but function is missing for now");
                     }
                     case Messages.AbortRemoteGSUsMessage messageObj -> {
-                        //GameController.getInstance().handleAbortRemoteGSUsMessage();
+                        GameController.getInstance().handleAbortRemoteGSUsMessage();
                         System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
                     }
                     case Messages.AppendRemoteInteractionResponseMessage messageObj -> {
