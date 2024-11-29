@@ -202,6 +202,7 @@ public class GameController {
             return;
         }
         pendingUpdates.addAll(queue);
+        System.out.println("Pending Updates: " + pendingUpdates.peek());
     }
 
     /**
@@ -212,6 +213,7 @@ public class GameController {
         if(pendingUpdates.isEmpty()) {
            return;
         }
+        System.out.println("Pending Updates: " + pendingUpdates.peek());
         GameStateUpdate gsu = pendingUpdates.remove();
         gsu.apply(currentMap);
     }
@@ -341,7 +343,6 @@ public class GameController {
     /**
      * FIXME JavaDoc
      * @param chain
-     * @return
      */
     private static void triggerQueuedLocalActions(Stack<InteractionChain> interactions, InteractionChain chain) {
         // Trigger locally queued actions

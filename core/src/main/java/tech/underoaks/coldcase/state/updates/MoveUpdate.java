@@ -22,6 +22,7 @@ public class MoveUpdate extends GameStateUpdate {
 
     @Override
     public void apply(Map map) {
+        System.out.println("MoveUpdate: " + sourcePosition + " -> " + targetPosition);
         TileContent sourceContent = map.getTileContentByIndex(sourcePosition, sourceIndex);
 
         Stack<TileContent> tileContents = new Stack<>();

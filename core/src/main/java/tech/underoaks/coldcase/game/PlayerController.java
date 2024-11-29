@@ -56,28 +56,28 @@ public class PlayerController implements InputProcessor {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             lookDirection = Direction.NORTH;
-            if (GameController.getInstance().triggerAction(playerPosition, Direction.NORTH)) {
+            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.NORTH)) {
                 playerPosition.add(Direction.NORTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             lookDirection = Direction.SOUTH;
-            if (GameController.getInstance().triggerAction(playerPosition, Direction.SOUTH)) {
+            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.SOUTH)) {
                 playerPosition.add(Direction.SOUTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             lookDirection = Direction.WEST;
-            if (GameController.getInstance().triggerAction(playerPosition, Direction.WEST)) {
+            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.WEST)) {
                 playerPosition.add(Direction.WEST.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             lookDirection = Direction.EAST;
-            if (GameController.getInstance().triggerAction(playerPosition, Direction.EAST)) {
+            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.EAST)) {
                 playerPosition.add(Direction.EAST.getVector());
                 return true;
             }
