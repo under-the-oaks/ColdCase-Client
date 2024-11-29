@@ -179,6 +179,10 @@ public class GameController {
     public static void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
         try(RemoteGameController remote = new RemoteGameController()) {
             Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
+            if(newRemoteActions == null)
+            {
+                return;
+            }
             chain.getPendingRemoteActions().addAll(newRemoteActions);
         }
     }
