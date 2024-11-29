@@ -69,7 +69,7 @@ public class RemoteGameController implements AutoCloseable {
     public Queue<Pair<Vector2, Direction>> triggerAction(Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
         CompletableFuture<Object> future = new CompletableFuture<>(); //used for synchronisation
 
-        WebSocketMessagesManager.getInstace().appendRemoteInteraction(remoteGameControllerInstanceId, future, targetPos, actionDirection);
+        WebSocketMessagesManager.getInstace().appendRemoteInteraction(remoteGameControllerInstanceId, future, targetPos, actionDirection, suppressTranscendentFollowUp);
         String callId = UUID.randomUUID().toString(); // Automatically generate a unique ID
 
         try {

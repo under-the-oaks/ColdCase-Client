@@ -13,14 +13,25 @@ public class Messages {
         private Vector2 targetPos;
         private Direction actionDirection;
 
+        public boolean getSuppressTranscendentFollowUp() {
+            return suppressTranscendentFollowUp;
+        }
+
+        public void setSuppressTranscendentFollowUp(boolean suppressTranscendentFollowUp) {
+            this.suppressTranscendentFollowUp = suppressTranscendentFollowUp;
+        }
+
+        private boolean suppressTranscendentFollowUp;
+
         // No-args constructor
         public AppendRemoteInteractionMessage() {}
 
         // All-args constructor
-        public AppendRemoteInteractionMessage(String remoteGameControllerInstanceId, Vector2 targetPos, Direction actionDirection) {
+        public AppendRemoteInteractionMessage(String remoteGameControllerInstanceId, Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
             this.setRemoteGameControllerInstanceId(remoteGameControllerInstanceId);
             this.targetPos = targetPos;
             this.actionDirection = actionDirection;
+            this.suppressTranscendentFollowUp = suppressTranscendentFollowUp;
         }
 
         // Getters and setters
