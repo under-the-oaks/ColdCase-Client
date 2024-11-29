@@ -202,7 +202,6 @@ public class GameController {
             return;
         }
         pendingUpdates.addAll(queue);
-        System.out.println("Pending Updates: " + pendingUpdates.peek());
     }
 
     /**
@@ -213,7 +212,6 @@ public class GameController {
         if(pendingUpdates.isEmpty()) {
            return;
         }
-        System.out.println("Pending Updates: " + pendingUpdates.peek());
         GameStateUpdate gsu = pendingUpdates.remove();
         gsu.apply(currentMap);
     }
