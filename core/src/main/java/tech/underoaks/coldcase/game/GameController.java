@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import org.glassfish.grizzly.utils.Pair;
@@ -197,6 +198,20 @@ public class GameController {
         Snapshot snapshot = new Snapshot(currentMap);
         return new InteractionChain(snapshot);
     }
+
+    public void endLevel(){
+        System.out.println("Ending the level...");
+        Gdx.app.exit();
+        System.exit(0);
+
+    }
+
+    private void loadNextLevel() {
+        System.out.println("Loading next level...");
+        //TODO: Load new Level
+
+    }
+
 
     /**
      * FIXME JavaDoc

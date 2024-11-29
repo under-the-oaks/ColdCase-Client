@@ -9,7 +9,7 @@ public class PlayerController {
 
     private static PlayerController instance;
     private Vector2 playerPosition;
-    private Direction lookDirection;
+    private Direction lookDirection = Direction.NORTH;
 
 
 
@@ -19,8 +19,11 @@ public class PlayerController {
 
     public void setInventory(TileContent inventory) {
         this.inventory = inventory;
+
         //debug
-        System.out.println("Inventory:"+this.inventory.toString());
+        if (inventory != null) {
+            System.out.println("Inventory:"+this.inventory.toString());
+        }
     }
 
     private TileContent inventory;
@@ -36,25 +39,25 @@ public class PlayerController {
         // Update position based on user input
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.NORTH)) {
-                playerPosition.y -= 1;
+                playerPosition.add(Direction.NORTH.getVector());
             }
             lookDirection = Direction.NORTH;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.SOUTH)) {
-                playerPosition.y += 1;
+                playerPosition.add(Direction.SOUTH.getVector());
             }
             lookDirection = Direction.SOUTH;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.WEST)) {
-                playerPosition.x -= 1;
+                playerPosition.add(Direction.WEST.getVector());
             }
             lookDirection = Direction.WEST;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             if (GameController.getInstance().triggerAction(playerPosition, Direction.EAST)) {
-                playerPosition.x += 1;
+                playerPosition.add(Direction.EAST.getVector());
             }
             lookDirection = Direction.EAST;
         }
@@ -67,5 +70,9 @@ public class PlayerController {
 
     public void setPlayerPosition(Vector2 playerPosition) {
         this.playerPosition = playerPosition;
+    }
+
+    public Vector2 getPlayerPosition() {
+        return playerPosition;
     }
 }

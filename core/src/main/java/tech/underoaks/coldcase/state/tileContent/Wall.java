@@ -18,13 +18,11 @@ public class Wall extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) {
-        // TODO
         return false;
     }
 
     @Override
     public boolean update(InteractionChain chain, Vector2 tilePosition) {
-        // TODO
         return false;
     }
 }

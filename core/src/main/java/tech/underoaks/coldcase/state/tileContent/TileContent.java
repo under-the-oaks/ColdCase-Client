@@ -238,7 +238,12 @@ public abstract class TileContent implements Cloneable {
     }
 
     public void dispose() {
-        texture.dispose();
+        if (texture != null) {
+            texture.dispose();
+        }
+        if (tileContent != null) {
+            tileContent.dispose();
+        }
     }
 
     @Override
@@ -277,4 +282,13 @@ public abstract class TileContent implements Cloneable {
         }
         return tileContent.getTileContentByIndex(i - 1);
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
 }

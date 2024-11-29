@@ -13,6 +13,16 @@ public class Player extends TileContent {
 
     private static final Texture texture = new Texture("./isometric tileset/placholder_player.png");
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
+    public int playerIndex = 2;
+
     public Player() {
         super(texture, true, false);
     }
@@ -22,10 +32,10 @@ public class Player extends TileContent {
 
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition, this);
         Vector2 targetPosition = switch (actionDirection) {
-            case NORTH -> tilePosition.cpy().add(0, -1);
-            case SOUTH -> tilePosition.cpy().add(0, 1);
-            case EAST -> tilePosition.cpy().add(1, 0);
-            case WEST -> tilePosition.cpy().add(-1, 0);
+            case NORTH -> tilePosition.cpy().add(Direction.NORTH.getVector());
+            case SOUTH -> tilePosition.cpy().add(Direction.SOUTH.getVector());
+            case EAST -> tilePosition.cpy().add(Direction.EAST.getVector());
+            case WEST -> tilePosition.cpy().add(Direction.WEST.getVector());
         };
 
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
