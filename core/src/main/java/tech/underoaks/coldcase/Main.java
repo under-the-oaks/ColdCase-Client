@@ -28,6 +28,8 @@ public class Main extends ApplicationAdapter {
         viewport = new ExtendViewport(800, 800);
 
         Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_MovableBlockDemo"), true);
+        Gdx.input.setInputProcessor(PlayerController.getInstance());
+
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
 
@@ -50,7 +52,6 @@ public class Main extends ApplicationAdapter {
         }
 
         gameController.applyNextPendingGSU();
-        PlayerController.getInstance().inputUpdate();
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
