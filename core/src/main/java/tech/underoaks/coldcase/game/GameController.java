@@ -195,6 +195,10 @@ public class GameController {
     private void applyGSUQueue(Map map, Queue<GameStateUpdate> queue) {
         for (GameStateUpdate gsu : queue) {
             gsu.apply(map);
+            try {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException ignored) { }
         }
     }
 
