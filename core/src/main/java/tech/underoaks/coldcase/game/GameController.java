@@ -234,10 +234,16 @@ public class GameController {
         else {
             InteractionChain currentChain = interactions.peek();
             InteractionChain chain = createInteractionChain(currentChain);
+            try {
+                interactions.push(chain);
+                boolean result = triggerAction(chain, targetPos, actionDirection);
+                if(!result) {
+                    return new LinkedList<>();
+                }
 
-            boolean result = triggerAction(chain, targetPos, actionDirection);
-            if(!result) {
-                return new LinkedList<>();
+            }
+            finally {
+                interactions.pop();
             }
 
             currentChain.getGSUQueue().addAll(chain.getGSUQueue());
