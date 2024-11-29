@@ -50,6 +50,10 @@ public class PlayerController implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
+        if (GameController.getInstance().isPendingGSUQueueEmpty()) {
+            return false;
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             lookDirection = Direction.NORTH;
             if (GameController.getInstance().triggerAction(playerPosition, Direction.NORTH)) {

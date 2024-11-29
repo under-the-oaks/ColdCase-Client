@@ -21,6 +21,7 @@ public class Main extends ApplicationAdapter {
     private GameController gameController;
     private ExtendViewport viewport;
     private float timeSinceLastLog = 0f;
+    private float timeSinceLastGSUCheck = 0f;
 
     @Override
     public void create() {
@@ -51,7 +52,12 @@ public class Main extends ApplicationAdapter {
             timeSinceLastLog = 0f;
         }
 
-        gameController.applyNextPendingGSU();
+        timeSinceLastGSUCheck += deltaTime;
+
+        if (timeSinceLastGSUCheck >= 0.1f) {
+            GameController.getInstance().applyNextPendingGSU();
+            timeSinceLastGSUCheck = 0f;
+        }
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
