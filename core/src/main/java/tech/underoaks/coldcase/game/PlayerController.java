@@ -50,7 +50,7 @@ public class PlayerController implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        if (GameController.getInstance().isPendingGSUQueueEmpty()) {
+        if (!GameController.getInstance().isPendingGSUQueueEmpty()) {
             return false;
         }
 
