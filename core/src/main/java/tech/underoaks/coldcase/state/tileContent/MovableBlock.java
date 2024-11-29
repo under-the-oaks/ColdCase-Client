@@ -10,11 +10,11 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.game.Direction;
 
-public class movableBlock extends TileContent {
+public class MovableBlock extends TileContent {
 
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_067.png");
 
-    public movableBlock() {
+    public MovableBlock() {
         super(texture, false, false);
     }
 

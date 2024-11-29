@@ -1,15 +1,10 @@
-package tech.underoaks.coldcase.state;
+package tech.underoaks.coldcase.remote;
 
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.Vector2;
 import org.glassfish.grizzly.utils.Pair;
 import tech.underoaks.coldcase.game.Direction;
-import tech.underoaks.coldcase.remote.Messages;
-import tech.underoaks.coldcase.remote.WebSocketClient;
-import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.*;

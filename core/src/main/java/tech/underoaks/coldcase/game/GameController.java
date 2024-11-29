@@ -1,12 +1,11 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import org.glassfish.grizzly.utils.Pair;
+import tech.underoaks.coldcase.remote.RemoteGameController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
-import tech.underoaks.coldcase.state.RemoteGameController;
 import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;

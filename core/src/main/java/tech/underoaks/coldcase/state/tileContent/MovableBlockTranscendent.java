@@ -11,10 +11,10 @@ import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
 
-public class movableBlockTrancendent extends TileContent{
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_067.png");
+public class MovableBlockTranscendent extends TileContent{
+    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_056.png");
 
-    public movableBlockTrancendent() {
+    public MovableBlockTranscendent() {
 
         super(texture, false, false);
         this.visibilityState = VisibilityStates.TRANSCENDENT;
