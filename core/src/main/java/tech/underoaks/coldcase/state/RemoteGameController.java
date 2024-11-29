@@ -51,12 +51,22 @@ public class RemoteGameController implements AutoCloseable {
 
     /**
      * TODO JavaDoc
-     *
      * @param targetPos
      * @param actionDirection
      * @return
      */
     public Queue<Pair<Vector2, Direction>> triggerAction(Vector2 targetPos, Direction actionDirection) {
+        return triggerAction(targetPos, actionDirection, false);
+    }
+
+    /**
+     * TODO JavaDoc
+     *
+     * @param targetPos
+     * @param actionDirection
+     * @return
+     */
+    public Queue<Pair<Vector2, Direction>> triggerAction(Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
         CompletableFuture<Object> future = new CompletableFuture<>(); //used for synchronisation
 
         WebSocketMessagesManager.getInstace().appendRemoteInteraction(remoteGameControllerInstanceId, future, targetPos, actionDirection);

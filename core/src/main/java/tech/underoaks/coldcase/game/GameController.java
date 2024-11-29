@@ -79,12 +79,23 @@ public class GameController {
     }
 
     /**
-     * FIXME JavaDoc
+     * TODO JavaDoc
+     * @param testChain
      * @param targetPos
      * @param actionDirection
      * @return
      */
     public static boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection) {
+        return triggerAction(testChain, targetPos, actionDirection, false);
+    }
+
+    /**
+     * FIXME JavaDoc
+     * @param targetPos
+     * @param actionDirection
+     * @return
+     */
+    public static boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
         RemoteGameController remote = null;
         try {
             TileContent handler = GameController.triggerLocalAction(testChain, targetPos, actionDirection);
@@ -93,9 +104,9 @@ public class GameController {
             }
 
             // If local action was transcendent, trigger remote action
-            if(handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
+            if(!suppressTranscendentFollowUp && handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
-                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
+                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection, true); // Suppress Transcended Trigger
                 testChain.getPendingRemoteActions().addAll(newRemoteActions);   //TODO handling getting null back or is that an error
             }
 
@@ -231,7 +242,7 @@ public class GameController {
      * @param actionDirection
      * @return
      */
-    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection) {
+    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
         System.out.println("handleAppendRemoteInteraction Called");
         // Remote called initial action
 //        if(interactions.isEmpty()) {
@@ -257,7 +268,7 @@ public class GameController {
             InteractionChain chain = createInteractionChain(currentChain);
             try {
                 interactions.push(chain);
-                boolean result = triggerAction(chain, targetPos, actionDirection);
+                boolean result = triggerAction(chain, targetPos, actionDirection, suppressTranscendentFollowUp);
                 if(!result) {
                     return new LinkedList<>();
                 }
