@@ -6,6 +6,9 @@ import tech.underoaks.coldcase.game.Direction;
 
 import java.util.Queue;
 
+/**
+ * Contains nested classes that represent various types of messages used in the remote game controller system.
+ */
 public class Messages {
 
     // AppendRemoteInteractionMessage

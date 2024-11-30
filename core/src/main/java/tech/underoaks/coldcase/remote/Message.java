@@ -1,6 +1,12 @@
 package tech.underoaks.coldcase.remote;
 
-// Abstract base class for all messages
+/**
+ * Abstract base class representing a generic message in the remote game controller system.
+ * <p>
+ * This class provides a common structure for all messages by including a unique identifier
+ * for the associated remote game controller instance.
+ * </p>
+ */
 public abstract class Message {
     private String remoteGameControllerInstanceId;
 

@@ -75,7 +75,8 @@ public class GameController {
             interactions.pop();
         }
 
-        applyGSUQueue(currentMap, chain.getGSUQueue());
+        //applyGSUQueue(currentMap, chain.getGSUQueue());
+        pendingUpdates.addAll(chain.getGSUQueue());
         return true;
     }
 
@@ -330,7 +331,8 @@ public class GameController {
         if(interactions.size() != 1) {
             throw new RuntimeException("Only one Chain is allowed in the Stack");
         }
-        applyGSUQueue(currentMap, interactions.pop().getGSUQueue());
+        //dapplyGSUQueue(currentMap, interactions.pop().getGSUQueue());
+        pendingUpdates.addAll(interactions.pop().getGSUQueue());
     }
 
     public void handleAbortRemoteGSUsMessage()

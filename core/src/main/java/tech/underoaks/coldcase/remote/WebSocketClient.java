@@ -1,25 +1,32 @@
 package tech.underoaks.coldcase.remote;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
-import org.glassfish.grizzly.utils.Pair;
-import tech.underoaks.coldcase.game.Direction;
-import tech.underoaks.coldcase.game.GameController;
-
-
 import java.io.IOException;
 import java.net.URI;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
+
+/**
+ * A WebSocket client for communicating with the remote game server.
+ * <p>
+ * This singleton class establishes and manages a WebSocket connection to the server,
+ * providing methods for sending and receiving messages.
+ * </p>
+ */
 @ClientEndpoint
 public class WebSocketClient {
     private static final Json json = new Json();
     private static Session session;
     private static WebSocketClient instance = null;
 
+    /**
+     * Retrieves the singleton instance of the WebSocket client.
+     * <p>
+     * If the instance is not yet initialized, this method initializes it and connects to the WebSocket server.
+     * </p>
+     *
+     * @return the singleton instance of the WebSocket client.
+     */
     public static WebSocketClient getInstance() {
         if (instance == null) {
             instance = new WebSocketClient();
@@ -27,7 +34,7 @@ public class WebSocketClient {
 
             try {
                 WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-                URI uri = new URI("ws://82.165.30.116:8080/?session=12345");  // TODO handle session UID for now static
+                URI uri = new URI("ws://82.165.30.116:8080/?session=12345");  // TODO handle session UID and ip for now static
                 System.out.println("Connecting to WebSocket server...");
                 session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
                 System.out.println("Connected to WebSocket server.");
@@ -44,12 +51,18 @@ public class WebSocketClient {
         System.out.println("Connected to server");
     }
 
+    /**
+     * this message gets invoked when a message is received from the server.
+     * it !it dosen´t has access to the fields of this class
+     *
+     * @param message the received message as a {@link String}.
+     */
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("incoming:");
-        System.out.println(json.prettyPrint(message));
+        //System.out.println("incoming:");
+        //System.out.println(json.prettyPrint(message));
         //Object deserializedObject = json.fromJson(Object.class, message);
-        WebSocketMessagesManager.hanndleIncommingMessages(message);
+        WebSocketMessagesManager.handleIncomingMessages(message);
     }
 
     @OnClose
@@ -57,6 +70,11 @@ public class WebSocketClient {
         System.out.println("Connection closed: " + closeReason);
     }
 
+    /**
+     * Sends a message to the WebSocket server.
+     *
+     * @param message the message to send as a {@link String}.
+     */
     public void send(String message) {
         try {
             session.getBasicRemote().sendText(message);

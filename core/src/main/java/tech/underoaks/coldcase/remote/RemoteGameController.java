@@ -10,67 +10,93 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 /**
- * TODO JavaDoc
+ * Represents a remote game controller responsible for managing remote interactions
+ * and game state updates through WebSocket communication.
+ * <p>
+ * This class handles the creation and management of interaction chains and provides
+ * functionality to trigger actions remotely and apply or abort updates to the game state.
+ * </p>
  */
 public class RemoteGameController implements AutoCloseable {
+
+    /** Unique identifier for the remote game controller instance. needed for callbacks*/
     private static String remoteGameControllerInstanceId = null;
+
+    /** Unique identifier for the remote interaction chain associated with this controller. not used ATM*/
     private final String remoteInteractionChainId;
 
     /**
-     * TODO JavaDoc
+     * Initializes a new remote game controller, establishing a remote interaction chain
+     * and retrieving its unique identifier.
+     * <p>
+     *     blocks until timeout or responseMessage completes the futureObj.
+     * </p>
      */
     public RemoteGameController() {
 
         CompletableFuture<Object> future = new CompletableFuture<>();
-        this.remoteGameControllerInstanceId = UUID.randomUUID().toString(); // Automatically generate a unique ID
-        WebSocketMessagesManager.getInstace().createRemoteInteractionChain(remoteGameControllerInstanceId,future); // TODO @Jean-Luc need identifier for remote interaction chain
+        remoteGameControllerInstanceId = UUID.randomUUID().toString(); // Automatically generate a unique ID
+        WebSocketMessagesManager.getInstance().createRemoteInteractionChain(remoteGameControllerInstanceId,future);
         String tmpRemoteInteractionChainId = null;
 
         try {
-            Object returnObj = future.get(60, TimeUnit.MINUTES);// Block until the response is provided
+            Object returnObj = future.get(5, TimeUnit.SECONDS);// Blocks until the response is provided
             if(returnObj instanceof Messages.CreateRemoteInteractionChainResponseMessage messageObj){
                 tmpRemoteInteractionChainId = messageObj.getRemoteInteractionChainId();
             }
         } catch (ExecutionException | InterruptedException e) {
             System.err.println(Arrays.toString(e.getStackTrace()));
-            //TODO
+            //TODO should this trigger an abort gsu?
         } catch (TimeoutException e) {
-            System.err.println("TIMEOUT in create remote interaktionchain");
+            System.err.println("TIMEOUT in createRemoteInteractionChain");
+            //TODO retry?
         }
 
 
         this.remoteInteractionChainId = tmpRemoteInteractionChainId;
 
-        System.out.println("GOT remote Interaction Chain Id:" + remoteInteractionChainId);
+        //System.out.println("GOT remote Interaction Chain Id:" + remoteInteractionChainId);
     }
 
     /**
-     * TODO JavaDoc
-     * @param targetPos
-     * @param actionDirection
-     * @return
+     * Triggers a remote action at the specified position and direction.
+     *
+     * @param targetPos       the target position of the action.
+     * @param actionDirection the direction of the action.
+     * @return a queue of interactions representing the result of the triggered action,
+     * or {@code null} if the action times out, an error occurs or no Action took place.
      */
     public Queue<Pair<Vector2, Direction>> triggerAction(Vector2 targetPos, Direction actionDirection) {
         return triggerAction(targetPos, actionDirection, false);
     }
 
     /**
-     * TODO JavaDoc
+     * Triggers a remote action at the specified position and direction with an option to suppress follow-up actions.
      *
-     * @param targetPos
-     * @param actionDirection
-     * @return
+     * <p>
+     *     needed to not create an endless loop of creating remote interaction chains.
+     * </p>
+     *
+     * @param targetPos                  the target position of the action.
+     * @param actionDirection            the direction of the action.
+     * @param suppressTranscendentFollowUp whether to suppress follow-up actions.
+     * @return a queue of interactions representing the result of the triggered action,
+     * or {@code null} if the action times out or an error occurs.
      */
-    public Queue<Pair<Vector2, Direction>> triggerAction(Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
+    public Queue<Pair<Vector2, Direction>> triggerAction(
+        Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
+
         CompletableFuture<Object> future = new CompletableFuture<>(); //used for synchronisation
 
-        WebSocketMessagesManager.getInstace().appendRemoteInteraction(remoteGameControllerInstanceId, future, targetPos, actionDirection, suppressTranscendentFollowUp);
+        WebSocketMessagesManager.getInstance().appendRemoteInteraction(
+            remoteGameControllerInstanceId, future, targetPos, actionDirection, suppressTranscendentFollowUp);
         String callId = UUID.randomUUID().toString(); // Automatically generate a unique ID
 
         try {
             Object returnObj = future.get(60, TimeUnit.SECONDS);// Block until the response is provided
             if (returnObj instanceof Messages.AppendRemoteInteractionResponseMessage messageObj) {
-                if (!messageObj.getInteractions().isEmpty() && messageObj.getInteractions().peek() instanceof Pair<?, ?>) { //TODO chasten ok like this?
+                if (!messageObj.getInteractions().isEmpty()
+                    && messageObj.getInteractions().peek() instanceof Pair<?, ?>) {
                     return messageObj.getInteractions();
                 }
             }
@@ -84,21 +110,22 @@ public class RemoteGameController implements AutoCloseable {
             //TODO may needs to remove future?
         }
 
-        //return WebSocketClient.getInstance().appendRemoteInteraction(targetPos,actionDirection); // TODO ...(Vector2 targetPos, Direction actionDirection)
         return null;//return in case server times out or responded with wrong data
     }
 
     /**
-     * TODO JavaDoc
-     *
-     * @return
+     * Applies all pending updates in the game state update (GSU) queue for the remote interaction chain on the other
+     * client.
      */
     public void applyGSUQueue() {
-        WebSocketMessagesManager.getInstace().applyRemoteGSUs(remoteInteractionChainId);
+        WebSocketMessagesManager.getInstance().applyRemoteGSUs(remoteInteractionChainId);
     }
 
+    /**
+     * Closes the remote game controller and aborts any pending updates in the GSU queue.
+     */
     @Override
     public void close() {
-        WebSocketMessagesManager.getInstace().abortRemoteGSU(remoteInteractionChainId);
+        WebSocketMessagesManager.getInstance().abortRemoteGSU(remoteInteractionChainId);
     }
 }
