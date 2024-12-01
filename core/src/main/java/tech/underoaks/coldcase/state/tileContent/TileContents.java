@@ -10,12 +10,14 @@ public enum TileContents {
     WALL(1, Wall.class),
     TEST(2, TestContent.class),
     PLAYER(3, Player.class),
-    MOVABLE_BLOCK(4, movableBlock.class),
+    MOVABLE_BLOCK(4, MovableBlock.class),
     TEST_ITEM(5, TestItem.class),
     TEST_ITEM02(6, TestItem02.class),
     INVISIBLE_WALL(7, InvisibleWall.class),
     GLOVE_ITEM(8, GloveItem.class),
-    GOALOBJECT(9,GoalObject.class);
+    GOAL_OBJECT(9,GoalObject.class),
+    MOVABLE_BLOCK_TRANSCENDENT(10, MovableBlockTranscendent.class),
+    TRANSCENDENT_TEST(11, TranscendentTestBlock.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

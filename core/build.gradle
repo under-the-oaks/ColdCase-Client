@@ -21,4 +21,6 @@ dependencies {
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+
+  implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:2.2.0'
 }

@@ -313,7 +313,7 @@ class MapTest{
 
         Vector2 past = mockMap.getTileContentByType( BrokenTileContent.class );
 
-        gameController.triggerAction( new Vector2(0,0), Direction.NORTH );
+        gameController.triggerLocalAction( new Vector2(0,0), Direction.NORTH );
 
         Vector2 current = mockMap.getTileContentByType( BrokenTileContent.class );
 
@@ -346,12 +346,12 @@ class MapTest{
         Vector2 brokenTilePosition = new Vector2(1, 0);
 
         // Soll nach 100 Iterationen fehlschlagen
-        Assertions.assertThrows( IllegalStateException.class, () -> gameController.triggerAction( brokenTilePosition, Direction.NORTH));
+        Assertions.assertThrows( IllegalStateException.class, () -> gameController.triggerLocalAction( brokenTilePosition, Direction.NORTH));
 
         mockMap.setTile(1,0,mockTile);
 
         // Soll alle Updates ausführen
-        Assertions.assertDoesNotThrow(() -> gameController.triggerAction( position, Direction.NORTH));
+        Assertions.assertDoesNotThrow(() -> gameController.triggerLocalAction( position, Direction.NORTH));
 
 
          */

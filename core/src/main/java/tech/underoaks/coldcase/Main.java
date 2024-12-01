@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
 
@@ -20,6 +21,7 @@ public class Main extends ApplicationAdapter {
     private GameController gameController;
     private ExtendViewport viewport;
     private float timeSinceLastLog = 0f;
+    private float timeSinceLastGSUCheck = 0f;
 
     @Override
     public void create() {
@@ -33,6 +35,7 @@ public class Main extends ApplicationAdapter {
         gameController.setCurrentMap(map);
 
         PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
+        WebSocketClient.getInstance();
     }
 
     @Override
@@ -47,6 +50,13 @@ public class Main extends ApplicationAdapter {
         if (timeSinceLastLog >= 0.5f) {
             //System.out.println("FPS: " + fps);
             timeSinceLastLog = 0f;
+        }
+
+        timeSinceLastGSUCheck += deltaTime;
+
+        if (timeSinceLastGSUCheck >= 0.1f) {
+            GameController.getInstance().applyNextPendingGSU();
+            timeSinceLastGSUCheck = 0f;
         }
 
         viewport.apply();
