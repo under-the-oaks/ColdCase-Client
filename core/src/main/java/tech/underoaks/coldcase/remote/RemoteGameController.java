@@ -95,10 +95,7 @@ public class RemoteGameController implements AutoCloseable {
         try {
             Object returnObj = future.get(60, TimeUnit.SECONDS);// Block until the response is provided
             if (returnObj instanceof Messages.AppendRemoteInteractionResponseMessage messageObj) {
-                if (!messageObj.getInteractions().isEmpty()
-                    && messageObj.getInteractions().peek() instanceof Pair<?, ?>) {
-                    return messageObj.getInteractions();
-                }
+                return messageObj.getInteractions();
             }
         } catch (ExecutionException | InterruptedException e) {
             System.err.println(Arrays.toString(e.getStackTrace()));
