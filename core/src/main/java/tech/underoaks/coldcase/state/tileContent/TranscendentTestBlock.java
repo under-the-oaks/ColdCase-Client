@@ -3,6 +3,7 @@ package tech.underoaks.coldcase.state.tileContent;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;

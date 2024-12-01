@@ -37,6 +37,9 @@ public class GameController {
      */
     private final Stack<InteractionChain> interactions = new Stack<>();
 
+    /**
+     * TODO JavaDoc
+     */
     private final Queue<GameStateUpdate> pendingUpdates = new LinkedList<>();
 
     /**
@@ -112,6 +115,10 @@ public class GameController {
                 if(newRemoteActions != null)
                 {
                     testChain.getPendingRemoteActions().addAll(newRemoteActions);
+                }
+                else
+                {
+                    return false;
                 }
             }
 
@@ -304,7 +311,7 @@ public class GameController {
                 interactions.push(chain);
                 boolean result = triggerAction(chain, targetPos, actionDirection, suppressTranscendentFollowUp);
                 if(!result) {
-                    return new LinkedList<>();
+                    return null;
                 }
 
             }
