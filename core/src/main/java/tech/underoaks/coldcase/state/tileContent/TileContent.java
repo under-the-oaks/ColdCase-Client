@@ -64,7 +64,7 @@ public abstract class TileContent implements Cloneable {
      */
     public void render(SpriteBatch batch, float x, float y) {
         if (texture != null) {
-            batch.draw(texture, x, y + 8);
+            batch.draw(texture, x, y + 480);
         }
 
         if (tileContent != null) {

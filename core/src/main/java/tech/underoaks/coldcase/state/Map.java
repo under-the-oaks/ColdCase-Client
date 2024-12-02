@@ -27,7 +27,7 @@ public class Map {
     /**
      * The size of each tile in pixels
      */
-    static float tileSize = 32;
+    static float tileSize = 960;
 
     /**
      * Default constructor for Map needed for deserialization in {@link MapGenerator}
@@ -244,10 +244,12 @@ public class Map {
      * @return Converted point as a Vector2
      */
     public Vector2 twoDToIso(Vector2 pt) {
+
         Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = pt.x - pt.y;
         tempPt.y = (pt.x + pt.y) / 2;
         return (tempPt);
+
     }
 
     /**

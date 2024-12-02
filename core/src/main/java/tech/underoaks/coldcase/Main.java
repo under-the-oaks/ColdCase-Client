@@ -26,7 +26,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new ExtendViewport(800, 800);
+        viewport = new ExtendViewport(10000, 10000);
 
         Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_MovableBlockDemo"), true);
         Gdx.input.setInputProcessor(PlayerController.getInstance());

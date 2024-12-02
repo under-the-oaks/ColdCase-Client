@@ -10,7 +10,7 @@ import tech.underoaks.coldcase.game.Direction;
  */
 public class Wall extends TileContent {
 
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_065.png");
+    private static final Texture texture = new Texture("./sprites/Sprite_StandardBlock_N.png");
 
     public Wall() {
         super(texture, false, false);

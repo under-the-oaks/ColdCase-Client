@@ -1,6 +1,8 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
@@ -11,7 +13,7 @@ import tech.underoaks.coldcase.game.Direction;
 
 public class Player extends TileContent {
 
-    private static final Texture texture = new Texture("./isometric tileset/placholder_player.png");
+    private static final Texture texture = new Texture("./sprites/Sprite_Detective_Right.png");
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -55,6 +57,19 @@ public class Player extends TileContent {
         // adding the validated movement to the chain
         chain.addGameStateUpdate(new MoveUpdate(tilePosition, childIndex, targetPosition));
         return true;
+    }
+
+    @Override
+    public void render(SpriteBatch batch, float x, float y) {
+
+        if (texture != null) {
+            batch.draw(texture, x, y + 540);
+        }
+
+        if (tileContent != null) {
+            tileContent.render(batch, x, y);
+        }
+
     }
 
     @Override
