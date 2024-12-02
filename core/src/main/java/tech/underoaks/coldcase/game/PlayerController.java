@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.state.tileContent.Player;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
 public class PlayerController implements InputProcessor {
@@ -56,35 +57,35 @@ public class PlayerController implements InputProcessor {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             lookDirection = Direction.NORTH;
-            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.NORTH)) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, new Player()))) {
                 playerPosition.add(Direction.NORTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             lookDirection = Direction.SOUTH;
-            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.SOUTH)) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, new Player()))) {
                 playerPosition.add(Direction.SOUTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             lookDirection = Direction.WEST;
-            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.WEST)) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, new Player()))) {
                 playerPosition.add(Direction.WEST.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             lookDirection = Direction.EAST;
-            if (GameController.getInstance().triggerAction(playerPosition.cpy(), Direction.EAST)) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, new Player()))) {
                 playerPosition.add(Direction.EAST.getVector());
                 return true;
             }
         }
         // Interact
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            GameController.getInstance().triggerAction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection);
+            GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, new Player()));
             return true;
         }
         return false;
