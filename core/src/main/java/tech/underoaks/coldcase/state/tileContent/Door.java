@@ -18,9 +18,9 @@ public class Door extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         // if action is called not by the player but by another object it opens the door, aka changes sprites and sets playerPassable to true
-        if (!(interaction.getCaller() instanceof Player)){
+        if (interaction.getCaller() != Player.class){
             this.setTexture(texture_open);
-            this.setPlayerPassable(true);
+            this.setPlayerPassable(!this.isPlayerPassable());
         }
 
         return true;

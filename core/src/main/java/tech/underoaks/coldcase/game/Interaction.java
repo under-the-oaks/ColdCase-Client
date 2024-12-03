@@ -1,7 +1,6 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.state.tileContent.TileContent;
 
 /**
  * Represents an interaction between two objects in the game world.
@@ -18,7 +17,7 @@ public class Interaction {
     /**
      * The object that initiated the interaction.
      */
-    private TileContent caller;
+    private Class<?> caller;
     /**
      * Additional parameters for the interaction. Each TileContent can use these parameters in its action method.
      */
@@ -30,7 +29,7 @@ public class Interaction {
     public Interaction() {
     }
 
-    public Interaction(Vector2 targetPos, Direction actionDirection, TileContent caller, int... parameters) {
+    public Interaction(Vector2 targetPos, Direction actionDirection, Class<?> caller, int... parameters) {
         this.targetPos = targetPos.cpy(); // this is so that the targetPos can't be changed from outside do to the Vector2 being mutable and our game handling interactions asynchronously
         this.actionDirection = actionDirection;
         this.caller = caller;
@@ -53,11 +52,11 @@ public class Interaction {
         this.actionDirection = actionDirection;
     }
 
-    public TileContent getCaller() {
+    public Class<?> getCaller() {
         return caller;
     }
 
-    public void setCaller(TileContent caller) {
+    public void setCaller(Class<?> caller) {
         this.caller = caller;
     }
 
