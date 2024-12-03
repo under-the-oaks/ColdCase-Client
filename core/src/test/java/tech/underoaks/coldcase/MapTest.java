@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.Wall;
@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 class MapTest{
 
     static ApplicationListener game;
-
     static Texture mockTexture;
     static Map mockMap;
     static Tile mockTile;
@@ -63,7 +62,7 @@ class MapTest{
 
     /**
      * A TileContent used for testing purposes using a mockTexture instead of an actual.
-     *
+     * <p>
      * The action method adds a BrokenTileContent on top of one tile to change the map
      * for testing. It did not work as intended though.
      */
@@ -74,9 +73,9 @@ class MapTest{
         }
 
         @Override
-        public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-            if (chain.getSnapshot().getSnapshotMap().getTile(tilePosition).topTileContent().getClass() == BrokenTileContent.class) {
+            if (chain.getSnapshot().getSnapshotMap().getTile(interaction.getTargetPos()).topTileContent().getClass() == BrokenTileContent.class) {
                 return false;
             }
 
@@ -110,7 +109,7 @@ class MapTest{
         }
 
         @Override
-        public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
             //System.out.println("brokenTile.action()");
             chain.addGameStateUpdate( new EmptyUpdate() );
             return true;

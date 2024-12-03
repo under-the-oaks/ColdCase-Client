@@ -33,9 +33,11 @@ public class Door extends TileContent {
                 chain.addGameStateUpdate(new ChangeTextureUpdate(texture_open, interaction.getTargetPos(), childIndex));
                 chain.addGameStateUpdate(new PlayerPassebilityUpdate(true, interaction.getTargetPos(), childIndex));
             }
+            return true;
+        } else {
+            return false;
         }
 
-        return true;
     }
 
     public boolean update(InteractionChain chain, Vector2 tilePosition) {
