@@ -41,7 +41,7 @@ public class TranscendentTestBlock extends TileContent {
         }
 
         chain.addGameStateUpdate(new MoveUpdate(interaction.getTargetPos(), childIndex, targetPosition));
-        chain.addAction(new Interaction(new Vector2(3, 3), interaction.getActionDirection(), this));
+        chain.addAction(new Interaction(new Vector2(3, 3), interaction.getActionDirection(), this.getClass()));
         return true;
     }
 

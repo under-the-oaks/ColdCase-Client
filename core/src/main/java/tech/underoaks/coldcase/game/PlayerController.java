@@ -57,35 +57,35 @@ public class PlayerController implements InputProcessor {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             lookDirection = Direction.NORTH;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, new Player()))) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, Player.class))) {
                 playerPosition.add(Direction.NORTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             lookDirection = Direction.SOUTH;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, new Player()))) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, Player.class))) {
                 playerPosition.add(Direction.SOUTH.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             lookDirection = Direction.WEST;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, new Player()))) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, Player.class))) {
                 playerPosition.add(Direction.WEST.getVector());
                 return true;
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             lookDirection = Direction.EAST;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, new Player()))) {
+            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, Player.class))) {
                 playerPosition.add(Direction.EAST.getVector());
                 return true;
             }
         }
         // Interact
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, new Player()));
+            GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, Player.class));
             return true;
         }
         return false;
