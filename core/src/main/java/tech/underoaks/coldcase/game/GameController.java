@@ -108,7 +108,7 @@ public class GameController {
                 return false;
             }
 
-            // If local action was transcendent, trigger remote action
+            // If local action was transcendent, trigger the same action on the remote client
             if (!suppressTranscendentFollowUp && handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
                 Queue<Interaction> newRemoteActions = remote.triggerAction(interaction, true); // Suppress Transcended Trigger
@@ -351,6 +351,7 @@ public class GameController {
         // Trigger locally queued remote actions
         Interaction action;
         while ((action = chain.getPendingRemoteActions().poll()) != null) {
+            System.out.println("Triggering remote action: " + action.getTargetPos() + " " + action.getActionDirection());
             GameController.triggerRemoteAction(chain, action);
         }
     }
