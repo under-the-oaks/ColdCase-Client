@@ -17,7 +17,7 @@ public class Interaction {
     /**
      * The object that initiated the interaction.
      */
-    private Class<?> caller;
+    private String caller;
     /**
      * Additional parameters for the interaction. Each TileContent can use these parameters in its action method.
      */
@@ -32,7 +32,7 @@ public class Interaction {
     public Interaction(Vector2 targetPos, Direction actionDirection, Class<?> caller, int... parameters) {
         this.targetPos = targetPos.cpy(); // this is so that the targetPos can't be changed from outside do to the Vector2 being mutable and our game handling interactions asynchronously
         this.actionDirection = actionDirection;
-        this.caller = caller;
+        this.caller = caller.getName();
         this.parameters = parameters;
     }
 
@@ -52,12 +52,12 @@ public class Interaction {
         this.actionDirection = actionDirection;
     }
 
-    public Class<?> getCaller() {
+    public String getCaller() {
         return caller;
     }
 
     public void setCaller(Class<?> caller) {
-        this.caller = caller;
+        this.caller = caller.getName();
     }
 
     public int[] getParameters() {

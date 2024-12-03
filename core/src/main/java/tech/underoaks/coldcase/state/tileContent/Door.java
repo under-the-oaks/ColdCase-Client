@@ -6,6 +6,8 @@ import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
+import java.util.Objects;
+
 public class Door extends TileContent {
 
     private static final Texture texture_closed = new Texture("./isometric tileset/separated images/tile_067.png");
@@ -18,7 +20,7 @@ public class Door extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         // if action is called not by the player but by another object it opens the door, aka changes sprites and sets playerPassable to true
-        if (interaction.getCaller() != Player.class){
+        if (!Objects.equals(interaction.getCaller(), Player.class.getName())){
             this.setTexture(texture_open);
             this.setPlayerPassable(!this.isPlayerPassable());
         }

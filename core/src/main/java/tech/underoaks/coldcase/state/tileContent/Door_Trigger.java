@@ -6,6 +6,8 @@ import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
+import java.util.Objects;
+
 public class Door_Trigger extends TileContent{
 
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_069.png");
@@ -17,7 +19,7 @@ public class Door_Trigger extends TileContent{
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-        if (interaction.getCaller() == Player.class){
+        if (Objects.equals(interaction.getCaller(), Player.class.getName())){
             chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass()));
         }
 
