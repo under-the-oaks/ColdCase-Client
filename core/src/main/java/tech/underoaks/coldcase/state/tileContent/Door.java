@@ -9,7 +9,7 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 public class Door extends TileContent {
 
     private static final Texture texture_closed = new Texture("./isometric tileset/separated images/tile_067.png");
-    private static final Texture texture_open = new Texture("./isometric tileset/separated images/tile_067.png");
+    private static final Texture texture_open = new Texture("./isometric tileset/separated images/tile_068.png");
 
     public Door() {
         super(texture_closed, false, false);
@@ -18,7 +18,10 @@ public class Door extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         // if action is called not by the player but by another object it opens the door, aka changes sprites and sets playerPassable to true
-
+        if (!(interaction.getCaller() instanceof Player)){
+            this.setTexture(texture_open);
+            this.setPlayerPassable(true);
+        }
 
         return true;
     }
