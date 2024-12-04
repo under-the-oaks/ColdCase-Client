@@ -17,7 +17,9 @@ public enum TileContents {
     GLOVE_ITEM(8, GloveItem.class),
     GOAL_OBJECT(9,GoalObject.class),
     MOVABLE_BLOCK_TRANSCENDENT(10, MovableBlockTranscendent.class),
-    TRANSCENDENT_TEST(11, TranscendentTestBlock.class);
+    TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
+    DOOR(12, Door.class),
+    DOOR_TRIGGER(13, Door_Trigger.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

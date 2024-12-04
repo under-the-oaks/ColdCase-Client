@@ -1,8 +1,6 @@
 package tech.underoaks.coldcase.remote;
 
-import com.badlogic.gdx.math.Vector2;
-import org.glassfish.grizzly.utils.Pair;
-import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.Interaction;
 
 import java.util.Queue;
 
@@ -13,8 +11,8 @@ public class Messages {
 
     // AppendRemoteInteractionMessage
     public static class AppendRemoteInteractionMessage extends Message {
-        private Vector2 targetPos;
-        private Direction actionDirection;
+
+        private Interaction interaction;
 
         public boolean getSuppressTranscendentFollowUp() {
             return suppressTranscendentFollowUp;
@@ -30,50 +28,41 @@ public class Messages {
         public AppendRemoteInteractionMessage() {}
 
         // All-args constructor
-        public AppendRemoteInteractionMessage(String remoteGameControllerInstanceId, Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
+        public AppendRemoteInteractionMessage(String remoteGameControllerInstanceId, Interaction interaction, boolean suppressTranscendentFollowUp) {
             this.setRemoteGameControllerInstanceId(remoteGameControllerInstanceId);
-            this.targetPos = targetPos;
-            this.actionDirection = actionDirection;
+            this.interaction = interaction;
             this.suppressTranscendentFollowUp = suppressTranscendentFollowUp;
         }
 
         // Getters and setters
-        public Vector2 getTargetPos() {
-            return targetPos;
+        public Interaction getInteraction() {
+            return interaction;
         }
 
-        public void setTargetPos(Vector2 targetPos) {
-            this.targetPos = targetPos;
-        }
-
-        public Direction getActionDirection() {
-            return actionDirection;
-        }
-
-        public void setActionDirection(Direction actionDirection) {
-            this.actionDirection = actionDirection;
+        public void setInteraction(Interaction interaction) {
+            this.interaction = interaction;
         }
     }
 
     // AppendRemoteInteractionResponseMessage
     public static class AppendRemoteInteractionResponseMessage extends Message {
-        private Queue<Pair<Vector2, Direction>> interactions;
+        private Queue<Interaction> interactions;
 
         // No-args constructor
         public AppendRemoteInteractionResponseMessage() {}
 
         // All-args constructor
-        public AppendRemoteInteractionResponseMessage(String remoteGameControllerInstanceId, Queue<Pair<Vector2, Direction>> interactions) {
+        public AppendRemoteInteractionResponseMessage(String remoteGameControllerInstanceId, Queue<Interaction> interactions) {
             this.setRemoteGameControllerInstanceId(remoteGameControllerInstanceId);
             this.interactions = interactions;
         }
 
         // Getters and setters
-        public Queue<Pair<Vector2, Direction>> getInteractions() {
+        public Queue<Interaction> getInteractions() {
             return interactions;
         }
 
-        public void setInteractions(Queue<Pair<Vector2, Direction>> interactions) {
+        public void setInteractions(Queue<Interaction> interactions) {
             this.interactions = interactions;
         }
     }

@@ -1,9 +1,7 @@
 package tech.underoaks.coldcase.remote;
 
-import com.badlogic.gdx.math.Vector2;
-import org.glassfish.grizzly.utils.Pair;
-import tech.underoaks.coldcase.game.Direction;
 import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.Interaction;
 
 import java.util.Queue;
 import java.util.UUID;
@@ -14,7 +12,9 @@ import static com.badlogic.gdx.net.HttpRequestBuilder.json;
 
 public class WebSocketMessagesManager {
 
-    /** Singleton instance of the WebSocketMessagesManager. */
+    /**
+     * Singleton instance of the WebSocketMessagesManager.
+     */
     private static WebSocketMessagesManager instance;
 
     /**
@@ -45,10 +45,7 @@ public class WebSocketMessagesManager {
      */
     public void createRemoteInteractionChain(String remoteGameControllerInstanceId, CompletableFuture<Object> future) {
         pendingCallbacks.put(remoteGameControllerInstanceId, future); //register callback
-        String message = json.toJson(
-            new Messages.CreateRemoteInteractionChainMessage(remoteGameControllerInstanceId),
-            Object.class
-        );
+        String message = json.toJson(new Messages.CreateRemoteInteractionChainMessage(remoteGameControllerInstanceId), Object.class);
         WebSocketClient.getInstance().send(message);
     }
 
@@ -57,22 +54,15 @@ public class WebSocketMessagesManager {
      *
      * @param remoteGameControllerInstanceId the ID of the remote game controller instance.
      * @param future                         the {@link CompletableFuture} to complete when the response is received.
-     * @param targetPos                      the target position of the interaction.
-     * @param actionDirection                the direction of the action.
+     * @param interaction                    The interaction to trigger.
      * @param suppressTranscendentFollowUp   whether to suppress follow-up interactions.
      */
-    public void appendRemoteInteraction(
-        String remoteGameControllerInstanceId,
-        CompletableFuture<Object> future,
-        Vector2 targetPos,
-        Direction actionDirection,
-        boolean suppressTranscendentFollowUp) {
+    public void appendRemoteInteraction(String remoteGameControllerInstanceId, CompletableFuture<Object> future, Interaction interaction, boolean suppressTranscendentFollowUp) {
 
-            pendingCallbacks.put(remoteGameControllerInstanceId, future); //register callback
-            String message = json.toJson(new Messages.AppendRemoteInteractionMessage(remoteGameControllerInstanceId,
-                targetPos, actionDirection, suppressTranscendentFollowUp), Object.class);
+        pendingCallbacks.put(remoteGameControllerInstanceId, future); //register callback
+        String message = json.toJson(new Messages.AppendRemoteInteractionMessage(remoteGameControllerInstanceId, interaction, suppressTranscendentFollowUp), Object.class);
 
-            WebSocketClient.getInstance().send(message);
+        WebSocketClient.getInstance().send(message);
     }
 
     /**
@@ -81,8 +71,7 @@ public class WebSocketMessagesManager {
      * @param remoteGameControllerInstanceId the ID of the remote game controller instance.
      */
     public void applyRemoteGSUs(String remoteGameControllerInstanceId) {
-        WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(
-            remoteGameControllerInstanceId), Object.class));
+        WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
     /**
@@ -91,8 +80,7 @@ public class WebSocketMessagesManager {
      * @param remoteGameControllerInstanceId the ID of the remote game controller instance.
      */
     public void abortRemoteGSU(String remoteGameControllerInstanceId) {
-        WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(
-            remoteGameControllerInstanceId), Object.class));
+        WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
     /**
@@ -108,6 +96,7 @@ public class WebSocketMessagesManager {
         }
         future.complete(messageObj);
     }
+
     /**
      * Handles incoming messages from the WebSocket connection.
      * <p>
@@ -126,27 +115,12 @@ public class WebSocketMessagesManager {
                     case Messages.CreateRemoteInteractionChainMessage messageObj -> {
                         String remoteInteractionChainId = "TEST" + UUID.randomUUID().toString(); // not needed for now
                         GameController.getInstance().handleCreateRemoteInteractionChain();
-                        WebSocketClient.getInstance().send(
-                            json.toJson(
-                                new Messages.CreateRemoteInteractionChainResponseMessage(
-                                    messageObj.getRemoteGameControllerInstanceId(), remoteInteractionChainId
-                                ),
-                                Object.class));
+                        WebSocketClient.getInstance().send(json.toJson(new Messages.CreateRemoteInteractionChainResponseMessage(messageObj.getRemoteGameControllerInstanceId(), remoteInteractionChainId), Object.class));
                     }
                     case Messages.AppendRemoteInteractionMessage messageObj -> {
-                        Queue<Pair<Vector2, Direction>> interactions =
-                            GameController.getInstance().handleTriggerRemoteInteraction(
-                                messageObj.getTargetPos(),
-                                messageObj.getActionDirection(),
-                                messageObj.getSuppressTranscendentFollowUp()
-                            );
+                        Queue<Interaction> interactions = GameController.getInstance().handleTriggerRemoteInteraction(messageObj.getInteraction(), messageObj.getSuppressTranscendentFollowUp());
 
-                        WebSocketClient.getInstance().send(
-                            json.toJson(
-                                new Messages.AppendRemoteInteractionResponseMessage(
-                                    messageObj.getRemoteGameControllerInstanceId(),
-                                    interactions
-                                ), Object.class));
+                        WebSocketClient.getInstance().send(json.toJson(new Messages.AppendRemoteInteractionResponseMessage(messageObj.getRemoteGameControllerInstanceId(), interactions), Object.class));
                     }
                     case Messages.ApplyRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleApplyRemoteGSUsMessage();

@@ -7,11 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tech.underoaks.coldcase.HeadlessApplicationListener;
 import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.ItemObject;
+import tech.underoaks.coldcase.state.tileContent.Player;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
@@ -54,7 +56,7 @@ public class ItemObjectTest {
             // Pick Up Item
 
             Assertions.assertNull( PlayerController.getInstance().getInventory() );
-            Assertions.assertTrue( itemObject.action( chain, tilePosition, direction ) );
+            Assertions.assertTrue( itemObject.action( chain, new Interaction(tilePosition, direction, Player.class) ) );
             Assertions.assertNotNull( PlayerController.getInstance().getInventory() );
 
             // Swap Item
@@ -63,7 +65,7 @@ public class ItemObjectTest {
 
             TileContent before = PlayerController.getInstance().getInventory();
 
-            Assertions.assertTrue( itemObject.action( chain, tilePosition, direction ) );
+            Assertions.assertTrue( itemObject.action( chain, new Interaction(tilePosition, direction, Player.class)  ) );
 
             TileContent after = PlayerController.getInstance().getInventory();
 

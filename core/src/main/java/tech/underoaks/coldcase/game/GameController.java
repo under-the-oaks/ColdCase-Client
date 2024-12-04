@@ -1,8 +1,6 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import org.glassfish.grizzly.utils.Pair;
 import tech.underoaks.coldcase.remote.RemoteGameController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
@@ -57,17 +55,16 @@ public class GameController {
     /**
      * Triggers an action at the specified position in the given direction.
      *
-     * @param targetPos       The target position where the action is applied.
-     * @param actionDirection The direction in which the action is triggered.
+     * @param interaction The interaction to trigger.
      * @return True if the action was successfully triggered, false otherwise.
      */
-    public boolean triggerAction(Vector2 targetPos, Direction actionDirection) {
+    public boolean triggerAction(Interaction interaction) {
         InteractionChain chain = createInteractionChain();
 
         // Trigger local action
         try {
             interactions.push(chain);
-            boolean result = GameController.triggerAction(chain, targetPos, actionDirection);
+            boolean result = GameController.triggerAction(chain, interaction);
             if (!result) {
                 return false;
             }
@@ -87,12 +84,11 @@ public class GameController {
      * Triggers an action using the provided interaction chain, target position, and direction.
      *
      * @param testChain       The interaction chain to use.
-     * @param targetPos       The target position where the action is applied.
-     * @param actionDirection The direction in which the action is triggered.
+     * @param interaction     The interaction to trigger.
      * @return True if the action was successfully triggered, false otherwise.
      */
-    public static boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection) {
-        return triggerAction(testChain, targetPos, actionDirection, false);
+    public static boolean triggerAction(InteractionChain testChain, Interaction interaction) {
+        return triggerAction(testChain, interaction, false);
     }
 
     /**
@@ -100,23 +96,22 @@ public class GameController {
      * with an option to suppress transcendent follow-up actions.
      *
      * @param testChain                    The interaction chain to use.
-     * @param targetPos                    The target position where the action is applied.
-     * @param actionDirection              The direction in which the action is triggered.
+     * @param interaction     The interaction to trigger.
      * @param suppressTranscendentFollowUp If true, suppresses triggering of transcendent follow-up actions.
      * @return True if the action was successfully triggered, false otherwise.
      */
-    public static boolean triggerAction(InteractionChain testChain, Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
+    public static boolean triggerAction(InteractionChain testChain, Interaction interaction, boolean suppressTranscendentFollowUp) {
         RemoteGameController remote = null;
         try {
-            TileContent handler = GameController.triggerLocalAction(testChain, targetPos, actionDirection);
+            TileContent handler = GameController.triggerLocalAction(testChain, interaction);
             if (handler == null) {
                 return false;
             }
 
-            // If local action was transcendent, trigger remote action
+            // If local action was transcendent, trigger the same action on the remote client
             if (!suppressTranscendentFollowUp && handler.getVisibilityState().equals(VisibilityStates.TRANSCENDENT)) {
                 remote = new RemoteGameController();
-                Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection, true); // Suppress Transcended Trigger
+                Queue<Interaction> newRemoteActions = remote.triggerAction(interaction, true); // Suppress Transcended Trigger
                 if (newRemoteActions != null) {
                     testChain.getPendingRemoteActions().addAll(newRemoteActions);
                 } else {
@@ -136,18 +131,17 @@ public class GameController {
      * Initiates a local action at a specified position and direction.
      *
      * @param chain           The interaction chain to use.
-     * @param targetPos       The target position where the action is applied.
-     * @param actionDirection The direction in which the action is triggered.
+     * @param interaction     The interaction to trigger.
      * @return The TileContent handler if the action was handled, null otherwise.
      */
-    public static TileContent triggerLocalAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
+    public static TileContent triggerLocalAction(InteractionChain chain, Interaction interaction) {
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
 
         // Requesting an action handler to respond to the triggered action
-        if (snapshotMap.isOutOfBounds(targetPos)) {
+        if (snapshotMap.isOutOfBounds(interaction.getTargetPos())) {
             return null;
         }
-        Tile targetTile = snapshotMap.getTile(targetPos);
+        Tile targetTile = snapshotMap.getTile(interaction.getTargetPos());
         if (targetTile == null) {
             return null;
         }
@@ -162,7 +156,7 @@ public class GameController {
         TileContent handler;
         try {
             // Trigger initial action
-            handler = targetTileContent.handleAction(chain, targetPos, actionDirection);
+            handler = targetTileContent.handleAction(chain, interaction);
             if (handler == null) {
                 return null;
             }
@@ -185,32 +179,16 @@ public class GameController {
      * Triggers a remote action at the specified position and direction.
      *
      * @param chain           The interaction chain to use.
-     * @param targetPos       The target position where the action is applied.
-     * @param actionDirection The direction in which the action is triggered.
+     * @param interaction     The interaction to trigger.
      */
-    public static void triggerRemoteAction(InteractionChain chain, Vector2 targetPos, Direction actionDirection) {
+    public static void triggerRemoteAction(InteractionChain chain, Interaction interaction) {
         try (RemoteGameController remote = new RemoteGameController()) {
-            Queue<Pair<Vector2, Direction>> newRemoteActions = remote.triggerAction(targetPos, actionDirection);
+            Queue<Interaction> newRemoteActions = remote.triggerAction(interaction);
             if (newRemoteActions == null) {
                 return;
             }
             chain.getPendingRemoteActions().addAll(newRemoteActions);
         }
-    }
-
-    /**
-     * Applies a queue of GameStateUpdates to the specified map.
-     *
-     * @param map   The map to which the updates will be applied.
-     * @param queue The queue of GameStateUpdates to apply.
-     */
-    private void applyGSUQueue(Map map, Queue<GameStateUpdate> queue) {
-        if (map != currentMap) {
-            GameStateUpdate gsu = queue.remove();
-            gsu.apply(map);
-            return;
-        }
-        pendingUpdates.addAll(queue);
     }
 
     /**
@@ -287,19 +265,18 @@ public class GameController {
     /**
      * Handles triggering of a remote interaction.
      *
-     * @param targetPos                    The target position where the action is applied.
-     * @param actionDirection              The direction in which the action is triggered.
+     * @param interaction     The interaction to trigger.
      * @param suppressTranscendentFollowUp If true, suppresses triggering of transcendent follow-up actions.
      * @return A queue of pending actions, or null if the action was unsuccessful.
      */
-    public Queue<Pair<Vector2, Direction>> handleTriggerRemoteInteraction(Vector2 targetPos, Direction actionDirection, boolean suppressTranscendentFollowUp) {
+    public Queue<Interaction> handleTriggerRemoteInteraction(Interaction interaction, boolean suppressTranscendentFollowUp) {
         System.out.println("handleAppendRemoteInteraction Called");
 
         InteractionChain currentChain = interactions.peek();
         InteractionChain chain = createInteractionChain(currentChain);
         try {
             interactions.push(chain);
-            boolean result = triggerAction(chain, targetPos, actionDirection, suppressTranscendentFollowUp);
+            boolean result = triggerAction(chain, interaction, suppressTranscendentFollowUp);
             if (!result) {
                 return null;
             }
@@ -353,12 +330,12 @@ public class GameController {
      */
     private static void triggerQueuedLocalActions(Stack<InteractionChain> interactions, InteractionChain chain) {
         // Trigger locally queued actions
-        Pair<Vector2, Direction> action;
+        Interaction action;
         while ((action = chain.getPendingActions().poll()) != null) {
             try {
                 InteractionChain testChain = GameController.createInteractionChain(chain);
                 interactions.add(testChain);
-                triggerAction(chain, action.getFirst(), action.getSecond());
+                triggerAction(chain, action);
             } finally {
                 interactions.pop();
             }
@@ -372,9 +349,10 @@ public class GameController {
      */
     private static void triggerQueuedRemoteActions(InteractionChain chain) {
         // Trigger locally queued remote actions
-        Pair<Vector2, Direction> action;
+        Interaction action;
         while ((action = chain.getPendingRemoteActions().poll()) != null) {
-            GameController.triggerRemoteAction(chain, action.getFirst(), action.getSecond());
+            System.out.println("Triggering remote action: " + action.getTargetPos() + " " + action.getActionDirection());
+            GameController.triggerRemoteAction(chain, action);
         }
     }
 }
