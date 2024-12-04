@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.Wall;
 import tech.underoaks.coldcase.state.tiles.Tile;
@@ -16,6 +17,8 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.updates.UpdateTypes;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
+
+import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,7 +47,6 @@ class MapTest{
 
             map.getTile(0,0).pushTileContent( new BrokenTileContent() );
 
-            System.out.println("Applied");
         }
     }
 
@@ -74,21 +76,16 @@ class MapTest{
 
         @Override
         public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-
-            if (chain.getSnapshot().getSnapshotMap().getTile(interaction.getTargetPos()).topTileContent().getClass() == BrokenTileContent.class) {
-                return false;
-            }
-
-            //System.out.println("TestTile.action()");
-            chain.addGameStateUpdate( new EmptyUpdate() );
-            return true;
+            return false;
         }
-
         @Override
         public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
-            //System.out.println("TestTile.update()");
 
-            if (chain.getSnapshot().getSnapshotMap().getTile(tilePosition).topTileContent().getClass() == BrokenTileContent.class) {
+            if (chain.getGSUQueue().peek() == null) {
+                GameStateUpdate update = new EmptyUpdate();
+
+                chain.addGameStateUpdate(update);
+
                 return true;
             }
 
@@ -117,15 +114,13 @@ class MapTest{
 
         @Override
         public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
-            //System.out.println("brokenTile.update()");
-            return false;
+            return true;
         }
     }
 
     @BeforeEach
     public void setUp(){
-        //das kann alles mit mockito gemacht werden, der headless application listener ist nicht notwendig
-        //game = new HeadlessApplicationListener();
+        game = new HeadlessApplicationListener();
 
         // Mock Variablen befüllen
 
@@ -134,10 +129,15 @@ class MapTest{
         when(mockTexture.getHeight()).thenReturn(32);
 
         mockTile = new TestTile();
+
         mockTileContent = new TestTileContent();
+
         mockTile.setTileContent(mockTileContent);
+
         Tile[][] testTileArray = new Tile[1][1];
+
         testTileArray[0][0] = mockTile;
+
         mockMap = new Map(testTileArray);
     }
 
@@ -304,55 +304,61 @@ class MapTest{
     @Test
     public void UpdateMapTest() {
 
-        /* Versuch
+        Snapshot snapshot = new Snapshot(mockMap);
 
-        GameController gameController = new GameController();
+        InteractionChain chain = new InteractionChain(snapshot);
 
-        gameController.setCurrentMap(mockMap);
+        GameStateUpdate before = chain.getGSUQueue().peek();
 
-        Vector2 past = mockMap.getTileContentByType( BrokenTileContent.class );
+        boolean updated = false;
 
-        gameController.triggerLocalAction( new Vector2(0,0), Direction.NORTH );
+        try {
+            List<TileContent> updatedTiles = mockMap.updateMap(chain);
 
-        Vector2 current = mockMap.getTileContentByType( BrokenTileContent.class );
+            for (TileContent updatedTile : updatedTiles) {
+                updated = updated || ( updatedTile != null ) ;
+            }
+        }
+        catch (Exception e) {
 
-        // Soll beweisen, das die Map verändert wird
-        Assertions.assertNotNull(current);
+        }
 
+        GameStateUpdate after = chain.getGSUQueue().peek();
 
-         */
+        // Check whether Map was updated
+
+        Assertions.assertTrue(updated);
+
+        // Check if the GameStateUpdate was queued, like the update() of TestTileContent does
+
+        Assertions.assertNotEquals(before, after);
     }
 
     @Test
     public void UpdateMapUntilStableTest() {
 
-        /*
+        Snapshot snapshot = new Snapshot(mockMap);
 
-        Tile brokenTile = new TestTile();
-        brokenTile.setTileContent(new BrokenTileContent());
+        InteractionChain chain = new InteractionChain(snapshot);
 
-        mockMap = new Map(
-            new Tile[][] {
-                { mockTile, brokenTile }
-            }
-        );
+        // Läuft durch
 
-        GameController gameController = new GameController();
+        try{
+            mockMap.updateUntilStable(chain);
+        }
+        catch (Exception e) {
 
-        gameController.setCurrentMap(mockMap);
+        }
 
-        Vector2 position = new Vector2(0, 0);
-        Vector2 brokenTilePosition = new Vector2(1, 0);
+        mockMap.getTile(0,0).pushTileContent( new BrokenTileContent() );
 
-        // Soll nach 100 Iterationen fehlschlagen
-        Assertions.assertThrows( IllegalStateException.class, () -> gameController.triggerLocalAction( brokenTilePosition, Direction.NORTH));
+        snapshot = new Snapshot(mockMap);
 
-        mockMap.setTile(1,0,mockTile);
+        InteractionChain brokenChain = new InteractionChain(snapshot);
 
-        // Soll alle Updates ausführen
-        Assertions.assertDoesNotThrow(() -> gameController.triggerLocalAction( position, Direction.NORTH));
+        // Endless Loop wird abgebrochen
 
+        Assertions.assertThrows( IllegalStateException.class, () -> { mockMap.updateUntilStable( brokenChain ); } );
 
-         */
     }
 }
