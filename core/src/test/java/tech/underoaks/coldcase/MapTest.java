@@ -18,6 +18,8 @@ import tech.underoaks.coldcase.state.updates.UpdateTypes;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
+import java.util.List;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -75,7 +77,7 @@ class MapTest{
         @Override
         public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
             return false;
-            }
+        }
         @Override
         public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
 
@@ -311,8 +313,11 @@ class MapTest{
         boolean updated = false;
 
         try {
+            List<TileContent> updatedTiles = mockMap.updateMap(chain);
 
-            updated = mockMap.updateMap(chain);
+            for (TileContent updatedTile : updatedTiles) {
+                updated = updated || ( updatedTile != null ) ;
+            }
         }
         catch (Exception e) {
 
