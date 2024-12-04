@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
 
@@ -20,17 +21,21 @@ public class Main extends ApplicationAdapter {
     private GameController gameController;
     private ExtendViewport viewport;
     private float timeSinceLastLog = 0f;
+    private float timeSinceLastGSUCheck = 0f;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(800, 800);
 
-        Map map = Map.getMap(Path.of("maps/test_plain"));
+        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_DoorDemo"), false);
+        Gdx.input.setInputProcessor(PlayerController.getInstance());
+
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
 
         PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
+        WebSocketClient.getInstance();
     }
 
     @Override
@@ -47,7 +52,12 @@ public class Main extends ApplicationAdapter {
             timeSinceLastLog = 0f;
         }
 
-        PlayerController.getInstance().inputUpdate();
+        timeSinceLastGSUCheck += deltaTime;
+
+        if (timeSinceLastGSUCheck >= 0.1f) {
+            GameController.getInstance().applyNextPendingGSU();
+            timeSinceLastGSUCheck = 0f;
+        }
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);

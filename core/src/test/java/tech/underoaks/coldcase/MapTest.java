@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -19,11 +19,11 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MapTest{
 
     static ApplicationListener game;
-
     static Texture mockTexture;
     static Map mockMap;
     static Tile mockTile;
@@ -62,7 +62,7 @@ class MapTest{
 
     /**
      * A TileContent used for testing purposes using a mockTexture instead of an actual.
-     *
+     * <p>
      * The action method adds a BrokenTileContent on top of one tile to change the map
      * for testing. It did not work as intended though.
      */
@@ -73,10 +73,9 @@ class MapTest{
         }
 
         @Override
-        public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
             return false;
-        }
-
+            }
         @Override
         public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
 
@@ -105,7 +104,8 @@ class MapTest{
         }
 
         @Override
-        public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+        public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
+            //System.out.println("brokenTile.action()");
             chain.addGameStateUpdate( new EmptyUpdate() );
             return true;
         }
@@ -123,6 +123,8 @@ class MapTest{
         // Mock Variablen befüllen
 
         mockTexture = mock(Texture.class);
+        when(mockTexture.getWidth()).thenReturn(32);
+        when(mockTexture.getHeight()).thenReturn(32);
 
         mockTile = new TestTile();
 
