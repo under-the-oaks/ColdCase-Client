@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Direction;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
@@ -33,15 +34,15 @@ public class GloveItem extends ItemObject {
     }
 
     @Override
-    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+    public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition, this);
+        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
 
         //no item in inventory
 
         if(PlayerController.getInstance().getInventory() == null){
             PlayerController.getInstance().setInventory(this);
-            chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition, childIndex));
+            chain.addGameStateUpdate(new RemoveTileContentUpdate(interaction.getTargetPos(), childIndex));
             return true;
         }
 
@@ -50,8 +51,8 @@ public class GloveItem extends ItemObject {
             TileContent previousItem = PlayerController.getInstance().getInventory();
             PlayerController.getInstance().setInventory(this);
 
-            chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition, childIndex));
-            chain.addGameStateUpdate(new AddTileContentUpdate(tilePosition, previousItem));
+            chain.addGameStateUpdate(new RemoveTileContentUpdate(interaction.getTargetPos(), childIndex));
+            chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), previousItem));
             return true;
         }
 
