@@ -11,8 +11,8 @@ import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.state.tileContent.ItemObject;
 import tech.underoaks.coldcase.state.tileContent.Player;
-import tech.underoaks.coldcase.state.tileContent.UITextures;
 
 import java.nio.file.Path;
 
@@ -90,15 +90,15 @@ public class Main extends ApplicationAdapter {
 
         if ( PlayerController.getInstance().getInventory() != null ) {
 
-            UITextures uiTexture = UITextures.getUITexture(PlayerController.getInstance().getInventory());
+            ItemObject item = (ItemObject) PlayerController.getInstance().getInventory();
+
+            Texture uiTexture = item.getInventoryTexture();
+
+            System.out.println( item );
 
             if ( uiTexture != null ) {
 
-                Texture inventoryTexture = uiTexture.getTexture();
-
-                if (inventoryTexture != null) {
-                    batch.draw( inventoryTexture , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
-                }
+                batch.draw( uiTexture , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
 
             }
         }
