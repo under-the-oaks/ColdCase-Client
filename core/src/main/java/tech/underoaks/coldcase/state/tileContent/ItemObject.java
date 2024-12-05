@@ -9,9 +9,21 @@ import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
-public class ItemObject extends TileContent {
+public class ItemObject extends TileContent{
+
+    private Texture inventoryTexture;
+
     public ItemObject(Texture texture) {
         super(texture, true, true);
+        inventoryTexture = texture;
+    }
+
+    public Texture getInventoryTexture() {
+        return inventoryTexture;
+    }
+
+    public void setInventoryTexture(Texture inventoryTexture) {
+        this.inventoryTexture = inventoryTexture;
     }
 
     @Override
@@ -32,6 +44,7 @@ public class ItemObject extends TileContent {
             return true;
         }
 
+        //return false;
     }
 
     @Override
