@@ -1,13 +1,17 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.math.Vector2;
+
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import tech.underoaks.coldcase.game.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
@@ -42,6 +46,7 @@ public abstract class TileContent implements Cloneable {
         this.texture = texture;
         this.isPlayerPassable = isPlayerPassable;
         this.isObjectPassable = isObjectPassable;
+        this.visibilityState = VisibilityStates.PLAYER_ONE_ONLY; // FIXME als Parameter callen
     }
 
     /**
@@ -65,38 +70,42 @@ public abstract class TileContent implements Cloneable {
     }
 
     /**
+     * FIXME JavaDoc
      * Tries to perform the action associated with this TileContent when interacted with.
      *
      * <p>{@code handleAction(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
      * This means that the top most content gets the first chance to handle a triggered action.
      * If a content handles the action no more contents will be able to accept it.
      *
-     * @param chain           InteractionChain managing the snapshot.
-     * @param actionDirection The direction in wich the action get triggered.
-     * @param tilePosition    The position of the currently selected tile.
+     * @param chain       InteractionChain managing the snapshot.
+     * @param interaction The interaction to trigger.
      * @return True if the action has been taken care of; False otherwise
      * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
-    public boolean handleAction(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
-        if (tileContent != null && tileContent.handleAction(chain, tilePosition, actionDirection)) {
-            return true;
+    public TileContent handleAction(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
+        TileContent handler;
+        if (tileContent != null) {
+            handler = tileContent.handleAction(chain, interaction);
+            if (handler != null) {
+                return handler;
+            }
         }
 
-        return action(chain, tilePosition, actionDirection);
+        return action(chain, interaction) ? this : null;
     }
 
     /**
      * Performs the action associated with this TileContent when interacted with.
      *
-     * @param chain           InteractionChain managing the snapshot.
-     * @param actionDirection The direction in wich the action get triggered.
-     * @param tilePosition    The position of the currently selected tile.
+     * @param chain       InteractionChain managing the snapshot.
+     * @param interaction The interaction to trigger.
      * @return True if the action has been taken care of; False otherwise
      * @throws GameStateUpdateException If a GameStateUpdate has failed
      */
-    public abstract boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException;
+    public abstract boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException;
 
     /**
+     * FIXME JavaDoc
      * Tries to perform an update associated with this TileContent when triggered.
      *
      * <p>{@code handleUpdate(...)} is a recursive function that traverses a stack of {@code TileContent}s in post order.
@@ -105,16 +114,18 @@ public abstract class TileContent implements Cloneable {
      * @param chain        InteractionChain managing the snapshot.
      * @param tilePosition The position of the currently selected tile.
      * @return True if an update as been performed; False otherwise
-     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     * @throws GameStateUpdateException   If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
      * @see TileContent#update(InteractionChain, Vector2)
      */
-    public boolean handleUpdate(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
-        boolean result_child = false;
-        if (tileContent != null) {
-            result_child = tileContent.handleUpdate(chain, tilePosition);
+    public List<TileContent> handleUpdate(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException {
+        List<TileContent> handlers = tileContent != null ? tileContent.handleUpdate(chain, tilePosition) : new ArrayList<>();
+
+        if (update(chain, tilePosition)) {
+            handlers.add(this);
         }
-        boolean result_self = update(chain, tilePosition);
-        return result_child || result_self;
+
+        return handlers;
     }
 
     /**
@@ -123,12 +134,13 @@ public abstract class TileContent implements Cloneable {
      * @param chain        InteractionChain managing the snapshot.
      * @param tilePosition The position of the currently selected tile.
      * @return True if an update has been performed; False otherwise
-     * @throws GameStateUpdateException If a GameStateUpdate has failed
+     * @throws GameStateUpdateException   If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If the TileContent couldn't be updated (due to a failing validation)
      * @implNote Ensure this method returns {@code true} only for meaningful changes to avoid unnecessary processing.
      * It should not always return {@code true} to prevent infinite loops in calling methods like
      * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
      */
-    public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException;
+    public abstract boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException;
 
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;
@@ -196,7 +208,12 @@ public abstract class TileContent implements Cloneable {
     }
 
     public void dispose() {
-        texture.dispose();
+        if (texture != null) {
+            texture.dispose();
+        }
+        if (tileContent != null) {
+            tileContent.dispose();
+        }
     }
 
     @Override
@@ -235,4 +252,13 @@ public abstract class TileContent implements Cloneable {
         }
         return tileContent.getTileContentByIndex(i - 1);
     }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
 }
