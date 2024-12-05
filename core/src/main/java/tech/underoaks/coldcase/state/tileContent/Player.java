@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
@@ -30,14 +31,14 @@ public class Player extends TileContent {
     }
 
     @Override
-    public boolean action(InteractionChain chain, Vector2 tilePosition, Direction actionDirection) throws GameStateUpdateException {
+    public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition, this);
-        Vector2 targetPosition = switch (actionDirection) {
-            case NORTH -> tilePosition.cpy().add(Direction.NORTH.getVector());
-            case SOUTH -> tilePosition.cpy().add(Direction.SOUTH.getVector());
-            case EAST -> tilePosition.cpy().add(Direction.EAST.getVector());
-            case WEST -> tilePosition.cpy().add(Direction.WEST.getVector());
+        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
+        Vector2 targetPosition = switch (interaction.getActionDirection()) {
+            case NORTH -> interaction.getTargetPos().cpy().add(Direction.NORTH.getVector());
+            case SOUTH -> interaction.getTargetPos().cpy().add(Direction.SOUTH.getVector());
+            case EAST -> interaction.getTargetPos().cpy().add(Direction.EAST.getVector());
+            case WEST -> interaction.getTargetPos().cpy().add(Direction.WEST.getVector());
         };
 
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
@@ -55,7 +56,7 @@ public class Player extends TileContent {
         }
 
         // adding the validated movement to the chain
-        chain.addGameStateUpdate(new MoveUpdate(tilePosition, childIndex, targetPosition));
+        chain.addGameStateUpdate(new MoveUpdate(interaction.getTargetPos(), childIndex, targetPosition));
         return true;
     }
 

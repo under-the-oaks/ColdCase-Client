@@ -1,9 +1,6 @@
 package tech.underoaks.coldcase.state;
 
-import com.badlogic.gdx.math.Vector2;
-import org.glassfish.grizzly.utils.Pair;
-import tech.underoaks.coldcase.game.Direction;
-import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
@@ -22,12 +19,12 @@ public class InteractionChain {
     /**
      * TODO JavaDoc
      */
-    private final Queue<Pair<Vector2, Direction>> pendingActions;
+    private final Queue<Interaction> pendingActions;
 
     /**
      * TODO JavaDoc
      */
-    private final Queue<Pair<Vector2, Direction>> pendingRemoteActions;
+    private final Queue<Interaction> pendingRemoteActions;
 
     /**
      * Snapshot that will act as the testing environment
@@ -47,11 +44,10 @@ public class InteractionChain {
 
     /**
      * TODO JavaDoc
-     * @param targetPos
-     * @param actionDirection
+     * @param interaction The interaction to add.
      */
-    public void addAction(Vector2 targetPos, Direction actionDirection) {
-        pendingActions.add(new Pair<>(targetPos, actionDirection));
+    public void addAction(Interaction interaction) {
+        pendingActions.add(interaction);
     }
 
     /**
@@ -75,11 +71,11 @@ public class InteractionChain {
         return gsuQueue;
     }
 
-    public Queue<Pair<Vector2, Direction>> getPendingActions() {
+    public Queue<Interaction> getPendingActions() {
         return pendingActions;
     }
 
-    public Queue<Pair<Vector2, Direction>> getPendingRemoteActions() {
+    public Queue<Interaction> getPendingRemoteActions() {
         return pendingRemoteActions;
     }
 }

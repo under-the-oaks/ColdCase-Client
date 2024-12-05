@@ -11,7 +11,7 @@ import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
-public class GloveItem extends ItemObject{
+public class GloveItem extends ItemObject {
 
     private static final Texture texture = new Texture("./sprites/item_glove_detective_6.png");
 
