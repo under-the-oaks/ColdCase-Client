@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
  */
 public class GroundTile extends Tile {
 
-    private static final Texture texture = new Texture("./sprites/Sprite_StandardBlock_G_Cropped.png");
+    private static final Texture texture = new Texture("./sprites/block_detective_2.png");
 
     public GroundTile() {
         super(texture);

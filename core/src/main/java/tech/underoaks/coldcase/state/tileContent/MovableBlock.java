@@ -12,7 +12,7 @@ import tech.underoaks.coldcase.game.Direction;
 
 public class MovableBlock extends TileContent {
 
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_067.png");
+    private static final Texture texture = new Texture("./sprites/block_detective_4");
 
     public MovableBlock() {
         super(texture, false, false);

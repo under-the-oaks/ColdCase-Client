@@ -11,7 +11,7 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
 
 public class TranscendentTestBlock extends TileContent{
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_041.png");
+    private static final Texture texture = new Texture("./sprites/block_transcendent.png");
 
     public TranscendentTestBlock() {
 
