@@ -27,7 +27,7 @@ public class Map {
     /**
      * The size of each tile in pixels
      */
-    static float tileSize = 32;
+    static float tileSize = 1080;
 
     /**
      * Default constructor for Map needed for deserialization in {@link MapGenerator}
@@ -216,10 +216,14 @@ public class Map {
     public void render(SpriteBatch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-                float tempY = x * tileSize / 2 * -1;
-                float tempX = y * tileSize / 2 * -1;
-                Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
-                tileArray[y][x].render(batch, tempPt.x, tempPt.y);
+
+                Vector2 position = twoDToIso45( x, y);
+
+                //Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
+
+                //Vector2 tempPt = twoDToIso( new Vector2(tempX, tempY), 45f );
+
+                tileArray[y][x].render( batch, position.x, position.y );
             }
         }
     }
@@ -244,10 +248,25 @@ public class Map {
      * @return Converted point as a Vector2
      */
     public Vector2 twoDToIso(Vector2 pt) {
+
         Vector2 tempPt = new Vector2(0, 0);
         tempPt.x = pt.x - pt.y;
         tempPt.y = (pt.x + pt.y) / 2;
         return (tempPt);
+
+    }
+
+    public Vector2 twoDToIso45(int ex, int why) {
+
+        float x = ex;
+        float y = why;
+
+        Vector2 rotatedPt = new Vector2(0, 0);
+
+        rotatedPt.y = ( ((x - y) * 320 ) + (y * 320 * 2) ) * -1;
+        rotatedPt.x = ( ((y - x) * 450) ) * -1;
+
+        return rotatedPt;
     }
 
     /**
