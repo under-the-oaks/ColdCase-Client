@@ -5,7 +5,14 @@ dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
   api "com.github.tommyettinger:anim8-gdx:$anim8Version"
 
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
+
+  // these are needed for headless tests
+  testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
 
   test {
     useJUnitPlatform()
@@ -14,4 +21,6 @@ dependencies {
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }
+
+  implementation 'org.glassfish.tyrus.bundles:tyrus-standalone-client:2.2.0'
 }
