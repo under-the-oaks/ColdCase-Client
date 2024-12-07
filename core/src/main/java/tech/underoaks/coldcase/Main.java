@@ -29,7 +29,7 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        viewport = new ExtendViewport(800, 800);
+        viewport = new ExtendViewport(10000, 10000);
 
         Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_DoorDemo"), false);
         Gdx.input.setInputProcessor(PlayerController.getInstance());
@@ -68,7 +68,7 @@ public class Main extends ApplicationAdapter {
 
         gameController.getCurrentMap().render(batch);
 
-        renderInventory(80, new Vector2(0,0) );
+        renderInventory(1000, new Vector2(0,0) );
 
         batch.end();
     }
@@ -86,7 +86,7 @@ public class Main extends ApplicationAdapter {
 
     void renderInventory( float inventoryDimension, Vector2 inventoryOffset ) {
 
-        batch.draw( new Texture("./isometric tileset/separated images/TEST_INVENTORY.png") , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
+        batch.draw( new Texture("./isometric tileset/separated images/TEST_INVENTORY.png") , -5000 + inventoryOffset.x + (inventoryDimension / 2), -5000 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
 
         if ( PlayerController.getInstance().getInventory() != null ) {
 

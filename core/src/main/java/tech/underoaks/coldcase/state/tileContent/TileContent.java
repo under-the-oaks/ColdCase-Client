@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import tech.underoaks.coldcase.game.Interaction;
@@ -38,12 +39,19 @@ public abstract class TileContent implements Cloneable {
     protected VisibilityStates visibilityState;
 
     private Texture texture;
+    private Sprite sprite;
 
     private boolean isPlayerPassable;
     private boolean isObjectPassable;
 
     public TileContent(Texture texture, boolean isPlayerPassable, boolean isObjectPassable) {
         this.texture = texture;
+
+        if (texture != null) {
+            this.sprite = new Sprite(texture);
+            this.sprite.setOriginCenter();
+        }
+
         this.isPlayerPassable = isPlayerPassable;
         this.isObjectPassable = isObjectPassable;
         this.visibilityState = VisibilityStates.PLAYER_ONE_ONLY; // FIXME als Parameter callen
@@ -60,8 +68,8 @@ public abstract class TileContent implements Cloneable {
      * @param y     the y-coordinate for rendering the tile
      */
     public void render(SpriteBatch batch, float x, float y) {
-        if (texture != null) {
-            batch.draw(texture, x, y + 8);
+        if (sprite != null) {
+            batch.draw(sprite, x, y + 410);
         }
 
         if (tileContent != null) {

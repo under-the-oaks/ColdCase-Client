@@ -10,7 +10,7 @@ import tech.underoaks.coldcase.state.InteractionChain;
  */
 public class Wall extends TileContent {
 
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_065.png");
+    private static final Texture texture = new Texture("./sprites/block_detective.png");
 
     public Wall() {
         super(texture, false, false);
