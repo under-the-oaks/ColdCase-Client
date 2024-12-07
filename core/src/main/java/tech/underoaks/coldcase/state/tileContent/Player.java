@@ -1,7 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
@@ -14,7 +13,13 @@ import tech.underoaks.coldcase.game.Direction;
 
 public class Player extends TileContent {
 
-    private static final Texture texture = new Texture("./sprites/Sprite_Detective_Right.png");
+    private static final Texture texture = new Texture("./sprites/player_detective_right.png");
+    // Textures for the player facing different directions
+    private static final Texture textureNorth = new Texture("./sprites/player_detective_up.png");
+    private static final Texture textureSouth = new Texture("./sprites/player_detective_down.png");
+    private static final Texture textureEast = new Texture("./sprites/player_detective_right.png");
+    private static final Texture textureWest = new Texture("./sprites/player_detective_left.png");
+    public static Texture currentTexture;
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -28,6 +33,7 @@ public class Player extends TileContent {
 
     public Player() {
         super(texture, true, false);
+        currentTexture = texture;
     }
 
     @Override
@@ -60,21 +66,53 @@ public class Player extends TileContent {
         return true;
     }
 
+    /**
+     * Renders the object at the specified coordinates using the {@link SpriteBatch}.
+     * If a texture is currently set, it draws the object with the texture; otherwise,
+     * it invokes the superclass's rendering method.
+     *
+     * @param batch The {@link SpriteBatch} used to draw the texture.
+     * @param x     The x-coordinate where the texture should be drawn.
+     * @param y     The y-coordinate where the texture should be drawn. The y-coordinate is
+     *              adjusted by adding 8 units for positioning purposes.
+     */
     @Override
     public void render(SpriteBatch batch, float x, float y) {
 
-        if (texture != null) {
-            batch.draw(texture, x, y + 540);
+        if (currentTexture != null) {
+            batch.draw(currentTexture, x, y + 540);
+        }else {
+            super.render(batch, x, y);
         }
 
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
-
     }
 
     @Override
     public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
         return false;
+    }
+
+    /**
+     * Updates the texture of an object based on the specified direction the object is facing.
+     *
+     * @param lookDirection The direction that the object is looking toward. Valid values are {@code NORTH},
+     *                      {@code SOUTH}, {@code EAST}, and {@code WEST}. The method sets the texture
+     *                      according to this direction.
+     */
+    public static void updateTexture(Direction lookDirection) {
+        Texture newTexture = switch (lookDirection) {
+            case NORTH -> textureNorth;
+            case SOUTH -> textureSouth;
+            case EAST -> textureEast;
+            case WEST -> textureWest;
+        };
+
+        if (newTexture != currentTexture) {
+            currentTexture = newTexture;
+            System.out.println("Player texture updated: " + newTexture);
+        }
     }
 }

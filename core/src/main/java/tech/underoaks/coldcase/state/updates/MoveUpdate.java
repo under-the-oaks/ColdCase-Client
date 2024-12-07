@@ -1,11 +1,12 @@
 package tech.underoaks.coldcase.state.updates;
 
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.game.Direction;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.tileContent.Player;
 
-import java.util.Objects;
 import java.util.Stack;
 
 public class MoveUpdate extends GameStateUpdate {
@@ -48,19 +49,22 @@ public class MoveUpdate extends GameStateUpdate {
             Vector2 directionVector = targetPosition.cpy().sub(sourcePosition);
 
             if (directionVector.equals(Direction.NORTH.getVector())) {
-                setPlayerRotation((Player) sourceContent, Direction.NORTH);
+                setPlayerRotation(Direction.NORTH);
             } else if (directionVector.equals(Direction.SOUTH.getVector())) {
-                setPlayerRotation((Player) sourceContent, Direction.SOUTH);
+                setPlayerRotation(Direction.SOUTH);
             } else if (directionVector.equals(Direction.EAST.getVector())) {
-                setPlayerRotation((Player) sourceContent, Direction.EAST);
+                setPlayerRotation(Direction.EAST);
             } else if (directionVector.equals(Direction.WEST.getVector())) {
-                setPlayerRotation((Player) sourceContent, Direction.WEST);
+                setPlayerRotation(Direction.WEST);
             }
             System.out.println("Player texture changed.");
         }
+        else {
+            System.out.println("Player texture not changed.");
+        }
     }
 
-    public void setPlayerRotation(Player player, Direction direction) {
-        player.updateTexture(direction);
+    public static void setPlayerRotation(Direction direction) {
+        Player.updateTexture(direction);
     }
 }
