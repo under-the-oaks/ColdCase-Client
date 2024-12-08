@@ -47,11 +47,17 @@ public class PortalObject extends TileContent{
 
         if (interaction.getParameters() != null) {
 
-            if ( interaction.getParameters().length > 0 || interaction.getParameters() [0] == 1) {
+            if ( interaction.getParameters().length > 0) {
 
                 System.out.println("Erhalte Item!");
 
-                chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+                // Erhalte Glove Item
+
+                if (interaction.getParameters() [0] == 1) {
+
+                    chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+
+                }
             }
 
             System.out.println( "   Item nicht bekannt!" );
