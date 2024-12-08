@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(10000, 10000);
 
-        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_DoorDemo"), false);
+        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_PortalDemo"), false);
         Gdx.input.setInputProcessor(PlayerController.getInstance());
 
         gameController = GameController.getInstance();
@@ -94,11 +94,9 @@ public class Main extends ApplicationAdapter {
 
             Texture uiTexture = item.getInventoryTexture();
 
-            System.out.println( item );
-
             if ( uiTexture != null ) {
 
-                batch.draw( uiTexture , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
+                batch.draw( uiTexture , -5000 + inventoryOffset.x + (inventoryDimension / 2), -5000 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
 
             }
         }

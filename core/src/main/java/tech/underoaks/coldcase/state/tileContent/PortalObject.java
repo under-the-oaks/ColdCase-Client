@@ -1,0 +1,137 @@
+package tech.underoaks.coldcase.state.tileContent;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.remote.RemoteGameController;
+import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
+import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
+import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
+
+public class PortalObject extends TileContent{
+
+    static final Texture texture = new Texture("./sprites/block_ghost.png");
+
+    static final Sprite sprite = new Sprite(texture);
+
+    public PortalObject() {
+
+        super(texture, false, false);
+
+    }
+
+    @Override
+    public void render(SpriteBatch batch, float x, float y) {
+
+        if (sprite != null) {
+            sprite.setPosition(x, y);
+            batch.draw(sprite, x, y + 480, sprite.getWidth(), sprite.getHeight());
+        }
+
+        if (tileContent != null) {
+            tileContent.render(batch, x, y);
+        }
+
+    }
+
+    @Override
+    public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
+
+        System.out.println("Portal Action\n");
+
+        // Item empfangen
+
+        if (interaction.getParameters() [0] == 1) {
+
+            System.out.println("Erhalte Item!");
+
+            chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+        }
+
+        // Item versuchen zu senden
+
+        System.out.println( "Versuche Item zu senden!" );
+
+        // Wenn etwas auf dem Portal liegt
+
+        if (tileContent != null) {
+
+            System.out.println("    Portal belegt!");
+
+            return false;
+        }
+
+        // Wenn nichts auf dem Portal liegt
+
+        else {
+
+            System.out.println("    Portal frei!");
+
+            // Spieler hat kein Item
+
+            if (PlayerController.getInstance().getInventory() == null) {
+
+                System.out.println("        Kein Item zum uebertragen");
+
+                return false;
+            }
+
+            //Spieler hat Item
+
+            else {
+
+                System.out.println("        Starte Item-Uebertragung!");
+
+                // Inventar auslesen
+
+                TileContent inventory = PlayerController.getInstance().getInventory();
+
+                // Inventar leeren
+
+                PlayerController.getInstance().setInventory(null);
+
+                // Item auf Remote-Portal erschaffen
+
+                {
+
+                    // Remote erstellen
+                    RemoteGameController remoteGameController = new RemoteGameController();
+
+                    int[] pm = new int[] { 0 };
+
+                    if (inventory.getClass() == GloveItem.class) {
+                        pm[0] = 1;
+                    }
+
+                    if (pm[0] == 0) {
+
+                        System.out.println("            Item nicht bekannt!");
+
+                        return false;
+                    }
+
+                    interaction.setParameters( pm );
+
+                    remoteGameController.triggerAction(interaction);
+
+                    System.out.println("            Item versendet!");
+
+                }
+
+                return true;
+
+            }
+
+        }
+
+    }
+
+    @Override
+    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException {
+        return false;
+    }
+}
