@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
@@ -12,6 +13,15 @@ import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.game.Direction;
 
 public class Player extends TileContent {
+
+    public static void queueMovement(Vector2 tilePosition, Direction actionDirection) {
+        Vector2 newPosition = tilePosition.cpy().add(actionDirection.getVector());
+        PlayerController.getInstance().setPlayerPosition(newPosition);
+    }
+
+    public static void queueRotation(Direction actionDirection) {
+        PlayerController.getInstance().setPlayerDirection(actionDirection);
+    }
 
     private static final Texture texture = new Texture("./sprites/player_detective_right.png");
     // Textures for the player facing different directions
@@ -112,7 +122,6 @@ public class Player extends TileContent {
 
         if (newTexture != currentTexture) {
             currentTexture = newTexture;
-            System.out.println("Player texture updated: " + newTexture);
         }
     }
 }

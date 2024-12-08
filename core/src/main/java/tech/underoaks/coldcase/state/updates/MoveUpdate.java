@@ -57,10 +57,6 @@ public class MoveUpdate extends GameStateUpdate {
             } else if (directionVector.equals(Direction.WEST.getVector())) {
                 setPlayerRotation(Direction.WEST);
             }
-            System.out.println("Player texture changed.");
-        }
-        else {
-            System.out.println("Player texture not changed.");
         }
     }
 
