@@ -45,7 +45,7 @@ public class PortalObject extends TileContent{
 
         // Item empfangen
 
-        if (interaction.getParameters() [0] == 1) {
+        if (interaction.getParameters() != null && interaction.getParameters() [0] == 1) {
 
             System.out.println("Erhalte Item!");
 
