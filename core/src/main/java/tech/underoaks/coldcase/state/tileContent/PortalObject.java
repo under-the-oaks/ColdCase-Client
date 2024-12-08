@@ -45,12 +45,21 @@ public class PortalObject extends TileContent{
 
         // Item empfangen
 
-        if (interaction.getParameters() != null && interaction.getParameters() [0] == 1) {
+        if (interaction.getParameters() != null) {
 
-            System.out.println("Erhalte Item!");
+            if ( interaction.getParameters().length > 0 || interaction.getParameters() [0] == 1) {
 
-            chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+                System.out.println("Erhalte Item!");
+
+                chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+            }
+
+            System.out.println( "   Item nicht bekannt!" );
+
+            return false;
         }
+
+
 
         // Item versuchen zu senden
 
