@@ -45,19 +45,17 @@ public class PortalObject extends TileContent{
 
         // Item empfangen
 
-        if (interaction.getParameters() != null) {
+        if ( interaction.getParameters().length > 0) {
 
-            if ( interaction.getParameters().length > 0) {
+            System.out.println("Erhalte Item!");
 
-                System.out.println("Erhalte Item!");
+            // Erhalte Glove Item
 
-                // Erhalte Glove Item
+            if (interaction.getParameters() [0] == 1) {
 
-                if (interaction.getParameters() [0] == 1) {
+                chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
 
-                    chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
-
-                }
+                return true;
             }
 
             System.out.println( "   Item nicht bekannt!" );
@@ -65,84 +63,87 @@ public class PortalObject extends TileContent{
             return false;
         }
 
-
-
         // Item versuchen zu senden
 
-        System.out.println( "Versuche Item zu senden!" );
+        else if ( interaction.getParameters().length == 0 ) {
 
-        // Wenn etwas auf dem Portal liegt
+            System.out.println( "Versuche Item zu senden!" );
 
-        if (tileContent != null) {
+            // Wenn etwas auf dem Portal liegt
 
-            System.out.println("    Portal belegt!");
+            if (tileContent != null) {
 
-            return false;
-        }
-
-        // Wenn nichts auf dem Portal liegt
-
-        else {
-
-            System.out.println("    Portal frei!");
-
-            // Spieler hat kein Item
-
-            if (PlayerController.getInstance().getInventory() == null) {
-
-                System.out.println("        Kein Item zum uebertragen");
+                System.out.println("    Portal belegt!");
 
                 return false;
             }
 
-            //Spieler hat Item
+            // Wenn nichts auf dem Portal liegt
 
             else {
 
-                System.out.println("        Starte Item-Uebertragung!");
+                System.out.println("    Portal frei!");
 
-                // Inventar auslesen
+                // Spieler hat kein Item
 
-                TileContent inventory = PlayerController.getInstance().getInventory();
+                if (PlayerController.getInstance().getInventory() == null) {
 
-                // Inventar leeren
+                    System.out.println("        Kein Item zum uebertragen");
 
-                PlayerController.getInstance().setInventory(null);
-
-                // Item auf Remote-Portal erschaffen
-
-                {
-
-                    // Remote erstellen
-                    RemoteGameController remoteGameController = new RemoteGameController();
-
-                    int[] pm = new int[] { 0 };
-
-                    if (inventory.getClass() == GloveItem.class) {
-                        pm[0] = 1;
-                    }
-
-                    if (pm[0] == 0) {
-
-                        System.out.println("            Item nicht bekannt!");
-
-                        return false;
-                    }
-
-                    interaction.setParameters( pm );
-
-                    remoteGameController.triggerAction(interaction);
-
-                    System.out.println("            Item versendet!");
-
+                    return false;
                 }
 
-                return true;
+                //Spieler hat Item
+
+                else {
+
+                    System.out.println("        Starte Item-Uebertragung!");
+
+                    // Inventar auslesen
+
+                    TileContent inventory = PlayerController.getInstance().getInventory();
+
+                    // Inventar leeren
+
+                    PlayerController.getInstance().setInventory(null);
+
+                    // Item auf Remote-Portal erschaffen
+
+                    {
+
+                        // Remote erstellen
+                        RemoteGameController remoteGameController = new RemoteGameController();
+
+                        int[] pm = new int[] { 0 };
+
+                        if (inventory.getClass() == GloveItem.class) {
+                            pm[0] = 1;
+                        }
+
+                        if (pm[0] == 0) {
+
+                            System.out.println("            Item nicht bekannt!");
+
+                            return false;
+                        }
+
+                        interaction.setParameters( pm );
+
+                        remoteGameController.triggerAction(interaction);
+
+                        System.out.println("            Item versendet!");
+
+                    }
+
+                    return true;
+
+                }
 
             }
 
         }
 
+        return false;
     }
 
     @Override
