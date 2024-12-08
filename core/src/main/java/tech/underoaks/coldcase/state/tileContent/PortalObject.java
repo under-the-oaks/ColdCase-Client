@@ -59,8 +59,6 @@ public class PortalObject extends TileContent{
 
                 System.out.println("    Glove erthalten!");
 
-                System.out.println(tileContent);
-
                 return true;
             }
 
@@ -86,7 +84,7 @@ public class PortalObject extends TileContent{
 
             // Wenn nichts auf dem Portal liegt
 
-            else {
+            else { // tileContent == null
 
                 System.out.println("    Portal frei!");
 
@@ -101,7 +99,7 @@ public class PortalObject extends TileContent{
 
                 //Spieler hat Item
 
-                else {
+                else { // PlayerController.getInstance().getInventory() != null
 
                     System.out.println("        Starte Item-Uebertragung!");
 
