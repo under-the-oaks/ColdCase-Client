@@ -59,6 +59,8 @@ public class PortalObject extends TileContent{
 
                 System.out.println("    Glove erthalten!");
 
+                System.out.println(tileContent);
+
                 return true;
             }
 
@@ -113,31 +115,9 @@ public class PortalObject extends TileContent{
 
                     // Item auf Remote-Portal erschaffen
 
-                    {
+                    chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass(),1));
 
-                        // Remote erstellen
-                        RemoteGameController remoteGameController = new RemoteGameController();
-
-                        int[] pm = new int[] { 0 };
-
-                        if (inventory.getClass() == GloveItem.class) {
-                            pm[0] = 1;
-                        }
-
-                        if (pm[0] == 0) {
-
-                            System.out.println("            Item nicht bekannt!");
-
-                            return false;
-                        }
-
-                        interaction.setParameters( pm );
-
-                        remoteGameController.triggerAction(interaction);
-
-                        System.out.println("            Item versendet!");
-
-                    }
+                    System.out.println("            Item versendet!");
 
                     return true;
 
