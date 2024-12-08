@@ -53,9 +53,13 @@ public class PortalObject extends TileContent{
 
             if (interaction.getParameters() [0] == 1) {
 
-                chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), new GloveItem() ));
+                chain.addGameStateUpdate(
+                    new AddTileContentUpdate( interaction.getTargetPos(), new GloveItem() )
+                );
 
                 System.out.println("    Glove erthalten!");
+
+                System.out.println(tileContent);
 
                 return true;
             }
