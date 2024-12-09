@@ -66,55 +66,51 @@ public class PlayerController implements InputProcessor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             if (lookDirection == Direction.NORTH) {
                 if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, Player.class))) {
-                    Player.queueMovement(playerPosition, Direction.NORTH);
                     return true;
                 }
             } else {
                 lookDirection = Direction.NORTH;
-                Player.queueRotation(Direction.NORTH);
                 Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             if (lookDirection == Direction.SOUTH) {
                 if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, Player.class))) {
-                    Player.queueMovement(playerPosition, Direction.SOUTH);
                     return true;
                 }
             } else {
                 lookDirection = Direction.SOUTH;
-                Player.queueRotation(Direction.SOUTH);
                 Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             if (lookDirection == Direction.WEST) {
                 if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, Player.class))) {
-                    Player.queueMovement(playerPosition, Direction.WEST);
                     return true;
                 }
             } else {
                 lookDirection = Direction.WEST;
-                Player.queueRotation(Direction.WEST);
                 Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             if (lookDirection == Direction.EAST) {
                 if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, Player.class))) {
-                    Player.queueMovement(playerPosition, Direction.EAST);
                     return true;
                 }
             } else {
                 lookDirection = Direction.EAST;
-                Player.queueRotation(Direction.EAST);
                 Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         // Interact
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, Player.class));

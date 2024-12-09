@@ -14,22 +14,15 @@ import tech.underoaks.coldcase.game.Direction;
 
 public class Player extends TileContent {
 
-    public static void queueMovement(Vector2 tilePosition, Direction actionDirection) {
-        Vector2 newPosition = tilePosition.cpy().add(actionDirection.getVector());
-        PlayerController.getInstance().setPlayerPosition(newPosition);
-    }
-
-    public static void queueRotation(Direction actionDirection) {
-        PlayerController.getInstance().setPlayerDirection(actionDirection);
-    }
+    public static Texture currentTexture;
 
     private static final Texture texture = new Texture("./sprites/player_detective_right.png");
+
     // Textures for the player facing different directions
     private static final Texture textureNorth = new Texture("./sprites/player_detective_up.png");
     private static final Texture textureSouth = new Texture("./sprites/player_detective_down.png");
     private static final Texture textureEast = new Texture("./sprites/player_detective_right.png");
     private static final Texture textureWest = new Texture("./sprites/player_detective_left.png");
-    public static Texture currentTexture;
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -50,11 +43,14 @@ public class Player extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
+
         Vector2 targetPosition = switch (interaction.getActionDirection()) {
+
             case NORTH -> interaction.getTargetPos().cpy().add(Direction.NORTH.getVector());
             case SOUTH -> interaction.getTargetPos().cpy().add(Direction.SOUTH.getVector());
             case EAST -> interaction.getTargetPos().cpy().add(Direction.EAST.getVector());
             case WEST -> interaction.getTargetPos().cpy().add(Direction.WEST.getVector());
+
         };
 
         Map snapshotMap = chain.getSnapshot().getSnapshotMap();
@@ -72,7 +68,10 @@ public class Player extends TileContent {
         }
 
         // adding the validated movement to the chain
+
         chain.addGameStateUpdate(new MoveUpdate(interaction.getTargetPos(), childIndex, targetPosition));
+        updateMovement( PlayerController.getInstance().getPlayerPosition(), PlayerController.getInstance().getPlayerDirection() );
+
         return true;
     }
 
@@ -98,6 +97,7 @@ public class Player extends TileContent {
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
+
     }
 
     @Override
@@ -113,6 +113,7 @@ public class Player extends TileContent {
      *                      according to this direction.
      */
     public static void updateTexture(Direction lookDirection) {
+
         Texture newTexture = switch (lookDirection) {
             case NORTH -> textureNorth;
             case SOUTH -> textureSouth;
@@ -121,7 +122,19 @@ public class Player extends TileContent {
         };
 
         if (newTexture != currentTexture) {
+
             currentTexture = newTexture;
+
         }
     }
+
+
+    public void updateMovement(Vector2 tilePosition, Direction actionDirection) {
+
+        Vector2 newPosition = tilePosition.cpy().add(actionDirection.getVector());
+        PlayerController.getInstance().setPlayerPosition(newPosition);
+        PlayerController.getInstance().setPlayerDirection(actionDirection);
+
+    }
+
 }
