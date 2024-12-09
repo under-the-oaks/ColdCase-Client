@@ -269,4 +269,23 @@ public abstract class TileContent implements Cloneable {
         this.texture = texture;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        TileContent other = (TileContent) obj;
+
+        if (isPlayerPassable != other.isPlayerPassable) return false;
+        if (isObjectPassable != other.isObjectPassable) return false;
+        if (visibilityState != other.visibilityState) return false;
+
+        if (texture != null ? !texture.equals(other.texture) : other.texture != null) return false;
+        if (sprite != null ? !sprite.equals(other.sprite) : other.sprite != null) return false;
+
+        return true;
+    }
+
+
 }
