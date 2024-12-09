@@ -150,3 +150,9 @@ tasks.register('release', Zip) {
     println 'Build and tests completed successfully. Release package has been created!'
   }
 }
+
+tasks.register('printVersion') {
+  doLast {
+    println "${projectVersion}"
+  }
+}
