@@ -94,8 +94,6 @@ public class Main extends ApplicationAdapter {
 
             Texture uiTexture = item.getInventoryTexture();
 
-            //System.out.println( item );
-
             if ( uiTexture != null ) {
 
                 batch.draw( uiTexture , -400 + inventoryOffset.x + (inventoryDimension / 2), -400 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
