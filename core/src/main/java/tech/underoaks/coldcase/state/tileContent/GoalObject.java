@@ -46,7 +46,7 @@ public class GoalObject extends TileContent {
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
         if (isPlayerOnTile(tilePosition)) { //Check if the player is on the same tile
 
             endLevel(); //Trigger the end of the level

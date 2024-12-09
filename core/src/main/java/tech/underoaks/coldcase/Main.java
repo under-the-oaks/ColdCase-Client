@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(10000, 10000);
 
-        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_Mvp"), true);
+        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_HoleDemo"), false);
         Gdx.input.setInputProcessor(PlayerController.getInstance());
 
         gameController = GameController.getInstance();

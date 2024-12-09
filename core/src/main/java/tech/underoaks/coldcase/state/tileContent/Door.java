@@ -40,7 +40,7 @@ public class Door extends TileContent {
 
     }
 
-    public boolean update(InteractionChain chain, Vector2 tilePosition) {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) {
         return false;
     }
 }

@@ -12,7 +12,7 @@ import tech.underoaks.coldcase.state.tiles.Tile;
 
 public class MovableBlock extends TileContent {
 
-    private static final Texture texture = new Texture("./sprites/block_detective_4");
+    private static final Texture texture = new Texture("./sprites/block_detective_4.png");
 
     public MovableBlock() {
         super(texture, false, false);
@@ -56,7 +56,7 @@ public class MovableBlock extends TileContent {
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) {
         return false;
     }
 
