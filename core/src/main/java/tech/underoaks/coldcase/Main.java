@@ -44,11 +44,19 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(10000, 10000);
 
-        String path = "maps/Map_Mvp";
-        if(properties.containsKey("map_override")) {
-            path = (String) properties.get("map_override");
+        if(!properties.containsKey("map_path")) {
+            throw new RuntimeException("Missing required property: map_path");
         }
-        Map map = MapGenerator.serializeContentToMap(Path.of(path), true);
+        if(!properties.containsKey("role")) {
+            throw new RuntimeException("Missing required property role");
+        }
+        String path = properties.getProperty("map_path");
+        boolean detective = switch (properties.getProperty("role")) {
+            case "detective" -> true;
+            case "ghost" -> false;
+            default -> throw new RuntimeException("Unknown role: " + properties.getProperty("role"));
+        };
+        Map map = MapGenerator.serializeContentToMap(Path.of(path), detective);
 
         Gdx.input.setInputProcessor(PlayerController.getInstance());
 
