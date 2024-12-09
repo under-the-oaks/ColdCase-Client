@@ -70,7 +70,7 @@ public abstract class Tile implements Cloneable {
     public TileContent popTileContent() {
         if (this.tileContent == null) {
             return null;
-        } else if (this.tileContent.tileContent == null) {
+        } else if (this.tileContent.getNextContent() == null) {
             TileContent content = this.tileContent;
             this.tileContent = null;
             return content;
