@@ -131,3 +131,22 @@ startScripts.classpath = project.tasks.jar.outputs.files
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
 }
+
+tasks.register('release', Zip) {
+  group = 'build'
+  description = 'Runs the complete build process and creates a release package with assets and the jar.'
+
+  dependsOn 'build'
+
+  from('build/libs') {
+    include "${appName}-${projectVersion}.jar"
+  }
+  from("../assets")
+
+  archiveFileName.set("${appName}-${projectVersion}-release.zip")
+  destinationDirectory = file("$buildDir/release")
+
+  doLast {
+    println 'Build and tests completed successfully. Release package has been created!'
+  }
+}
