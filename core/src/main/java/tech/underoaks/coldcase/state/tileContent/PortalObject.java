@@ -6,12 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
-import tech.underoaks.coldcase.remote.RemoteGameController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
-import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
+/**
+ * The {@code PortalObject} class represents a portal within the game world that allows the player
+ * to send an item to the other player through the portal.
+ *
+ * <p>The player can send an item through the portal by interacting with it whilst holding an item.
+ * In this case the item gets transferred to the other portal. He can also pick up an item laying on
+ * the portal.
+ *
+ */
 public class PortalObject extends TileContent{
 
     static final Texture texture = new Texture("./sprites/block_ghost.png");
@@ -91,7 +98,7 @@ public class PortalObject extends TileContent{
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
         return false;
     }
 }
