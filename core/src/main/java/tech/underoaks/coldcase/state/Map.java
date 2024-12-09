@@ -2,6 +2,8 @@ package tech.underoaks.coldcase.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.MapGenerator;
+import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -280,10 +282,10 @@ public class Map {
      * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
      * triggers another in a cyclic manner, the loop may otherwise never terminate.
      */
-    public void updateUntilStable(InteractionChain chain) throws GameStateUpdateException, UpdateTileContentException {
+    public void updateUntilStable(InteractionChain chain, Interaction interaction) throws GameStateUpdateException, UpdateTileContentException {
         int maxIteration = 25;
         int iteration = 0;
-        while (!this.updateMap(chain).isEmpty()) {
+        while (!this.updateMap(chain, interaction).isEmpty()) {
             // Keep updating until no further updates occur
             iteration++;
             if (iteration > maxIteration) {
@@ -301,9 +303,9 @@ public class Map {
      *
      * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
      * @return true if at least one {@code TileContent} performs an update; false otherwise
-     * @see TileContent#handleUpdate(InteractionChain, Vector2)
+     * @see TileContent#handleUpdate(InteractionChain, Vector2, Interaction)
      */
-    public List<TileContent> updateMap(InteractionChain chain) throws GameStateUpdateException, UpdateTileContentException {
+    public List<TileContent> updateMap(InteractionChain chain, Interaction interaction) throws GameStateUpdateException, UpdateTileContentException {
         List<TileContent> updated = new ArrayList<>();
         for (int i = 0; i < tileArray.length; i++) {
             for (int j = 0; j < tileArray[i].length; j++) {
@@ -312,7 +314,8 @@ public class Map {
                 }
                 updated.addAll(tileArray[i][j].getTileContent().handleUpdate(
                     chain,
-                    new Vector2(i, j)
+                    new Vector2(i, j),
+                    interaction
                 ));
             }
         }
