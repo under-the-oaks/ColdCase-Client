@@ -19,7 +19,8 @@ public enum TileContents {
     MOVABLE_BLOCK_TRANSCENDENT(10, MovableBlockTranscendent.class),
     TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
     DOOR(12, Door.class),
-    DOOR_TRIGGER(13, Door_Trigger.class);
+    DOOR_TRIGGER(13, Door_Trigger.class),
+    Hole(14,Hole.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

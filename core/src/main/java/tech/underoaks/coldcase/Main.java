@@ -31,7 +31,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(10000, 10000);
 
-        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_MovableBlockDemo"), true);
+        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_HoleDemo"), false);
         Gdx.input.setInputProcessor(PlayerController.getInstance());
 
         gameController = GameController.getInstance();
@@ -93,8 +93,6 @@ public class Main extends ApplicationAdapter {
             ItemObject item = (ItemObject) PlayerController.getInstance().getInventory();
 
             Texture uiTexture = item.getInventoryTexture();
-
-            System.out.println( item );
 
             if ( uiTexture != null ) {
 

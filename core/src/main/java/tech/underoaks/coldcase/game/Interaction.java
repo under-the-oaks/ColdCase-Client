@@ -37,11 +37,11 @@ public class Interaction {
     }
 
     public Vector2 getTargetPos() {
-        return targetPos;
+        return targetPos.cpy();
     }
 
     public void setTargetPos(Vector2 targetPos) {
-        this.targetPos = targetPos;
+        this.targetPos = targetPos.cpy();
     }
 
     public Direction getActionDirection() {
