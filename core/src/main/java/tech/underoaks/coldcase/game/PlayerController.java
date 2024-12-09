@@ -11,7 +11,7 @@ public class PlayerController implements InputProcessor {
 
     private static PlayerController instance;
     private Vector2 playerPosition;
-    private Direction lookDirection = Direction.NORTH;
+    private Direction lookDirection = Direction.EAST;
 
     public TileContent getInventory() {
         return inventory;
@@ -43,6 +43,14 @@ public class PlayerController implements InputProcessor {
         return playerPosition;
     }
 
+    public void setPlayerDirection(Direction lookDirection) {
+        this.lookDirection = lookDirection;
+    }
+    public Direction getPlayerDirection() {
+        return lookDirection;
+    }
+
+
     /**
      * Called when a key was pressed
      *
@@ -56,33 +64,53 @@ public class PlayerController implements InputProcessor {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            lookDirection = Direction.NORTH;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, Player.class))) {
-                playerPosition.add(Direction.NORTH.getVector());
+            if (lookDirection == Direction.NORTH) {
+                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, Player.class))) {
+                    return true;
+                }
+            } else {
+                lookDirection = Direction.NORTH;
+                Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            lookDirection = Direction.SOUTH;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, Player.class))) {
-                playerPosition.add(Direction.SOUTH.getVector());
+            if (lookDirection == Direction.SOUTH) {
+                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, Player.class))) {
+                    return true;
+                }
+            } else {
+                lookDirection = Direction.SOUTH;
+                Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            lookDirection = Direction.WEST;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, Player.class))) {
-                playerPosition.add(Direction.WEST.getVector());
+            if (lookDirection == Direction.WEST) {
+                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, Player.class))) {
+                    return true;
+                }
+            } else {
+                lookDirection = Direction.WEST;
+                Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            lookDirection = Direction.EAST;
-            if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, Player.class))) {
-                playerPosition.add(Direction.EAST.getVector());
+            if (lookDirection == Direction.EAST) {
+                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, Player.class))) {
+                    return true;
+                }
+            } else {
+                lookDirection = Direction.EAST;
+                Player.updateTexture(lookDirection);
                 return true;
             }
         }
+
         // Interact
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, Player.class));

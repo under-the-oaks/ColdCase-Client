@@ -48,7 +48,7 @@ public class ItemObject extends TileContent{
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
         return false;
     }
 }

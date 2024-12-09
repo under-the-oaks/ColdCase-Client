@@ -27,7 +27,7 @@ public class Door_Trigger extends TileContent{
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException, UpdateTileContentException {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
         return false;
     }
 

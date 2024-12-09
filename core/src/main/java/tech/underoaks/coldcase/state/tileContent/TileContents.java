@@ -20,7 +20,8 @@ public enum TileContents {
     TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
     DOOR(12, Door.class),
     DOOR_TRIGGER(13, Door_Trigger.class),
-    PORTAL(14, PortalObject.class);
+    HOLE(14,Hole.class),
+    PORTAL(15,PortalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;

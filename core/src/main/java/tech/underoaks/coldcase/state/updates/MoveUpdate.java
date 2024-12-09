@@ -1,9 +1,11 @@
 package tech.underoaks.coldcase.state.updates;
 
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.game.Direction;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tile;
+import tech.underoaks.coldcase.state.tileContent.Player;
 
 import java.util.Stack;
 
@@ -41,5 +43,24 @@ public class MoveUpdate extends GameStateUpdate {
         while (!tileContents.isEmpty()) {
             sourceTile.pushTileContent(tileContents.pop());
         }
+
+        if (sourceContent.getClass() == Player.class){
+
+            Vector2 directionVector = targetPosition.cpy().sub(sourcePosition);
+
+            if (directionVector.equals(Direction.NORTH.getVector())) {
+                setPlayerRotation(Direction.NORTH);
+            } else if (directionVector.equals(Direction.SOUTH.getVector())) {
+                setPlayerRotation(Direction.SOUTH);
+            } else if (directionVector.equals(Direction.EAST.getVector())) {
+                setPlayerRotation(Direction.EAST);
+            } else if (directionVector.equals(Direction.WEST.getVector())) {
+                setPlayerRotation(Direction.WEST);
+            }
+        }
+    }
+
+    public static void setPlayerRotation(Direction direction) {
+        Player.updateTexture(direction);
     }
 }
