@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
@@ -16,27 +17,9 @@ public class Player extends TileContent {
 
     public static Texture currentTexture;
 
-    private static final Texture texture = new Texture("./sprites/player_detective_right.png");
-
-    // Textures for the player facing different directions
-    private static final Texture textureNorth = new Texture("./sprites/player_detective_up.png");
-    private static final Texture textureSouth = new Texture("./sprites/player_detective_down.png");
-    private static final Texture textureEast = new Texture("./sprites/player_detective_right.png");
-    private static final Texture textureWest = new Texture("./sprites/player_detective_left.png");
-
-    public int getPlayerIndex() {
-        return playerIndex;
-    }
-
-    public void setPlayerIndex(int playerIndex) {
-        this.playerIndex = playerIndex;
-    }
-
-    public int playerIndex = 2;
-
     public Player() {
-        super(texture, true, false);
-        currentTexture = texture;
+        super(TextureController.getInstance().getPlayerTexture(), true, false);
+        currentTexture = TextureController.getInstance().getPlayerTexture();
     }
 
     @Override
@@ -115,10 +98,10 @@ public class Player extends TileContent {
     public static void updateTexture(Direction lookDirection) {
 
         Texture newTexture = switch (lookDirection) {
-            case NORTH -> textureNorth;
-            case SOUTH -> textureSouth;
-            case EAST -> textureEast;
-            case WEST -> textureWest;
+            case NORTH -> TextureController.getInstance().getPlayerTextureNorth();
+            case SOUTH -> TextureController.getInstance().getPlayerTextureSouth();
+            case EAST -> TextureController.getInstance().getPlayerTextureEast();
+            case WEST -> TextureController.getInstance().getPlayerTextureWest();
         };
 
         if (newTexture != currentTexture) {
