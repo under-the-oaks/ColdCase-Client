@@ -16,9 +16,12 @@ public class GloveItem extends ItemObject {
 
     private static final Texture texture = new Texture("./sprites/item_glove_detective_6.png");
 
-    private static final Sprite sprite = new Sprite(texture);
+    private Sprite sprite;
 
-    public GloveItem() { super(texture); }
+    public GloveItem() {
+        super(texture);
+        sprite = new Sprite(texture);
+    }
 
     @Override
     public void render(SpriteBatch batch, float x, float y) {
