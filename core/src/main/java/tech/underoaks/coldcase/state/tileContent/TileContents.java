@@ -34,6 +34,17 @@ public enum TileContents {
         return index;
     }
 
+    public static int getIndexByClass(Class<? extends TileContent> tileClass) {
+        for (TileContents contents : TileContents.values()) {
+
+            if (contents.tileClass.equals(tileClass)) {
+                return contents.getIndex();
+            }
+
+        }
+        return -1;
+    }
+
     /**
      * Creates a new instance of the tile content.
      *

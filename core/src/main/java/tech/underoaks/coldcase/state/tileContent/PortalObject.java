@@ -41,90 +41,50 @@ public class PortalObject extends TileContent{
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-        System.out.println("Portal Action\n");
-
         // Item empfangen
-
         if ( interaction.getParameters().length > 0) {
 
-            System.out.println("Erhalte Item!");
+            // Item erstellen
+            TileContent newItem = TileContents.getNewTileClassByIndex(interaction.getParameters()[0]);
+            chain.addGameStateUpdate( new AddTileContentUpdate( interaction.getTargetPos(), newItem ));
 
-            // Erhalte Glove Item
-
-            if (interaction.getParameters() [0] == 1) {
-
-                chain.addGameStateUpdate(
-                    new AddTileContentUpdate( interaction.getTargetPos(), new GloveItem() )
-                );
-
-                System.out.println("    Glove erthalten!");
-
-                System.out.println(tileContent);
-
-                return true;
-            }
-
-            System.out.println( "   Item nicht bekannt!" );
-
-            return false;
+            return true;
         }
 
         // Item versuchen zu senden
 
-        else if ( interaction.getParameters().length == 0 ) {
-
-            System.out.println( "Versuche Item zu senden!" );
+        if ( interaction.getParameters().length == 0 ) {
 
             // Wenn etwas auf dem Portal liegt
-
-            if (tileContent != null) {
-
-                System.out.println("    Portal belegt!");
-
-                return false;
-            }
+            if (tileContent != null) return false;
 
             // Wenn nichts auf dem Portal liegt
-
             else { // tileContent == null
 
-                System.out.println("    Portal frei!");
-
                 // Spieler hat kein Item
-
-                if (PlayerController.getInstance().getInventory() == null) {
-
-                    System.out.println("        Kein Item zum uebertragen");
-
-                    return false;
-                }
+                if (PlayerController.getInstance().getInventory() == null) return false;
 
                 //Spieler hat Item
-
                 else { // PlayerController.getInstance().getInventory() != null
 
-                    System.out.println("        Starte Item-Uebertragung!");
-
                     // Inventar auslesen
-
                     TileContent inventory = PlayerController.getInstance().getInventory();
 
-                    // Inventar leeren
+                    // Index der Klasse auslesen
+                    int index = TileContents.getIndexByClass(inventory.getClass());
 
+                    // Inventar leeren
                     PlayerController.getInstance().setInventory(null);
 
                     // Item auf Remote-Portal erschaffen
-
-                    chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass(),1));
-
-                    System.out.println("            Item versendet!");
+                    if (inventory instanceof ItemObject) {
+                        chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass(), index));
+                    }
 
                     return true;
 
                 }
-
             }
-
         }
 
         return false;
