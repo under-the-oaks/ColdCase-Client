@@ -24,5 +24,7 @@ public class AddTileContentUpdate extends GameStateUpdate {
     public void apply(Map map) {
         Tile targetTile = map.getTile(targetPosition);
         targetTile.pushTileContent(targetTileContent);
+
+        System.out.println(targetTile.topTileContent());
     }
 }
