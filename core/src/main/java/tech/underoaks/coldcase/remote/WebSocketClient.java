@@ -19,6 +19,26 @@ public class WebSocketClient {
     private static Session session;
     private static WebSocketClient instance = null;
 
+    public static WebSocketClient create(String websocket_url, String session_id) {
+        if(instance != null) {
+            throw new IllegalStateException("WebSocketClient already created");
+        }
+        instance = new WebSocketClient();
+
+        try {
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            URI uri = new URI("ws://" + websocket_url + "/?session=" + session_id);
+            System.out.println("Connecting to Server " + uri);
+            session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
+            System.out.println("Connected to WebSocket server.");
+        } catch (Exception e) {
+            System.err.println("Error during WebSocket connection: " + e.getMessage());
+            e.printStackTrace();    //TODO Handle error better / correctly
+        }
+
+        return instance;
+    }
+
     /**
      * Retrieves the singleton instance of the WebSocket client.
      * <p>
@@ -29,19 +49,7 @@ public class WebSocketClient {
      */
     public static WebSocketClient getInstance() {
         if (instance == null) {
-            instance = new WebSocketClient();
-
-
-            try {
-                WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-                URI uri = new URI("ws://82.165.30.116:8080/?session=12345");  // TODO handle session UID and ip for now static
-                System.out.println("Connecting to WebSocket server...");
-                session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
-                System.out.println("Connected to WebSocket server.");
-            } catch (Exception e) {
-                System.err.println("Error during WebSocket connection: " + e.getMessage());
-                e.printStackTrace();    //TODO Handle error better / correctly
-            }
+            throw new IllegalStateException("WebSocketClient not created");
         }
         return instance;
     }

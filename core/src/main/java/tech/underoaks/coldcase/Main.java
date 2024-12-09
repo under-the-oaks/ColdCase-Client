@@ -14,7 +14,10 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.ItemObject;
 import tech.underoaks.coldcase.state.tileContent.Player;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Properties;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -26,21 +29,38 @@ public class Main extends ApplicationAdapter {
     private float timeSinceLastLog = 0f;
     private float timeSinceLastGSUCheck = 0f;
 
+    private static final String propertiesPath = ".properties";
+    private final Properties properties = new Properties();
+
     @Override
     public void create() {
+        try {
+            properties.load(new FileInputStream(propertiesPath));
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         batch = new SpriteBatch();
         viewport = new ExtendViewport(10000, 10000);
 
+        String path = "maps/Map_Mvp";
+        if(properties.containsKey("map_override")) {
+            path = (String) properties.get("map_override");
+        }
+        Map map = MapGenerator.serializeContentToMap(Path.of(path), true);
 
-
-        Map map = MapGenerator.serializeContentToMap(Path.of("maps/Map_Mvp"), true);
         Gdx.input.setInputProcessor(PlayerController.getInstance());
 
         gameController = GameController.getInstance();
         gameController.setCurrentMap(map);
 
         PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
-        WebSocketClient.getInstance();
+
+        if(!properties.containsKey("websocket_url") || !properties.containsKey("session_id")) {
+            throw new RuntimeException("Missing websocket url or map_override property");
+        }
+        WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
     }
 
     @Override
