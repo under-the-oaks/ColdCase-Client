@@ -79,7 +79,7 @@ class MapTest{
             return false;
         }
         @Override
-        public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+        public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
 
             if (chain.getGSUQueue().peek() == null) {
                 GameStateUpdate update = new EmptyUpdate();
@@ -113,7 +113,7 @@ class MapTest{
         }
 
         @Override
-        public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+        public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
             return true;
         }
     }
@@ -310,10 +310,13 @@ class MapTest{
 
         GameStateUpdate before = chain.getGSUQueue().peek();
 
+        Interaction interaction = mock(Interaction.class);
+        TileContent handler = mock(TileContent.class);
+
         boolean updated = false;
 
         try {
-            List<TileContent> updatedTiles = mockMap.updateMap(chain);
+            List<TileContent> updatedTiles = mockMap.updateMap(chain, interaction, handler);
 
             for (TileContent updatedTile : updatedTiles) {
                 updated = updated || ( updatedTile != null ) ;
@@ -341,10 +344,13 @@ class MapTest{
 
         InteractionChain chain = new InteractionChain(snapshot);
 
+        Interaction interaction = mock(Interaction.class);
+        TileContent handler = mock(TileContent.class);
+
         // Läuft durch
 
         try{
-            mockMap.updateUntilStable(chain);
+            mockMap.updateUntilStable(chain, interaction, handler);
         }
         catch (Exception e) {
 
@@ -358,7 +364,7 @@ class MapTest{
 
         // Endless Loop wird abgebrochen
 
-        Assertions.assertThrows( IllegalStateException.class, () -> { mockMap.updateUntilStable( brokenChain ); } );
+        Assertions.assertThrows( IllegalStateException.class, () -> { mockMap.updateUntilStable( brokenChain, interaction, handler ); } );
 
     }
 }
