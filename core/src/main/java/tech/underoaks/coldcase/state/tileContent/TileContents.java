@@ -20,7 +20,8 @@ public enum TileContents {
     TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
     DOOR(12, Door.class),
     DOOR_TRIGGER(13, Door_Trigger.class),
-    Hole(14,Hole.class);
+    HOLE(14,Hole.class),
+    PORTAL(15,PortalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
@@ -32,6 +33,17 @@ public enum TileContents {
 
     public int getIndex() {
         return index;
+    }
+
+    public static int getIndexByClass(Class<? extends TileContent> tileClass) {
+        for (TileContents contents : TileContents.values()) {
+
+            if (contents.tileClass.equals(tileClass)) {
+                return contents.getIndex();
+            }
+
+        }
+        return -1;
     }
 
     /**
