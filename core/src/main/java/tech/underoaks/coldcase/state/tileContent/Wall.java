@@ -22,7 +22,7 @@ public class Wall extends TileContent {
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) {
         return false;
     }
 }

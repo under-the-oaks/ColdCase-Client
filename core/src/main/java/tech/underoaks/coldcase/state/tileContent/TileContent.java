@@ -124,12 +124,12 @@ public abstract class TileContent implements Cloneable {
      * @return True if an update as been performed; False otherwise
      * @throws GameStateUpdateException   If a GameStateUpdate has failed
      * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
-     * @see TileContent#update(InteractionChain, Vector2, Interaction)
+     * @see TileContent#update(InteractionChain, Vector2, Interaction, TileContent)
      */
-    public List<TileContent> handleUpdate(InteractionChain chain, Vector2 tilePosition, Interaction interaction) throws GameStateUpdateException, UpdateTileContentException {
-        List<TileContent> handlers = tileContent != null ? tileContent.handleUpdate(chain, tilePosition, interaction) : new ArrayList<>();
+    public List<TileContent> handleUpdate(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
+        List<TileContent> handlers = tileContent != null ? tileContent.handleUpdate(chain, tilePosition, interaction, handler) : new ArrayList<>();
 
-        if (update(chain, tilePosition, interaction)) {
+        if (update(chain, tilePosition, interaction, handler)) {
             handlers.add(this);
         }
 
@@ -148,7 +148,7 @@ public abstract class TileContent implements Cloneable {
      * It should not always return {@code true} to prevent infinite loops in calling methods like
      * {@code updateUntilStable}. Avoid cyclic updates that could trigger endless interactions.
      */
-    public abstract boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction) throws GameStateUpdateException, UpdateTileContentException;
+    public abstract boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException;
 
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;

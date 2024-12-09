@@ -1,7 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
@@ -74,7 +73,7 @@ public class Player extends TileContent {
     }
 
     @Override
-    public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+    public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
         return false;
     }
 }

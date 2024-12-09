@@ -162,7 +162,7 @@ public class GameController {
             }
 
             // Update due to potential changes
-            snapshotMap.updateUntilStable(chain, interaction);
+            snapshotMap.updateUntilStable(chain, interaction, handler);
         } catch (UpdateTileContentException e) {
             System.err.println("Update tile content failed");
             System.err.println(e.getMessage());
