@@ -267,6 +267,7 @@ public abstract class TileContent implements Cloneable {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+        this.sprite = new Sprite(texture);
     }
 
 }

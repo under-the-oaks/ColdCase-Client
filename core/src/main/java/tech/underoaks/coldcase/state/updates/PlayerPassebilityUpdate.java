@@ -10,7 +10,7 @@ public class PlayerPassebilityUpdate extends GameStateUpdate{
     private final int sourceIndex;
 
     public PlayerPassebilityUpdate(boolean passable, Vector2 targetPosition, int sourceIndex) {
-        super(UpdateTypes.MAP_MODIFICATION);
+        super(UpdateTypes.VISUAL_EFFECT);
         this.passible = passable;
         this.targetPosition = targetPosition;
         this.sourceIndex = sourceIndex;
