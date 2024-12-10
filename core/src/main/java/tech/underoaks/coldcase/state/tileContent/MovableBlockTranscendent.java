@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
