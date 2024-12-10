@@ -12,8 +12,8 @@ import java.util.Objects;
 
 public class Door extends TileContent {
 
-    private static final Texture texture_closed = new Texture("./isometric tileset/separated images/tile_067.png");
-    private static final Texture texture_open = new Texture("./isometric tileset/separated images/tile_048.png");
+    private static final Texture texture_closed = new Texture("./sprites/object_spike_detective_2.png");
+    private static final Texture texture_open = new Texture("./sprites/object_spike_retracted_detective_1.png");
 
     public Door() {
         super(texture_closed, false, false);
