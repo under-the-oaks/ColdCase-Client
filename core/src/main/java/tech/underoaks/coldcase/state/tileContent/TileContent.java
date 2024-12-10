@@ -30,7 +30,7 @@ public abstract class TileContent implements Cloneable {
     /**
      * Reference to the next TileContent in the stack
      */
-    private TileContent tileContent;
+    public TileContent tileContent;
 
     /**
      * The visibility state of this TileContent
