@@ -22,6 +22,13 @@ public class MovableBlockTranscendent extends TileContent{
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
+        // No Glove in Inventory
+
+        if(PlayerController.getInstance().getInventory() == null || PlayerController.getInstance().getInventory().getClass() != GloveItem.class){
+            System.out.println( "Insufficient inventory - Glove needed" );
+            return false;
+        }
+        
         System.out.println("MovableBlockTranscendent.action() - red rock");
 
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
