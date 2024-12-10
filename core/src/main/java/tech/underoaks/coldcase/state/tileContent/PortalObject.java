@@ -26,9 +26,7 @@ public class PortalObject extends TileContent{
     static final Sprite sprite = new Sprite(texture);
 
     public PortalObject() {
-
         super(texture, false, false);
-
     }
 
     @Override

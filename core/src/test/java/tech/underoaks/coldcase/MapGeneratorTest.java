@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.TileContents;
@@ -31,12 +32,17 @@ public class MapGeneratorTest {
     void testSerializeContentToMapFromFile() {
         Path mockPath = Path.of("mock/directory");
         List<String> mockLines = Arrays.asList("1 1", // Metadata layer (map size)
-                "---", "1", // Tile layer
-                "---", "1",  // Tile content layer
-                "---");
+            "---", "1", // Tile layer
+            "---", "1",  // Tile content layer
+            "---");
 
-        try (MockedStatic<Files> mockedFiles = mockStatic(Files.class); MockedStatic<Tiles> tilesMockedStatic = Mockito.mockStatic(Tiles.class); MockedStatic<TileContents> tileContentsMockedStatic = Mockito.mockStatic(TileContents.class)) {
+        try (MockedStatic<Files> mockedFiles = mockStatic(Files.class);
+             MockedStatic<Tiles> tilesMockedStatic = Mockito.mockStatic(Tiles.class);
+             MockedStatic<TileContents> tileContentsMockedStatic = Mockito.mockStatic(TileContents.class);
+             MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)
+             ) {
 
+            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean())).thenReturn(null);
             mockedFiles.when(() -> java.nio.file.Files.readAllLines(any())).thenReturn(mockLines);
 
             tilesMockedStatic.when(() -> Tiles.getNewTileClassByIndex(anyInt())).thenReturn(mockedTile);
@@ -54,6 +60,9 @@ public class MapGeneratorTest {
 
     @Test
     public void testSerializeContentToMap_null() {
-        assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
+        try(MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)) {
+            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean())).thenReturn(null);
+            assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
+        }
     }
 }

@@ -1,12 +1,10 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import tech.underoaks.coldcase.game.Direction;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
@@ -14,11 +12,12 @@ import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
 public class GloveItem extends ItemObject {
 
-    private static final Texture texture = new Texture("./sprites/item_glove_detective_6.png");
+    private Sprite sprite;
 
-    private static final Sprite sprite = new Sprite(texture);
-
-    public GloveItem() { super(texture); }
+    public GloveItem() {
+        super(TextureController.getInstance().getGloveTexture());
+        sprite = new Sprite(TextureController.getInstance().getGloveTexture());
+    }
 
     @Override
     public void render(SpriteBatch batch, float x, float y) {

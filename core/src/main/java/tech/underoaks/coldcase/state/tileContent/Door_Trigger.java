@@ -13,7 +13,7 @@ public class Door_Trigger extends TileContent{
     private static final Texture texture = new Texture("./isometric tileset/separated images/tile_069.png");
 
     public Door_Trigger() {
-        super(texture, false, false);
+        super(texture, true, false);
     }
 
     @Override
