@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Door_Trigger extends TileContent{
 
-    private static final Texture texture = new Texture("./isometric tileset/separated images/tile_069.png");
+    private static final Texture texture = new Texture("./sprites/block_transcendent.png");
 
     public Door_Trigger() {
         super(texture, true, false);
