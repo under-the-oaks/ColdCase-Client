@@ -1,6 +1,5 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.TextureController;
