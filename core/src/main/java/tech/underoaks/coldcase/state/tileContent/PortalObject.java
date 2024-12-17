@@ -83,7 +83,7 @@ public class PortalObject extends TileContent{
 
                     // Item auf Remote-Portal erschaffen
                     if (inventory instanceof ItemObject) {
-                        chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass(), index));
+                        chain.addRemoteAction(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass(), index));
                     }
 
                     return true;
