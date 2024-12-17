@@ -20,7 +20,7 @@ public class Door_Trigger extends TileContent{
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         if (Objects.equals(interaction.getCaller(), Player.class.getName())){
-            chain.getPendingRemoteActions().add(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass()));
+            chain.addRemoteAction(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass()));
         }
 
         return true;

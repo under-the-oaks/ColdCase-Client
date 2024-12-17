@@ -17,12 +17,12 @@ public class InteractionChain {
     private final Queue<GameStateUpdate> gsuQueue;
 
     /**
-     * TODO JavaDoc
+     * {@link Queue} that stores actions that need to be executed by the {@link tech.underoaks.coldcase.game.GameController}
      */
     private final Queue<Interaction> pendingActions;
 
     /**
-     * TODO JavaDoc
+     * {@link Queue} that stores remote actions that need to be executed by the {@link tech.underoaks.coldcase.game.GameController}
      */
     private final Queue<Interaction> pendingRemoteActions;
 
@@ -43,11 +43,21 @@ public class InteractionChain {
     }
 
     /**
-     * TODO JavaDoc
+     * Adds an interaction to be executed by the {@link tech.underoaks.coldcase.game.GameController}
      * @param interaction The interaction to add.
      */
     public void addAction(Interaction interaction) {
         pendingActions.add(interaction);
+    }
+
+
+    /**
+     * Adds a remote interaction to be executed by the {@link tech.underoaks.coldcase.game.GameController}
+     * remotely
+     * @param interaction The interaction to add.
+     */
+    public void addRemoteAction(Interaction interaction) {
+        pendingRemoteActions.add(interaction);
     }
 
     /**
