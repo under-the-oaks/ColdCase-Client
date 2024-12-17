@@ -62,7 +62,7 @@ public class MapGeneratorTest {
     @Test
     public void testSerializeContentToMap_null() {
         try(MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)) {
-            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean(), new TextureFactory())).thenReturn(null);
+            textureControllerMockedStatic.when(() -> TextureController.create(true, new TextureFactory())).thenReturn(null);
             assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
         }
     }
