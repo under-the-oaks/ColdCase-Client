@@ -25,7 +25,7 @@ public class MovableBlock extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         // No Glove in Inventory
-        if(interaction.getUuid().equals(GameController.getInstance().uuid))
+        if(interaction.getUuid().equals(GameController.getInstance().uuid.toString()))
         {
             if(PlayerController.getInstance().getInventory() == null || PlayerController.getInstance().getInventory().getClass() != GloveItem.class){
                 System.out.println( "Insufficient inventory - Glove needed" );

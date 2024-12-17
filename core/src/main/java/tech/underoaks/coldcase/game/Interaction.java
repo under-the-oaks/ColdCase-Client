@@ -28,7 +28,7 @@ public class Interaction {
     /**
      * UUID of the executing GameController
      */
-    private UUID uuid;
+    private String uuid;
 
     /**
      * Default constructor. For serialization purposes.
@@ -41,7 +41,7 @@ public class Interaction {
         this.actionDirection = actionDirection;
         this.caller = caller.getName();
         this.parameters = parameters;
-        this.uuid = GameController.getInstance().uuid;
+        this.uuid = GameController.getInstance().uuid.toString();
     }
 
     public Vector2 getTargetPos() {
@@ -76,7 +76,7 @@ public class Interaction {
         this.parameters = parameters;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 }
