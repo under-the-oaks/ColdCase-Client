@@ -3,6 +3,7 @@ package tech.underoaks.coldcase.state.tileContent;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
@@ -10,11 +11,10 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
 
 public class TranscendentTestBlock extends TileContent{
-    private static final Texture texture = new Texture("./sprites/block_transcendent.png");
 
     public TranscendentTestBlock() {
 
-        super(texture, false, false);
+        super(TextureController.getInstance().getTranscendentTestBlockTexture(), false, false);
         this.visibilityState = VisibilityStates.TRANSCENDENT;
     }
 
