@@ -10,6 +10,8 @@ import tech.underoaks.coldcase.state.updates.MoveUpdate;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
+import java.util.Objects;
+
 public class MovableBlock extends TileContent {
 
     private static Texture texture = new Texture("./sprites/block_detective_4.png");
@@ -22,37 +24,34 @@ public class MovableBlock extends TileContent {
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
         // No Glove in Inventory
-
-        if(PlayerController.getInstance().getInventory() == null || PlayerController.getInstance().getInventory().getClass() != GloveItem.class){
-            System.out.println( "Insufficient inventory - Glove needed" );
-            return false;
+        if(Objects.equals(interaction.getCaller(), Player.class.getName()))
+        {
+            if(PlayerController.getInstance().getInventory() == null || PlayerController.getInstance().getInventory().getClass() != GloveItem.class){
+                System.out.println( "Insufficient inventory - Glove needed" );
+                return false;
+            }
         }
 
         // Glove in Inventory
+        int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
 
-        else {
+        Vector2 targetPosition = interaction.getTargetPos().cpy().add(interaction.getActionDirection().getVector());
 
-            int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
-
-            Vector2 targetPosition = interaction.getTargetPos().cpy().add(interaction.getActionDirection().getVector());
-
-            //validation checks: if the target tile is out of bounds
-            Map snapshotMap = chain.getSnapshot().getSnapshotMap();
-            if (snapshotMap.isOutOfBounds(targetPosition)) {
-                return false;
-            }
-
-            //validation checks: if the target tile is not passable
-            Tile targetTile = snapshotMap.getTile(targetPosition);
-            TileContent topTargetContent = targetTile.topTileContent();
-            if (topTargetContent != null && !topTargetContent.isObjectPassable()) {
-                return false;
-            }
-
-            chain.addGameStateUpdate(new MoveUpdate(interaction.getTargetPos(), childIndex, targetPosition));
-            return true;
-
+        //validation checks: if the target tile is out of bounds
+        Map snapshotMap = chain.getSnapshot().getSnapshotMap();
+        if (snapshotMap.isOutOfBounds(targetPosition)) {
+            return false;
         }
+
+        //validation checks: if the target tile is not passable
+        Tile targetTile = snapshotMap.getTile(targetPosition);
+        TileContent topTargetContent = targetTile.topTileContent();
+        if (topTargetContent != null && !topTargetContent.isObjectPassable()) {
+            return false;
+        }
+
+        chain.addGameStateUpdate(new MoveUpdate(interaction.getTargetPos(), childIndex, targetPosition));
+        return true;
     }
 
     @Override
