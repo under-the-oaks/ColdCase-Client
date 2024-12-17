@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
@@ -21,7 +22,7 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
  */
 public class PortalObject extends TileContent{
 
-    static final Texture texture = new Texture("./sprites/block_ghost.png");
+    static final Texture texture = TextureController.getInstance().getPortalObjectTexture();
 
     static final Sprite sprite = new Sprite(texture);
 

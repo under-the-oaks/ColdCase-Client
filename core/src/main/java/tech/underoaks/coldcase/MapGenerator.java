@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import tech.underoaks.coldcase.game.TextureController;
+import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.InvisibleWall;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -39,8 +40,9 @@ public final class MapGenerator {
      * @return A {@link Map} Object.
      */
     public static Map serializeContentToMap(Path path, boolean isDetective) {
-
-        TextureController.create(isDetective);
+        if(!TextureController.exists()) {
+            TextureController.create(isDetective, new TextureFactory());
+        }
 
         Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
         List<String> lines = null;

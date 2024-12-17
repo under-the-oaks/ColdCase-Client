@@ -1,12 +1,9 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
+import tech.underoaks.coldcase.game.TextureController;
 
 public class TestItem02 extends ItemObject {
-    private static final Texture texture = new Texture("./isometric tileset/separated images/TEST_ITEM02.png");
-
     public TestItem02() {
-        super(texture);
+        super(TextureController.getInstance().getTestItem02Texture());
     }
-
 }
