@@ -40,8 +40,9 @@ public final class MapGenerator {
      * @return A {@link Map} Object.
      */
     public static Map serializeContentToMap(Path path, boolean isDetective) {
-
-        TextureController.create(isDetective, new TextureFactory());
+        if(!TextureController.exists()) {
+            TextureController.create(isDetective, new TextureFactory());
+        }
 
         Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
         List<String> lines = null;

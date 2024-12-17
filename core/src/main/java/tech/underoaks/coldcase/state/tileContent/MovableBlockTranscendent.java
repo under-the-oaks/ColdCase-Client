@@ -1,6 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
+import tech.underoaks.coldcase.game.TextureController;
 
 /**
  * Transcendent Version of {@link MovableBlock} that gets synced between both clients
@@ -10,6 +10,6 @@ public class MovableBlockTranscendent extends MovableBlock {
         super();
 
         this.visibilityState = VisibilityStates.TRANSCENDENT;
-        setTexture(new Texture("sprites/block_transcendent_2.png"));
+        setTexture(TextureController.getInstance().getMovableBlockTranscendantTexture());
     }
 }

@@ -1,24 +1,20 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
-import java.util.Objects;
-
 public class MovableBlock extends TileContent {
 
-    private static final Texture texture = new Texture("./sprites/block_detective_4.png");
-
     public MovableBlock() {
-        super(texture, false, false);
+        super(TextureController.getInstance().getMovableBlockTexture(), false, false);
     }
 
     @Override
