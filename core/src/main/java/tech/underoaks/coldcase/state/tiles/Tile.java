@@ -1,8 +1,8 @@
 package tech.underoaks.coldcase.state.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
 /**
@@ -45,7 +45,7 @@ public abstract class Tile implements Cloneable {
      * @param x     the x-coordinate for rendering the tile
      * @param y     the y-coordinate for rendering the tile
      */
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (texture != null) {
             batch.draw(sprite, x, y);

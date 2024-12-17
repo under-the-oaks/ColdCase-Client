@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,7 +10,6 @@ import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public abstract class TileContent implements Cloneable {
      * @param x     the x-coordinate for rendering the tile
      * @param y     the y-coordinate for rendering the tile
      */
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
         if (sprite != null) {
             batch.draw(sprite, x, y + 410);
         }

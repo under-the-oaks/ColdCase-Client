@@ -1,6 +1,6 @@
 package tech.underoaks.coldcase.state;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.game.Interaction;
@@ -215,7 +215,7 @@ public class Map {
      *
      * @param batch SpriteBatch to render the map
      */
-    public void render(SpriteBatch batch) {
+    public void render(Batch batch) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
 
@@ -260,13 +260,10 @@ public class Map {
 
     public Vector2 twoDToIso45(int ex, int why) {
 
-        float x = ex;
-        float y = why;
-
         Vector2 rotatedPt = new Vector2(0, 0);
 
-        rotatedPt.y = ( ((x - y) * 320 ) + (y * 320 * 2) ) * -1;
-        rotatedPt.x = ( ((y - x) * 450) ) * -1;
+        rotatedPt.y = ( (((float) ex - (float) why) * 320 ) + ((float) why * 320 * 2) ) * -1;
+        rotatedPt.x = ( (((float) why - (float) ex) * 450) ) * -1;
 
         return rotatedPt;
     }
@@ -302,7 +299,7 @@ public class Map {
      * is invoked with the given {@code InteractionChain}.
      *
      * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
-     * @return true if at least one {@code TileContent} performs an update; false otherwise
+     * @return List of {@code TileContents} that handled the update
      * @see TileContent#handleUpdate(InteractionChain, Vector2, Interaction, TileContent)
      */
     public List<TileContent> updateMap(InteractionChain chain, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {

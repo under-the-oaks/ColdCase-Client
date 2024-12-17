@@ -1,8 +1,8 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
@@ -23,12 +23,8 @@ public class GoalObject extends TileContent {
         super(texture, isPlayerPassable, isObjectPassable);
     }
 
-    public GoalObject() {
-        super(texture, true, true); // Beispielwerte
-    }
-
     @Override
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (sprite != null) {
             sprite.setPosition(x, y);

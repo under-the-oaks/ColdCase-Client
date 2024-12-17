@@ -1,6 +1,9 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class TextureController {
     private static TextureController instance;
@@ -29,6 +32,8 @@ public class TextureController {
     private Texture detectiveTextureEast;
     private Texture detectiveTextureWest;
     private Texture ghostTexture;
+    private Texture buttonUp;
+    private Texture buttonDown;
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
@@ -56,6 +61,9 @@ public class TextureController {
         this.detectiveTextureWest = factory.create("./sprites/player_detective_left.png");
 
         this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Placeholder.png");
+
+        this.buttonUp = new Texture("./sprites/ui/button_up.png");
+        this.buttonDown = new Texture("./sprites/ui/button_down.png");
     }
 
     public static TextureController create(boolean isDetective, TextureFactory factory) {
@@ -76,6 +84,10 @@ public class TextureController {
 
     public static boolean exists() {
         return instance != null;
+    }
+
+    public static void setIsDetective(boolean isDetective) {
+        TextureController.isDetective = isDetective;
     }
 
     public Texture getEmptyTileTexture() {
@@ -158,4 +170,11 @@ public class TextureController {
         return isDetective ? detectiveTextureWest : ghostTexture;
     }
 
+    public Drawable getButtonUp() {
+        return new TextureRegionDrawable(new TextureRegion(buttonUp));
+    }
+
+    public Drawable getButtonDown() {
+        return new TextureRegionDrawable(new TextureRegion(buttonDown));
+    }
 }

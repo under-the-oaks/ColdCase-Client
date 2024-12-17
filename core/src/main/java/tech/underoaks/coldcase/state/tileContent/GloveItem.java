@@ -1,7 +1,7 @@
 package tech.underoaks.coldcase.state.tileContent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
@@ -12,7 +12,7 @@ import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
 public class GloveItem extends ItemObject {
 
-    private Sprite sprite;
+    private final Sprite sprite;
 
     public GloveItem() {
         super(TextureController.getInstance().getGloveTexture());
@@ -20,7 +20,7 @@ public class GloveItem extends ItemObject {
     }
 
     @Override
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (sprite != null) {
             sprite.setPosition(x, y);
