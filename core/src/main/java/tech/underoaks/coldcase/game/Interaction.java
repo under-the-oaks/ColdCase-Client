@@ -2,6 +2,8 @@ package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.UUID;
+
 /**
  * Represents an interaction between two objects in the game world.
  */
@@ -24,6 +26,11 @@ public class Interaction {
     private int[] parameters;
 
     /**
+     * UUID of the executing GameController
+     */
+    private UUID uuid;
+
+    /**
      * Default constructor. For serialization purposes.
      */
     public Interaction() {
@@ -34,6 +41,7 @@ public class Interaction {
         this.actionDirection = actionDirection;
         this.caller = caller.getName();
         this.parameters = parameters;
+        this.uuid = GameController.getInstance().uuid;
     }
 
     public Vector2 getTargetPos() {
@@ -66,5 +74,9 @@ public class Interaction {
 
     public void setParameters(int[] parameters) {
         this.parameters = parameters;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }
