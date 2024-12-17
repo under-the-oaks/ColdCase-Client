@@ -1,15 +1,10 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 
-import tech.underoaks.coldcase.game.Interaction;
-import tech.underoaks.coldcase.state.InteractionChain;
-import tech.underoaks.coldcase.state.Map;
-import tech.underoaks.coldcase.state.tiles.Tile;
-import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
-import tech.underoaks.coldcase.state.updates.MoveUpdate;
-
+/**
+ * Transcendent Version of {@link MovableBlock} that gets synced between both clients
+ */
 public class MovableBlockTranscendent extends MovableBlock {
     public MovableBlockTranscendent() {
         super();
