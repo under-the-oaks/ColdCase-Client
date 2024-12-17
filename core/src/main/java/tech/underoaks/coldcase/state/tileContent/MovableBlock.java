@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class MovableBlock extends TileContent {
 
-    private static Texture texture = new Texture("./sprites/block_detective_4.png");
+    private static final Texture texture = new Texture("./sprites/block_detective_4.png");
 
     public MovableBlock() {
         super(texture, false, false);
