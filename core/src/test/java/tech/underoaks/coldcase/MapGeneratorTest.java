@@ -43,7 +43,7 @@ public class MapGeneratorTest {
              MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)
              ) {
 
-            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean(), new TextureFactory())).thenReturn(null);
+            textureControllerMockedStatic.when(() -> TextureController.create(true, new TextureFactory())).thenReturn(null);
             mockedFiles.when(() -> java.nio.file.Files.readAllLines(any())).thenReturn(mockLines);
 
             tilesMockedStatic.when(() -> Tiles.getNewTileClassByIndex(anyInt())).thenReturn(mockedTile);
@@ -62,7 +62,7 @@ public class MapGeneratorTest {
     @Test
     public void testSerializeContentToMap_null() {
         try(MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)) {
-            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean(), new TextureFactory())).thenReturn(null);
+            textureControllerMockedStatic.when(() -> TextureController.create(true, new TextureFactory())).thenReturn(null);
             assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
         }
     }
