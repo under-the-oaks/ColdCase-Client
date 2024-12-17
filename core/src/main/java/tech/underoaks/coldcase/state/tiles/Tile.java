@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.state.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
@@ -26,8 +27,12 @@ public abstract class Tile implements Cloneable {
 
     private Texture texture;
 
+    private Sprite sprite;
+
     public Tile(Texture texture) {
         this.texture = texture;
+        this.sprite = new Sprite(texture);
+        this.sprite.setOriginCenter();
     }
 
     /**
@@ -41,11 +46,12 @@ public abstract class Tile implements Cloneable {
      * @param y     the y-coordinate for rendering the tile
      */
     public void render(SpriteBatch batch, float x, float y) {
+
         if (texture != null) {
-            batch.draw(texture, x, y);
+            batch.draw(sprite, x, y);
         }
 
-        batch.draw(texture, x, y);
+        batch.draw(sprite, x, y);
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }

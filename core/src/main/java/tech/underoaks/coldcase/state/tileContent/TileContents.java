@@ -10,9 +10,18 @@ public enum TileContents {
     WALL(1, Wall.class),
     TEST(2, TestContent.class),
     PLAYER(3, Player.class),
-    MOVABLE_BLOCK(4, movableBlock.class),
-    TEST_ITEM(5,TestItem.class),
-    TEST_ITEM02(6, TestItem02.class);
+    MOVABLE_BLOCK(4, MovableBlock.class),
+    TEST_ITEM(5, TestItem.class),
+    TEST_ITEM02(6, TestItem02.class),
+    INVISIBLE_WALL(7, InvisibleWall.class),
+    GLOVE_ITEM(8, GloveItem.class),
+    GOAL_OBJECT(9,GoalObject.class),
+    MOVABLE_BLOCK_TRANSCENDENT(10, MovableBlockTranscendent.class),
+    TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
+    DOOR(12, Door.class),
+    DOOR_TRIGGER(13, Door_Trigger.class),
+    HOLE(14,Hole.class),
+    PORTAL(15,PortalObject.class);
 
     private final int index;
     private final Class<? extends TileContent> tileClass;
@@ -24,6 +33,17 @@ public enum TileContents {
 
     public int getIndex() {
         return index;
+    }
+
+    public static int getIndexByClass(Class<? extends TileContent> tileClass) {
+        for (TileContents contents : TileContents.values()) {
+
+            if (contents.tileClass.equals(tileClass)) {
+                return contents.getIndex();
+            }
+
+        }
+        return -1;
     }
 
     /**
@@ -48,6 +68,10 @@ public enum TileContents {
      * @throws IllegalArgumentException If no TileContent corresponds to the given index.
      */
     public static TileContent getNewTileClassByIndex(int index) {
+        if (index == 0) {
+            return null;
+        }
+
         for (TileContents tileContent : TileContents.values()) {
             if (tileContent.getIndex() == index) {
                 return tileContent.getNewTileContent();
