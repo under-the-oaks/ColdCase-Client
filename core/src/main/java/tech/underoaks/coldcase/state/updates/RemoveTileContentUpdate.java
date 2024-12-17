@@ -30,11 +30,13 @@ public class RemoveTileContentUpdate extends GameStateUpdate {
         Stack<TileContent> tileContents = new Stack<>();
 
         Tile sourceTile = map.getTile(sourcePosition);
-
         TileContent poppedContent = sourceTile.popTileContent();
 
-        while (poppedContent != null && poppedContent != sourceContent) {
-            tileContents.push(poppedContent);
+
+        while (poppedContent != null ) {
+            if(poppedContent != sourceContent){
+                tileContents.push(poppedContent);
+            }
             poppedContent = sourceTile.popTileContent();
         }
 
