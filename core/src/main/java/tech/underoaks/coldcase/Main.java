@@ -1,9 +1,9 @@
 package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
-import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
+import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 public class Main extends Game {
     private static final String propertiesPath = ".properties";
-    private final Properties properties = new Properties();
+    public static final Properties properties = new Properties();
 
     @Override
     public void create() {
@@ -32,20 +32,17 @@ public class Main extends Game {
         if(!TextureController.exists()) {
             TextureController.create(true, new TextureFactory());
         }
+        if(!UITextureController.exists()) {
+            UITextureController.create(new TextureFactory());
+        }
 
         // Stage Management
         StageManager.create(this);
-        StageManager.getInstance().showScreen(Stages.GAME);
+        StageManager.getInstance().showScreen(Stages.MAIN_MENU);
 
 
         // Multiplayer setup
         setupWebSocketConnection();
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        GameController.getInstance().getCurrentMap().dispose();
     }
 
     void setupWebSocketConnection() {

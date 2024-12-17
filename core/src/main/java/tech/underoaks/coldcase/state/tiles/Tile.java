@@ -51,7 +51,6 @@ public abstract class Tile implements Cloneable {
             batch.draw(sprite, x, y);
         }
 
-        batch.draw(sprite, x, y);
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }

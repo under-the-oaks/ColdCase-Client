@@ -27,11 +27,6 @@ public class Map {
     public Tile[][] tileArray;
 
     /**
-     * The size of each tile in pixels
-     */
-    static float tileSize = 1080;
-
-    /**
      * Default constructor for Map needed for deserialization in {@link MapGenerator}
      */
     public Map() {
@@ -70,79 +65,12 @@ public class Map {
         tileArray[y][x] = tile;
     }
 
-    public int getWidth() {
+    public int getTileArrayWidth() {
         return tileArray[0].length;
     }
 
-    public int getHeight() {
+    public int getTileArrayHeight() {
         return tileArray.length;
-    }
-
-    /**
-     * Generates a new map from a template file
-     * Each template files should be a text file with the following format:
-     * Each line represents a row of the map
-     * Each number represents a tile or tile content
-     * The numbers should be separated by a space
-     * The numbers should be the index of the tile/tileContent in the Tiles/TileContents enum
-     *
-     * @param path Path to the template folder
-     *             The folder should contain two files:
-     *             map.tiles: The file containing the tile layout
-     *             map.content: The file containing the tile content layout
-     *             The files should be in the format described above
-     * @return New Map
-     */
-    public static Map getMap(Path path) {
-        List<List<Tile>> tiles = new ArrayList<>();
-        Path tilePath = Path.of(path + "/map.tiles");
-        Path contentPath = Path.of(path + "/map.content");
-        try {
-            List<List<Integer>> rawTiles = readMapFile(tilePath);
-
-            for (int i = 0; i < rawTiles.size(); i++) {
-                tiles.add(new ArrayList<>());
-                for (int j = 0; j < rawTiles.get(i).size(); j++) {
-                    tiles.get(i).add(Tiles.getNewTileClassByIndex(rawTiles.get(i).get(j)));
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-        try {
-            List<List<Integer>> rawTiles = readMapFile(contentPath);
-
-            for (int i = 0; i < rawTiles.size(); i++) {
-                for (int j = 0; j < rawTiles.get(i).size(); j++) {
-                    int temp = rawTiles.get(i).get(j);
-                    if (temp != 0) {
-                        tiles.get(i).get(j).setTileContent(TileContents.getNewTileClassByIndex(rawTiles.get(i).get(j)));
-                    }
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-
-        // Convert 2D-List to 2D-Array
-        Tile[][] tileArray = new Tile[tiles.size()][getMatrixWidth(tiles)];
-        for (int i = 0; i < tileArray.length; i++) {
-            for (int j = 0; j < tileArray[i].length; j++) {
-                Tile tile;
-                try {
-                    tile = tiles.get(i).get(j);
-                } catch (IndexOutOfBoundsException e) {
-                    // If the template is not uniform,
-                    // the remaining tiles will be filled up using EmptyTile
-                    tile = new EmptyTile();
-                }
-                tileArray[i][j] = tile;
-            }
-        }
-
-        return new Map(tileArray);
     }
 
     /**
@@ -205,7 +133,7 @@ public class Map {
     }
 
     public boolean isOutOfBounds(Vector2 position) {
-        return position.x < 0 || position.y < 0 || position.x >= getWidth() || position.y >= getHeight();
+        return position.x < 0 || position.y < 0 || position.x >= getTileArrayWidth() || position.y >= getTileArrayHeight();
     }
 
     /**
@@ -215,17 +143,17 @@ public class Map {
      *
      * @param batch SpriteBatch to render the map
      */
-    public void render(Batch batch) {
+    public void render(Batch batch, float originX, float originY) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
 
-                Vector2 position = twoDToIso45( x, y);
+                Vector2 position = twoDToIso45(x, y);
 
                 //Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
 
                 //Vector2 tempPt = twoDToIso( new Vector2(tempX, tempY), 45f );
 
-                tileArray[y][x].render( batch, position.x, position.y );
+                tileArray[y][x].render( batch,originX + position.x, originY + position.y);
             }
         }
     }
