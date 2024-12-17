@@ -63,6 +63,13 @@ public class GameController {
     }
 
     /**
+     * Removes the currently running instance
+     */
+    public static void destroy() {
+        instance = null;
+    }
+
+    /**
      * Triggers an action at the specified position in the given direction.
      *
      * @param interaction The interaction to trigger.
