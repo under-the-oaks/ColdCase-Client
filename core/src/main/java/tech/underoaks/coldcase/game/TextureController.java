@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import tech.underoaks.coldcase.state.tileContent.Door;
 
 public class TextureController {
     private static TextureController instance;
@@ -15,6 +16,8 @@ public class TextureController {
     private Texture detectiveTextureEast;
     private Texture detectiveTextureWest;
     private Texture ghostTexture;
+    private Texture doorOpenTexture;
+    private Texture doorClosedTexture;
 
     private TextureController(TextureFactory factory) {
         this.gloveTexture = factory.create("./sprites/item_glove_detective_6.png");
@@ -26,6 +29,9 @@ public class TextureController {
         this.detectiveTextureWest = factory.create("./sprites/player_detective_left.png");
 
         this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Placeholder.png");
+
+        this.doorOpenTexture = factory.create("./sprites/object_spike_retracted_detective_1.png");
+        this.doorClosedTexture = factory.create("./sprites/object_spike_detective_2.png");
     }
 
     public static TextureController create(boolean isDetective, TextureFactory factory) {
@@ -66,6 +72,14 @@ public class TextureController {
 
     public Texture getPlayerTextureWest() {
         return isDetective ? detectiveTextureWest : ghostTexture;
+    }
+
+    public  Texture getDoorClosedTexture(){
+        return doorOpenTexture;
+    }
+
+    public  Texture getDoorOpenTexture(){
+        return doorClosedTexture;
     }
 
 }
