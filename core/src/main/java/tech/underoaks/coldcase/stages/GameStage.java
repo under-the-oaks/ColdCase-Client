@@ -2,14 +2,12 @@ package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.stages.actors.InventoryActor;
 import tech.underoaks.coldcase.stages.actors.MapActor;
-import tech.underoaks.coldcase.state.tileContent.ItemObject;
 
 public class GameStage extends AbstractStage {
     private float timeSinceLastGSUCheck = 0f;
@@ -25,6 +23,11 @@ public class GameStage extends AbstractStage {
         mapActor.setOrigin(getWidth()/2, getHeight()/2);
         addActor(mapActor);
 
+        InventoryActor inventoryActor = new InventoryActor();
+        inventoryActor.setPosition(100, 100);
+        inventoryActor.setSize(2000, 2000);
+        addActor(inventoryActor);
+
         inputMultiplexer.addProcessor(PlayerController.getInstance());
     }
 
@@ -36,7 +39,6 @@ public class GameStage extends AbstractStage {
 
         getBatch().begin();
         renderFPS(getBatch());
-        renderInventory(1000, new Vector2(0,0) );
         getBatch().end();
 
     }
@@ -63,24 +65,6 @@ public class GameStage extends AbstractStage {
     public void dispose() {
         super.dispose();
         GameController.getInstance().getCurrentMap().dispose();
-    }
-
-    void renderInventory( float inventoryDimension, Vector2 inventoryOffset ) {
-
-        getBatch().draw( new Texture("./isometric tileset/separated images/TEST_INVENTORY.png") , -5000 + inventoryOffset.x + (inventoryDimension / 2), -5000 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
-
-        if ( PlayerController.getInstance().getInventory() != null ) {
-
-            ItemObject item = (ItemObject) PlayerController.getInstance().getInventory();
-
-            Texture uiTexture = item.getInventoryTexture();
-
-            if ( uiTexture != null ) {
-
-                getBatch().draw( uiTexture , -5000 + inventoryOffset.x + (inventoryDimension / 2), -5000 + inventoryOffset.y + (inventoryDimension / 2), inventoryDimension, inventoryDimension);
-
-            }
-        }
     }
 
 }
