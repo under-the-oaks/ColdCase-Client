@@ -9,8 +9,11 @@ import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.stages.actors.InventoryActor;
 import tech.underoaks.coldcase.stages.actors.MapActor;
 
+/**
+ * GameStage class -> initializes alle game relevant actors and handles fixed updates
+ */
 public class GameStage extends AbstractStage {
-    private float timeSinceLastGSUCheck = 0f;
+    private float fixedUpdateClock = 0f;
 
     GameStage() {
         super();
@@ -20,7 +23,7 @@ public class GameStage extends AbstractStage {
     public void buildStage(InputMultiplexer inputMultiplexer) {
         Gdx.input.setInputProcessor(PlayerController.getInstance());
         MapActor mapActor = new MapActor();
-        mapActor.setOrigin(getWidth()/2, getHeight()/2);
+        mapActor.setOrigin(getWidth() / 2, getHeight() / 2);
         addActor(mapActor);
 
         InventoryActor inventoryActor = new InventoryActor();
@@ -32,7 +35,7 @@ public class GameStage extends AbstractStage {
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         super.render(delta);
 
         fixedUpdate(delta);
@@ -45,20 +48,29 @@ public class GameStage extends AbstractStage {
 
     /**
      * Fixed update method to trigger Methods every 0.1 seconds
+     *
      * @param delta time since last frame
      */
     private void fixedUpdate(float delta) {
-        timeSinceLastGSUCheck += delta;
-        if (timeSinceLastGSUCheck >= 0.1f) {
+        fixedUpdateClock += delta;
+        if (fixedUpdateClock >= 0.1f) {
+            fixedUpdateClock = 0f;
+
+            // all fixed update methods below
             GameController.getInstance().applyNextPendingGSU();
-            timeSinceLastGSUCheck = 0f;
         }
     }
 
+    /**
+     * Renders the current FPS in the top left corner
+     *
+     * @param batch the batch to render the FPS
+     */
     private void renderFPS(Batch batch) {
         BitmapFont font = new BitmapFont();
+        font.getData().setScale(20);
         int fps = Gdx.graphics.getFramesPerSecond();
-        font.draw(batch, "FPS: " + fps, 10, getHeight()-10);
+        font.draw(batch, "FPS: " + fps, 100, getHeight() - 100);
     }
 
     @Override
