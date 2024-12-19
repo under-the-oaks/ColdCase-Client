@@ -1,6 +1,8 @@
 package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 
 public class StageManager {
@@ -30,10 +32,15 @@ public class StageManager {
         // Get current screen to dispose it
         Screen currentStage = game.getScreen();
 
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
         // Show new screen
         AbstractStage newStage = stage.getScreen(params);
-        newStage.buildStage();
+        newStage.buildStage(inputMultiplexer);
         game.setScreen(newStage);
+
+        inputMultiplexer.addProcessor(newStage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         // Dispose previous stage
         if (currentStage != null) {

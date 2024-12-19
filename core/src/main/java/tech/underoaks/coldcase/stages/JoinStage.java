@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.stages;
 
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +24,7 @@ public class JoinStage extends AbstractStage {
     private TextButton backButton;
 
     @Override
-    public void buildStage() {
+    public void buildStage(InputMultiplexer inputMultiplexer) {
 
         Table table = new Table();
         table.setFillParent(true); // Fill the entire stage

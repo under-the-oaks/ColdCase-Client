@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,11 +19,13 @@ public class GameStage extends AbstractStage {
     }
 
     @Override
-    public void buildStage() {
+    public void buildStage(InputMultiplexer inputMultiplexer) {
         Gdx.input.setInputProcessor(PlayerController.getInstance());
         MapActor mapActor = new MapActor();
         mapActor.setOrigin(getWidth()/2, getHeight()/2);
         addActor(mapActor);
+
+        inputMultiplexer.addProcessor(PlayerController.getInstance());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -15,7 +16,7 @@ public abstract class AbstractStage extends Stage implements Screen {
     }
 
     // Subclasses must load actors in this method
-    public abstract void buildStage();
+    public abstract void buildStage(InputMultiplexer inputMultiplexer);
 
     @Override
     public void render(float delta) {

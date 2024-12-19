@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.stages;
 
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,7 +17,7 @@ import tech.underoaks.coldcase.game.UITextureController;
 public class MainMenuStage extends AbstractStage {
 
     @Override
-    public void buildStage() {
+    public void buildStage(InputMultiplexer inputMultiplexer) {
 
         Skin skin = UITextureController.getInstance().getSkin();
 
