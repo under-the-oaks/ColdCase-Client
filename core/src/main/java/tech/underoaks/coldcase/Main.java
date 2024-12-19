@@ -69,7 +69,11 @@ public class Main extends ApplicationAdapter {
             throw new RuntimeException("Missing websocket url or map_override property");
         }
         //WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
-        WebSocketClient.create(properties.getProperty("websocket_url"));
+        if(detective){
+            WebSocketClient.create(properties.getProperty("websocket_url"));
+        }else{
+            WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
+        }
     }
 
     @Override

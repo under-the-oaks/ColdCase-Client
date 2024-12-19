@@ -105,7 +105,7 @@ public class WebSocketClient {
         Object deserializedObject = json.fromJson(Object.class, message);
         if (deserializedObject instanceof Messages.lobbyIdMessage) {
             lobbyID = ((Messages.lobbyIdMessage) deserializedObject).getLobbyId();
-            //System.out.println("Received Lobby ID: " + lobbyID);
+            System.out.println("Received Lobby ID: " + lobbyID);
         } else {
             WebSocketMessagesManager.handleIncomingMessages(deserializedObject);
         }
