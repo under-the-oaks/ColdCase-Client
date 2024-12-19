@@ -103,13 +103,13 @@ public class WebSocketMessagesManager {
      * This method runs asynchronously and dispatches messages based on their type.
      * </p>
      *
-     * @param message the raw message received as a {@link String}.
+     * @param deserializedObject the deserialized message.
      */
-    public static void handleIncomingMessages(String message) {
+    public static void handleIncomingMessages(Object deserializedObject) {
         // Run asynchronously with CompletableFuture
         CompletableFuture.runAsync(() -> {
             try {
-                Object deserializedObject = json.fromJson(Object.class, message);
+                //Object deserializedObject = json.fromJson(Object.class, message);
 
                 switch (deserializedObject) {
                     case Messages.CreateRemoteInteractionChainMessage messageObj -> {
@@ -124,11 +124,11 @@ public class WebSocketMessagesManager {
                     }
                     case Messages.ApplyRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleApplyRemoteGSUsMessage();
-                        System.out.println("ApplyRemoteGSUs called but function is missing for now");
+                        //System.out.println("ApplyRemoteGSUs called but function is missing for now");
                     }
                     case Messages.AbortRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleAbortRemoteGSUsMessage();
-                        System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
+                        //System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
                     }
                     case Messages.AppendRemoteInteractionResponseMessage messageObj -> {
                         WebSocketMessagesManager.getInstance().callback(messageObj);
