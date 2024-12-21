@@ -49,6 +49,11 @@ public class Main extends Game {
         if (!properties.containsKey("websocket_url") || !properties.containsKey("session_id")) {
             throw new RuntimeException("Missing websocket url or map_override property");
         }
-        WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
+        //WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
+        if(detective){
+            WebSocketClient.create(properties.getProperty("websocket_url"));
+        }else{
+            WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
+        }
     }
 }
