@@ -166,7 +166,7 @@ public class TextureController {
         return isDetective ? detectiveTextureWest : ghostTexture;
     }
 
-    public Texture getGhostTexture() {
-        return ghostTexture;
-    }
+    public Texture getGhostTexture() { return ghostTexture; }
+
+    public Texture getDetectiveTexture() { return detectiveTexture; }
 }

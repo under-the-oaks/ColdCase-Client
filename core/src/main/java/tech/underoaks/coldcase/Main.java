@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.game.UITextureController;
@@ -17,7 +18,8 @@ import java.util.Properties;
  */
 public class Main extends Game {
     private static final String propertiesPath = ".properties";
-    public static final Properties properties = new Properties();
+    private static final Properties properties = new Properties();
+    private float fixedUpdateClock = 0f;
 
     @Override
     public void create() {
@@ -39,21 +41,33 @@ public class Main extends Game {
         // Stage Management
         StageManager.create(this);
         StageManager.getInstance().showScreen(Stages.MAIN_MENU);
-
-
-        // Multiplayer setup
-        setupWebSocketConnection();
     }
 
-    void setupWebSocketConnection() {
-        if (!properties.containsKey("websocket_url") || !properties.containsKey("session_id")) {
-            throw new RuntimeException("Missing websocket url or map_override property");
+    public void render() {
+        super.render();
+        float delta = Gdx.graphics.getDeltaTime();
+        fixedUpdate(delta);
+
+    }
+
+    /**
+     * Fixed update method to trigger Methods every 0.1 seconds
+     * This is supposed to be used for Loading and Menu Logic.
+     * The Game Stage has its own fixed update method.
+     *
+     * @param delta time since last frame
+     */
+    private void fixedUpdate(float delta) {
+        fixedUpdateClock += delta;
+        if (fixedUpdateClock >= 0.1f) {
+            fixedUpdateClock = 0f;
+
+            // all fixed update methods below
+            StageManager.getInstance().update();
         }
-        //WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
-        if(detective){
-            WebSocketClient.create(properties.getProperty("websocket_url"));
-        }else{
-            WebSocketClient.create(properties.getProperty("websocket_url"), properties.getProperty("session_id"));
-        }
+    }
+
+    public static Properties getProperties() {
+        return properties;
     }
 }

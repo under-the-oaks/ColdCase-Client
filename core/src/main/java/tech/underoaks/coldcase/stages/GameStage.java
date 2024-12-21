@@ -14,6 +14,7 @@ import tech.underoaks.coldcase.stages.actors.MapActor;
  */
 public class GameStage extends AbstractStage {
     private float fixedUpdateClock = 0f;
+    MapActor mapActor;
 
     GameStage() {
         super();
@@ -22,7 +23,7 @@ public class GameStage extends AbstractStage {
     @Override
     public void buildStage(InputMultiplexer inputMultiplexer) {
         Gdx.input.setInputProcessor(PlayerController.getInstance());
-        MapActor mapActor = new MapActor();
+        mapActor = new MapActor();
         mapActor.setOrigin(getWidth() / 2, getHeight() / 2);
         addActor(mapActor);
 

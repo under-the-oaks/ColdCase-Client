@@ -15,7 +15,7 @@ import java.util.Properties;
 public class MapActor extends Actor {
 
     private Map map;
-    private final Properties properties = Main.properties;
+    private final Properties properties = Main .getProperties();
 
     public MapActor() {
         map = setupMap();

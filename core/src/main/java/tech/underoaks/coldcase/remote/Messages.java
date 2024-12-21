@@ -130,7 +130,7 @@ public class Messages {
         public lobbyIdMessage(String lobbyId) {
             this.lobbyId = lobbyId;
         }
-        public lobbyIdMessage(){};
+        public lobbyIdMessage(){}
 
         public String getLobbyId() {
             return lobbyId;
@@ -139,5 +139,9 @@ public class Messages {
         public void setLobbyId(String lobbyId) {
             this.lobbyId = lobbyId;
         }
+    }
+
+    public static class startGameMessage{
+        public startGameMessage(){}
     }
 }

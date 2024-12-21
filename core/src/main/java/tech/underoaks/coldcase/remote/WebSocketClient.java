@@ -5,9 +5,6 @@ import jakarta.websocket.*;
 import java.io.IOException;
 import java.net.URI;
 
-import static com.badlogic.gdx.net.HttpRequestBuilder.json;
-
-
 /**
  * A WebSocket client for communicating with the remote game server.
  * <p>
@@ -20,7 +17,7 @@ public class WebSocketClient {
     private static final Json json = new Json();
     private static Session session;
     private static WebSocketClient instance = null;
-    private static String lobbyID;
+    private static String lobbyID = "";
 
     public static WebSocketClient create(String websocket_url, String session_id) {
         if(instance != null) {
@@ -79,6 +76,10 @@ public class WebSocketClient {
             throw new IllegalStateException("WebSocketClient not created");
         }
         return instance;
+    }
+
+    public static boolean exists() {
+        return instance != null;
     }
 
     public static String getLobbyID() {

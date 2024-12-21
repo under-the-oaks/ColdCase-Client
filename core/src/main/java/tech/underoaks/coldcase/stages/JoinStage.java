@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 
 public class JoinStage extends AbstractStage {
     private final Skin skin = UITextureController.getInstance().getSkin();
@@ -46,15 +48,16 @@ public class JoinStage extends AbstractStage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String sessionID = sessionIDField.getText();
+                TextureController.setIsDetective(false);
+                Main.getProperties().setProperty("role", "ghost");
                 System.out.println("Connecting to session: " + sessionID);
-                // TODO: Connect to the server
+                WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
             }
         });
 
-        //TODO: sync character selection
         //Image and Caption
-        hostImage = new Image(TextureController.getInstance().getPlayerTexture());
-        hostLabel = new Label( TextureController.getIsDetective()? "You are the detective" : "You are the ghost", skin);
+        hostImage = new Image(TextureController.getInstance().getDetectiveTexture());
+        hostLabel = new Label("You are the detective", skin);
         hostLabel.setAlignment(1); // Center the text
 
         teammateImage = new Image(TextureController.getInstance().getGhostTexture());
@@ -74,13 +77,13 @@ public class JoinStage extends AbstractStage {
         topRow.add(connectButton).width(buttonWidth/2).height(buttonHeight);
 
         Table playerSelectionTable = new Table();
-        playerSelectionTable.add(hostImage).width(1080*4).height(1080*4);
-        playerSelectionTable.add().width(1080).height(1080);
         playerSelectionTable.add(teammateImage).width(1080*4).height(1080*4);
+        playerSelectionTable.add().width(1080).height(1080);
+        playerSelectionTable.add(hostImage).width(1080*4).height(1080*4);
         playerSelectionTable.row();
-        playerSelectionTable.add(hostLabel);
-        playerSelectionTable.add();
         playerSelectionTable.add(teammateLabel);
+        playerSelectionTable.add();
+        playerSelectionTable.add(hostLabel);
 
         // Arrange components in the table
         table.add(topRow).padBottom(20);

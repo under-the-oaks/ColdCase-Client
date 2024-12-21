@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 
 public class StageManager {
 
+    private Stages nextStage;
     private static StageManager instance;
     public static StageManager getInstance() {
         if (instance == null) {
@@ -48,4 +49,14 @@ public class StageManager {
         }
     }
 
+    public void setNextStage(Stages nextStage) {
+        this.nextStage = nextStage;
+    }
+
+    public void update() {
+        if (nextStage != null) {
+            showScreen(nextStage);
+            nextStage = null;
+        }
+    }
 }

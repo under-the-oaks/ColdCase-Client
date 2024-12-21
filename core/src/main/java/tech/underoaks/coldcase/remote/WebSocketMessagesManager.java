@@ -2,6 +2,8 @@ package tech.underoaks.coldcase.remote;
 
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.stages.StageManager;
+import tech.underoaks.coldcase.stages.Stages;
 
 import java.util.Queue;
 import java.util.UUID;
@@ -83,6 +85,10 @@ public class WebSocketMessagesManager {
         WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
+    public static void startGame() {
+        WebSocketClient.getInstance().send(json.toJson(new Messages.startGameMessage(), Object.class));
+    }
+
     /**
      * Completes the future associated with a given message.
      *
@@ -135,6 +141,9 @@ public class WebSocketMessagesManager {
                     }
                     case Messages.CreateRemoteInteractionChainResponseMessage messageObj -> {   //not needed for now
                         WebSocketMessagesManager.getInstance().callback(messageObj);
+                    }
+                    case Messages.startGameMessage messageObj -> {
+                        StageManager.getInstance().setNextStage(Stages.GAME);
                     }
                     case null, default -> System.out.println("unknown message");
                 }
