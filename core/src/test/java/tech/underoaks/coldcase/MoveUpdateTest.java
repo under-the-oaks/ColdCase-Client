@@ -1,95 +1,146 @@
 package tech.underoaks.coldcase;
 
+
 import static org.mockito.Mockito.*;
 
 
+
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import tech.underoaks.coldcase.state.Map;
-import tech.underoaks.coldcase.state.tileContent.TileContent;
-import tech.underoaks.coldcase.state.tiles.Tile;
-import tech.underoaks.coldcase.state.updates.MoveUpdate;
+import org.junit.jupiter.api.*;
+import tech.underoaks.coldcase.game.*;
 
-import java.util.Stack;
+import tech.underoaks.coldcase.state.Map;
+
+import tech.underoaks.coldcase.state.tileContent.Player;
+import tech.underoaks.coldcase.state.tileContent.TileContent;
+
+
+
+
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.Objects;
+
 
 public class MoveUpdateTest {
 
-    private Map mockMap;
-    private Tile mockSourceTile;
-    private Tile mockTargetTile;
-    private TileContent mockSourceContent;
-    private TileContent mockPoppedContent;
-    private Vector2 sourcePosition;
-    private Vector2 targetPosition;
-    private int sourceIndex;
+
+    private HeadlessApplicationListener game;
+
+    @BeforeAll
+    public static void beforeAll() {
+        TextureFactory mockTextureFactory = mock(TextureFactory.class);
+        when(mockTextureFactory.create(anyString())).thenReturn(mock(Texture.class));
+        TextureController.create(false, mockTextureFactory);
+    }
 
     @BeforeEach
-    public void setUp() {
-        // Mocking Map and Tiles
-        mockMap = mock(Map.class);
-        mockSourceTile = mock(Tile.class);
-        mockTargetTile = mock(Tile.class);
-        mockSourceContent = mock(TileContent.class);
-        mockPoppedContent = mock(TileContent.class);
+    public void beforeEach() throws URISyntaxException {
+        game = new HeadlessApplicationListener();
+        game.gameController = GameController.getInstance();
 
-        sourcePosition = new Vector2(1, 1);
-        targetPosition = new Vector2(2, 2);
-        sourceIndex = 0;
+        Map map = MapGenerator.serializeContentToMap(Path.of(
+            Objects.requireNonNull(getClass().getClassLoader().getResource("Map_Test")).toURI()
+        ), true);
+        game.gameController.setCurrentMap(map);
 
-        // Mocking the Map behavior
-        when(mockMap.getTile(sourcePosition)).thenReturn(mockSourceTile);
-        when(mockMap.getTile(targetPosition)).thenReturn(mockTargetTile);
-        when(mockMap.getTileContentByIndex(sourcePosition, sourceIndex)).thenReturn(mockSourceContent);
+        PlayerController.getInstance().setPlayerPosition(new Vector2(3,1));
+    }
 
-        // Simulate popping content from the source tile
-        when(mockSourceTile.popTileContent()).thenReturn(mockPoppedContent).thenReturn(null);
+    @AfterEach
+    public void afterEach() {
+        GameController.destroy();
+        PlayerController.destroy();
     }
 
     @Test
-    public void testApplyMoveUpdate() {
-        // Create MoveUpdate instance
-        MoveUpdate moveUpdate = new MoveUpdate(sourcePosition, sourceIndex, targetPosition);
+    public void testInteractionEast() {
+        Interaction interaction = new Interaction(
+            new Vector2(3, 1),
+            Direction.EAST,
+            Player.class
+        );
 
-        // Apply the move update to the mocked map
-        moveUpdate.apply(mockMap);
+        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
 
-        // Verify that the correct methods are called
-        verify(mockSourceTile, times(1)).popTileContent(); // pop content from source tile
-        verify(mockTargetTile, times(1)).pushTileContent(mockSourceContent); // push content to target tile
-        verify(mockSourceTile, times(1)).pushTileContent(mockPoppedContent); // push popped content back to source tile
+        game.gameController.triggerAction(interaction);
+        game.gameController.applyNextPendingGSU();
+
+        // Ist der Player nicht mehr an seiner alten Position?
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
+
+        // Ist der Player an seiner neuen Position?
+        Assertions.assertSame(expectedPlayer,game.gameController.getCurrentMap().getTile(2,3).topTileContent());
+
+    }
+
+
+
+    @Test
+    public void testInteractionWest() {
+        Interaction interaction = new Interaction(
+            new Vector2(3, 1), // Startposition
+            Direction.WEST,    // Richtung
+            Player.class
+        );
+
+        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
+
+        game.gameController.triggerAction(interaction);
+        game.gameController.applyNextPendingGSU();
+
+        // Ist der Player nicht mehr an seiner alten Position?
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 3).topTileContent());
+
+        // Ist der Player an seiner neuen Position?
+        Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(0, 3).topTileContent());
+    }
+
+
+    @Test
+    public void testInteractionNorth() {
+        Interaction interaction = new Interaction(
+            new Vector2(3, 2), // Startposition
+            Direction.NORTH,   // Richtung
+            Player.class
+        );
+
+        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(2, 3).topTileContent();
+
+        game.gameController.triggerAction(interaction);
+        game.gameController.applyNextPendingGSU();
+
+        // Ist der Player nicht mehr an seiner alten Position?
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(3, 2).topTileContent());
+
+        // Ist der Player an seiner neuen Position?
+        Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(3, 1).topTileContent());
     }
 
     @Test
-    public void testMoveUpdateWithEmptySourceTile() {
-        // Simulate that the source tile is empty (no content to pop)
-        when(mockSourceTile.popTileContent()).thenReturn(null);
+    public void testInteractionSouth() {
+        Interaction interaction = new Interaction(
+            new Vector2(3, 1), // Startposition
+            Direction.SOUTH,   // Richtung
+            Player.class
+        );
 
-        // Create MoveUpdate instance
-        MoveUpdate moveUpdate = new MoveUpdate(sourcePosition, sourceIndex, targetPosition);
+        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
 
-        // Apply the move update to the mocked map
-        moveUpdate.apply(mockMap);
+        game.gameController.triggerAction(interaction);
+        game.gameController.applyNextPendingGSU();
 
-        // Verify that no content is moved if the source tile is empty
-        verify(mockTargetTile, times(0)).pushTileContent(mockSourceContent);
+        // Ist der Player nicht mehr an seiner alten Position?
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 3).topTileContent());
+
+        // Ist der Player an seiner neuen Position?
+        Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(1, 4).topTileContent());
     }
 
-    @Test
-    public void testMoveUpdateWithMultiplePoppedContents() {
-        // Simulate multiple contents being popped from the source tile
-        TileContent mockSecondContent = mock(TileContent.class);
-        when(mockSourceTile.popTileContent()).thenReturn(mockPoppedContent).thenReturn(mockSecondContent).thenReturn(null);
 
-        // Create MoveUpdate instance
-        MoveUpdate moveUpdate = new MoveUpdate(sourcePosition, sourceIndex, targetPosition);
-
-        // Apply the move update to the mocked map
-        moveUpdate.apply(mockMap);
-
-        // Verify that the popped content is pushed back in the correct order
-        verify(mockSourceTile, times(2)).pushTileContent(any(TileContent.class));
-        verify(mockTargetTile, times(1)).pushTileContent(mockSourceContent);
-    }
 }
+
+
+
