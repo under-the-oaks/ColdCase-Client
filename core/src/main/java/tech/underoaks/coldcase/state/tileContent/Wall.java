@@ -1,8 +1,8 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 
 /**
@@ -10,10 +10,8 @@ import tech.underoaks.coldcase.state.InteractionChain;
  */
 public class Wall extends TileContent {
 
-    private static final Texture texture = new Texture("./sprites/block_detective.png");
-
     public Wall() {
-        super(texture, false, false);
+        super(TextureController.getInstance().getWallTexture(), false, false);
     }
 
     @Override

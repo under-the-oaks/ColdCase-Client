@@ -35,6 +35,10 @@ public class PlayerController implements InputProcessor {
         return instance;
     }
 
+    public static void destroy() {
+        instance = null;
+    }
+
     public void setPlayerPosition(Vector2 playerPosition) {
         this.playerPosition = playerPosition;
     }

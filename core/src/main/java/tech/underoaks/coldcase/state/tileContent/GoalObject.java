@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
@@ -14,7 +15,7 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 public class GoalObject extends TileContent {
 
-    private static final Texture texture = new Texture("./sprites/object_goal_detective_2.png");
+    private static final Texture texture = TextureController.getInstance().getGoalObjectTexture();
 
     private static final Sprite sprite = new Sprite(texture);
 

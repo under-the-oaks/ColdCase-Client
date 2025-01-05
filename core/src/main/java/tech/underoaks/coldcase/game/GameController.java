@@ -15,11 +15,17 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import java.util.Stack;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.UUID;
 
 /**
  * Central manager responsible for handling interactions within the game.
  */
 public class GameController {
+    /**
+     * UUID of this GameController instance
+     */
+    public final UUID uuid;
+
     /**
      * Singleton instance of GameController
      */
@@ -40,6 +46,10 @@ public class GameController {
      */
     private final Queue<GameStateUpdate> pendingUpdates = new LinkedList<>();
 
+    private GameController() {
+        this.uuid = UUID.randomUUID();
+    }
+
     /**
      * Retrieves the singleton instance of the GameController.
      *
@@ -50,6 +60,13 @@ public class GameController {
             instance = new GameController();
         }
         return instance;
+    }
+
+    /**
+     * Removes the currently running instance
+     */
+    public static void destroy() {
+        instance = null;
     }
 
     /**
