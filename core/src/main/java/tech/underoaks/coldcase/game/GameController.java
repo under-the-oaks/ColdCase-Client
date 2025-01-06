@@ -251,8 +251,8 @@ public class GameController {
      */
     public void endLevel() {
         System.out.println("Ending the level...");
-        Gdx.app.exit();
-        System.exit(0);
+        //Gdx.app.exit();
+        //System.exit(0);
 
     }
 
