@@ -287,7 +287,7 @@ public class GameController {
      * @return A queue of pending actions, or null if the action was unsuccessful.
      */
     public Queue<Interaction> handleTriggerRemoteInteraction(Interaction interaction, boolean suppressTranscendentFollowUp) {
-        System.out.println("handleAppendRemoteInteraction Called");
+        //System.out.println("handleAppendRemoteInteraction Called");
 
         InteractionChain currentChain = interactions.peek();
         InteractionChain chain = createInteractionChain(currentChain);

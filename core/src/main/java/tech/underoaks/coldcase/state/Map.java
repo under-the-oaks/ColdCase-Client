@@ -31,6 +31,9 @@ public class Map {
      */
     static float tileSize = 1080;
 
+
+    private boolean isSnapshotMap = false;
+
     /**
      * Default constructor for Map needed for deserialization in {@link MapGenerator}
      */
@@ -347,5 +350,13 @@ public class Map {
                 tile.dispose();
             }
         }
+    }
+
+    public boolean isSnapshotMap() {
+        return isSnapshotMap;
+    }
+
+    public void setIsSnapshotMap(boolean snapshotMap) {
+        isSnapshotMap = snapshotMap;
     }
 }

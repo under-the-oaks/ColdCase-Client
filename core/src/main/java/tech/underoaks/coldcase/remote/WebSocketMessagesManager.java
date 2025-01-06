@@ -124,11 +124,11 @@ public class WebSocketMessagesManager {
                     }
                     case Messages.ApplyRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleApplyRemoteGSUsMessage();
-                        System.out.println("ApplyRemoteGSUs called but function is missing for now");
+                        //System.out.println("ApplyRemoteGSUs called but function is missing for now");
                     }
                     case Messages.AbortRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleAbortRemoteGSUsMessage();
-                        System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
+                        //System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
                     }
                     case Messages.AppendRemoteInteractionResponseMessage messageObj -> {
                         WebSocketMessagesManager.getInstance().callback(messageObj);

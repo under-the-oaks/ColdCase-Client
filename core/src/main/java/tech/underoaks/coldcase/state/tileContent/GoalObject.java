@@ -41,10 +41,10 @@ public class GoalObject extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-        System.out.println("TEST");
+        //System.out.println("TEST");
         if (isPlayerOnTile(interaction.getTargetPos()) || isPlayerNextToTile(interaction.getTargetPos())){
 
-            GameController.getInstance().endLevel();
+            chain.addGameStateUpdate(new EndLevelUpdate());
             return true; //Action was successfully
         }
         return false;
@@ -55,6 +55,7 @@ public class GoalObject extends TileContent {
 
         if (isPlayerOnTile(tilePosition)) { //Check if the player is on the same tile
             //GameController.getInstance().triggerAction(new Interaction(tilePosition, Direction.NORTH, GoalObject.class));
+            //chain.addGameStateUpdate(new EndLevelUpdate());
             //return true;
         }
         return false; //No Action performed

@@ -11,6 +11,8 @@ public class EndLevelUpdate extends GameStateUpdate{
 
     @Override
     public void apply(Map map) {
-        //Map.getMap().
+        if(!map.isSnapshotMap()){
+            GameController.getInstance().endLevel();
+        }
     }
 }
