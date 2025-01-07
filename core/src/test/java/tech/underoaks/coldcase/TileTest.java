@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
+import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
@@ -47,8 +48,9 @@ public class TileTest {
         public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
             return false;
         }
+
         @Override
-        public boolean update(InteractionChain chain, Vector2 tilePosition) throws GameStateUpdateException {
+        public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
 
             if (chain.getGSUQueue().peek() == null) {
                 GameStateUpdate update = new MapTest.EmptyUpdate();
