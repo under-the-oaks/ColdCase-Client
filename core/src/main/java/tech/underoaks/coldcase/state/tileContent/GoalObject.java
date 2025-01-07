@@ -41,7 +41,7 @@ public class GoalObject extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-        //System.out.println("TEST");
+        //System.out.println("TEST")test;
         if (isPlayerOnTile(interaction.getTargetPos()) || isPlayerNextToTile(interaction.getTargetPos())){
 
             chain.addGameStateUpdate(new EndLevelUpdate());
