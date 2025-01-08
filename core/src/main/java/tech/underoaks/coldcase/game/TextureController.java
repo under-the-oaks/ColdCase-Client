@@ -29,6 +29,10 @@ public class TextureController {
     private Texture detectiveTextureEast;
     private Texture detectiveTextureWest;
     private Texture ghostTexture;
+    private Texture ghostTextureNorth;
+    private Texture ghostTextureSouth;
+    private Texture ghostTextureEast;
+    private Texture ghostTextureWest;
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
@@ -55,7 +59,12 @@ public class TextureController {
         this.detectiveTextureEast = factory.create("./sprites/player_detective_right.png");
         this.detectiveTextureWest = factory.create("./sprites/player_detective_left.png");
 
-        this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Placeholder.png");
+        this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Right.png");
+        this.ghostTextureNorth = new Texture("./sprites/Sprite_Ghost_Up.png");
+        this.ghostTextureWest = new Texture("./sprites/Sprite_Ghost_Left.png");
+        this.ghostTextureSouth = new Texture("./sprites/Sprite_Ghost_Down.png");
+        this.ghostTextureEast = new Texture("./sprites/Sprite_Ghost_Right.png");
+
     }
 
     public static TextureController create(boolean isDetective, TextureFactory factory) {
@@ -151,19 +160,19 @@ public class TextureController {
     }
 
     public Texture getPlayerTextureNorth() {
-        return isDetective ? detectiveTextureNorth : ghostTexture;
+        return isDetective ? detectiveTextureNorth : ghostTextureNorth;
     }
 
     public Texture getPlayerTextureSouth() {
-        return isDetective ? detectiveTextureSouth : ghostTexture;
+        return isDetective ? detectiveTextureSouth : ghostTextureSouth;
     }
 
     public Texture getPlayerTextureEast() {
-        return isDetective ? detectiveTextureEast : ghostTexture;
+        return isDetective ? detectiveTextureEast : ghostTextureEast;
     }
 
     public Texture getPlayerTextureWest() {
-        return isDetective ? detectiveTextureWest : ghostTexture;
+        return isDetective ? detectiveTextureWest : ghostTextureWest;
     }
 
     public Texture getGhostTexture() { return ghostTexture; }
