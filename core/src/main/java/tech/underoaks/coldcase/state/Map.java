@@ -7,10 +7,7 @@ import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
-import tech.underoaks.coldcase.state.tiles.Tiles;
-import tech.underoaks.coldcase.state.tiles.EmptyTile;
 import tech.underoaks.coldcase.state.tiles.Tile;
-import tech.underoaks.coldcase.state.tileContent.TileContents;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -146,14 +143,20 @@ public class Map {
     public void render(Batch batch, float originX, float originY) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
-
                 Vector2 position = twoDToIso45(x, y);
 
-                //Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
+                // calculate offset to origin for rendering -> middle of the map should be in the origin
+                // Pythagoras to calculate the diagonal of the map
+                float offsetY = (float) Math.sqrt(Math.pow((double) getTileArrayHeight() / 2, 2) + Math.pow((double) getTileArrayWidth() / 2, 2));
+                // to account for size of the tile sprites
+                offsetY = offsetY * 320;
+                // to account for the height of the tiles -> the middle of the top side of the tile should be in the origin
+                offsetY = offsetY - 660;
+                // to account for the width of the tiles -> the middle of the tile should be in the origin, not the bottom left corner
+                float halfTileSpriteWidth = 540;
 
-                //Vector2 tempPt = twoDToIso( new Vector2(tempX, tempY), 45f );
+                tileArray[y][x].render(batch, originX + position.x - halfTileSpriteWidth, originY + position.y + offsetY);
 
-                tileArray[y][x].render( batch,originX + position.x, originY + position.y);
             }
         }
     }
@@ -190,8 +193,8 @@ public class Map {
 
         Vector2 rotatedPt = new Vector2(0, 0);
 
-        rotatedPt.y = ( (((float) ex - (float) why) * 320 ) + ((float) why * 320 * 2) ) * -1;
-        rotatedPt.x = ( (((float) why - (float) ex) * 450) ) * -1;
+        rotatedPt.y = ((((float) ex - (float) why) * 320) + ((float) why * 320 * 2)) * -1;
+        rotatedPt.x = ((((float) why - (float) ex) * 450)) * -1;
 
         return rotatedPt;
     }
@@ -237,12 +240,7 @@ public class Map {
                 if (tileArray[i][j].getTileContent() == null) {
                     continue;
                 }
-                updated.addAll(tileArray[i][j].getTileContent().handleUpdate(
-                    chain,
-                    new Vector2(i, j),
-                    interaction,
-                    handler
-                ));
+                updated.addAll(tileArray[i][j].getTileContent().handleUpdate(chain, new Vector2(i, j), interaction, handler));
             }
         }
         return updated;
