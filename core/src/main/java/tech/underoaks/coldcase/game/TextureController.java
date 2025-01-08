@@ -30,6 +30,7 @@ public class TextureController {
     private Texture detectiveTextureWest;
     private Texture ghostTexture;
 
+
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
         this.groundTileTexture = factory.create("./sprites/block_detective_2.png");
@@ -38,7 +39,7 @@ public class TextureController {
         this.testItem02Texture = factory.create("./isometric tileset/separated images/TEST_ITEM02.png");
         this.doorTriggerTexture = factory.create("./isometric tileset/separated images/tile_069.png");
         this.testContentTexture = factory.create("./isometric tileset/separated images/tile_050.png");
-        this.portalObjectTexture = factory.create("./sprites/block_ghost.png");
+        this.portalObjectTexture = factory.create("./sprites/portal.png");
         this.wallTexture = factory.create("./sprites/block_detective.png");
         this.movableBlockTexture = factory.create("./sprites/block_detective.png");
         this.movableBlockTranscendantTexture = factory.create("sprites/block_transcendent_2.png");
