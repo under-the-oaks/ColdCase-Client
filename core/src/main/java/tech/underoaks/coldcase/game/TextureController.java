@@ -60,10 +60,10 @@ public class TextureController {
         this.detectiveTextureWest = factory.create("./sprites/player_detective_left.png");
 
         this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Right.png");
-        this.ghostTextureNorth = new Texture("./sprites/Sprite_Ghost_Up.png");
-        this.ghostTextureWest = new Texture("./sprites/Sprite_Ghost_Left.png");
-        this.ghostTextureSouth = new Texture("./sprites/Sprite_Ghost_Down.png");
-        this.ghostTextureEast = new Texture("./sprites/Sprite_Ghost_Right.png");
+        this.ghostTextureNorth = factory.create("./sprites/Sprite_Ghost_Up.png");
+        this.ghostTextureWest = factory.create("./sprites/Sprite_Ghost_Left.png");
+        this.ghostTextureSouth = factory.create("./sprites/Sprite_Ghost_Down.png");
+        this.ghostTextureEast = factory.create("./sprites/Sprite_Ghost_Right.png");
 
     }
 
