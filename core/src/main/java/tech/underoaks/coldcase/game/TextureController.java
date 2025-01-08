@@ -78,6 +78,14 @@ public class TextureController {
         return instance != null;
     }
 
+    public static void setIsDetective(boolean isDetective) {
+        TextureController.isDetective = isDetective;
+    }
+
+    public static boolean getIsDetective() {
+        return isDetective;
+    }
+
     public Texture getEmptyTileTexture() {
         return emptyTileTexture;
     }
@@ -158,4 +166,7 @@ public class TextureController {
         return isDetective ? detectiveTextureWest : ghostTexture;
     }
 
+    public Texture getGhostTexture() { return ghostTexture; }
+
+    public Texture getDetectiveTexture() { return detectiveTexture; }
 }

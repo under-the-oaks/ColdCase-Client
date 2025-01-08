@@ -95,7 +95,6 @@ class MapTest{
 
     /**
      * A TileContent used for testing purposes mainly for {@code UpdateMapUntilStable}.
-     *
      * The action method always returns true making it run the method run into it's maximum
      * amount of iteration.
      */
@@ -143,12 +142,6 @@ class MapTest{
 
     @Test
     public void GetTileContentByTypeTest(){
-
-        /* TODO - Soll das so sein?
-         Map emptyMap = new Map(null); //Leere Map wird nicht gehandled
-         System.out.println( emptyMap.getTileContentByType( TestTileContent.class ) );
-         Assertions.assertNull( emptyMap.getTileContentByType( TestTileContent.class ) );
-         */
 
         // Finden
         Assertions.assertEquals( new Vector2(0,0), mockMap.getTileContentByType( TestTileContent.class ));
@@ -291,8 +284,8 @@ class MapTest{
 
         Assertions.assertNotNull(deepClone);
 
-        Assertions.assertEquals(mockMap.getHeight(), deepClone.getHeight());
-        Assertions.assertEquals(mockMap.getWidth(), deepClone.getWidth());
+        Assertions.assertEquals(mockMap.getTileArrayHeight(), deepClone.getTileArrayHeight());
+        Assertions.assertEquals(mockMap.getTileArrayWidth(), deepClone.getTileArrayWidth());
 
         Assertions.assertSame(mockMap.getTile(position).getClass(), deepClone.getTile(position).getClass());
 
@@ -322,7 +315,7 @@ class MapTest{
                 updated = updated || ( updatedTile != null ) ;
             }
         }
-        catch (Exception e) {
+        catch (Exception ignored) {
 
         }
 
@@ -352,7 +345,7 @@ class MapTest{
         try{
             mockMap.updateUntilStable(chain, interaction, handler);
         }
-        catch (Exception e) {
+        catch (Exception ignored) {
 
         }
 
@@ -364,7 +357,7 @@ class MapTest{
 
         // Endless Loop wird abgebrochen
 
-        Assertions.assertThrows( IllegalStateException.class, () -> { mockMap.updateUntilStable( brokenChain, interaction, handler ); } );
+        Assertions.assertThrows( IllegalStateException.class, () -> mockMap.updateUntilStable( brokenChain, interaction, handler ));
 
     }
 }
