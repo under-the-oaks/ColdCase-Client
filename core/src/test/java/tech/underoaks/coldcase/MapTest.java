@@ -143,12 +143,6 @@ class MapTest{
     @Test
     public void GetTileContentByTypeTest(){
 
-        /* TODO - Soll das so sein?
-         Map emptyMap = new Map(null); //Leere Map wird nicht gehandled
-         System.out.println( emptyMap.getTileContentByType( TestTileContent.class ) );
-         Assertions.assertNull( emptyMap.getTileContentByType( TestTileContent.class ) );
-         */
-
         // Finden
         Assertions.assertEquals( new Vector2(0,0), mockMap.getTileContentByType( TestTileContent.class ));
 
