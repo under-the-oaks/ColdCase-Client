@@ -12,7 +12,8 @@ public class EndLevelUpdate extends GameStateUpdate{
     @Override
     public void apply(Map map) {
         if(!map.isSnapshotMap()){
-            GameController.getInstance().endLevel();
+            System.out.println("Level completed");
+            //TODO load new Level [#135]
         }
     }
 }

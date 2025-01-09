@@ -24,7 +24,6 @@ public class Player extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-        //if(!Objects.equals(interaction.getCaller(), Player.class.getName()))return false;
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
 
         Vector2 targetPosition = switch (interaction.getActionDirection()) {
