@@ -80,6 +80,9 @@ public class Player extends TileContent {
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
+
+        System.out.println("Player position: " + x + ", " + y);
+
     }
 
     @Override
