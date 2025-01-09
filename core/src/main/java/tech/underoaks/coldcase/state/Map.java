@@ -1,6 +1,6 @@
 package tech.underoaks.coldcase.state;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.game.Interaction;
@@ -8,10 +8,7 @@ import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
-import tech.underoaks.coldcase.state.tiles.Tiles;
-import tech.underoaks.coldcase.state.tiles.EmptyTile;
 import tech.underoaks.coldcase.state.tiles.Tile;
-import tech.underoaks.coldcase.state.tileContent.TileContents;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,79 +71,12 @@ public class Map {
         tileArray[y][x] = tile;
     }
 
-    public int getWidth() {
+    public int getTileArrayWidth() {
         return tileArray[0].length;
     }
 
-    public int getHeight() {
+    public int getTileArrayHeight() {
         return tileArray.length;
-    }
-
-    /**
-     * Generates a new map from a template file
-     * Each template files should be a text file with the following format:
-     * Each line represents a row of the map
-     * Each number represents a tile or tile content
-     * The numbers should be separated by a space
-     * The numbers should be the index of the tile/tileContent in the Tiles/TileContents enum
-     *
-     * @param path Path to the template folder
-     *             The folder should contain two files:
-     *             map.tiles: The file containing the tile layout
-     *             map.content: The file containing the tile content layout
-     *             The files should be in the format described above
-     * @return New Map
-     */
-    public static Map getMap(Path path) {
-        List<List<Tile>> tiles = new ArrayList<>();
-        Path tilePath = Path.of(path + "/map.tiles");
-        Path contentPath = Path.of(path + "/map.content");
-        try {
-            List<List<Integer>> rawTiles = readMapFile(tilePath);
-
-            for (int i = 0; i < rawTiles.size(); i++) {
-                tiles.add(new ArrayList<>());
-                for (int j = 0; j < rawTiles.get(i).size(); j++) {
-                    tiles.get(i).add(Tiles.getNewTileClassByIndex(rawTiles.get(i).get(j)));
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-        try {
-            List<List<Integer>> rawTiles = readMapFile(contentPath);
-
-            for (int i = 0; i < rawTiles.size(); i++) {
-                for (int j = 0; j < rawTiles.get(i).size(); j++) {
-                    int temp = rawTiles.get(i).get(j);
-                    if (temp != 0) {
-                        tiles.get(i).get(j).setTileContent(TileContents.getNewTileClassByIndex(rawTiles.get(i).get(j)));
-                    }
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-
-        // Convert 2D-List to 2D-Array
-        Tile[][] tileArray = new Tile[tiles.size()][getMatrixWidth(tiles)];
-        for (int i = 0; i < tileArray.length; i++) {
-            for (int j = 0; j < tileArray[i].length; j++) {
-                Tile tile;
-                try {
-                    tile = tiles.get(i).get(j);
-                } catch (IndexOutOfBoundsException e) {
-                    // If the template is not uniform,
-                    // the remaining tiles will be filled up using EmptyTile
-                    tile = new EmptyTile();
-                }
-                tileArray[i][j] = tile;
-            }
-        }
-
-        return new Map(tileArray);
     }
 
     /**
@@ -209,7 +139,7 @@ public class Map {
     }
 
     public boolean isOutOfBounds(Vector2 position) {
-        return position.x < 0 || position.y < 0 || position.x >= getWidth() || position.y >= getHeight();
+        return position.x < 0 || position.y < 0 || position.x >= getTileArrayWidth() || position.y >= getTileArrayHeight();
     }
 
     /**
@@ -219,17 +149,23 @@ public class Map {
      *
      * @param batch SpriteBatch to render the map
      */
-    public void render(SpriteBatch batch) {
+    public void render(Batch batch, float originX, float originY) {
         for (int y = 0; y < tileArray.length; y++) {
             for (int x = 0; x < tileArray[y].length; x++) {
+                Vector2 position = twoDToIso45(x, y);
 
-                Vector2 position = twoDToIso45( x, y);
+                // calculate offset to origin for rendering -> middle of the map should be in the origin
+                // Pythagoras to calculate the diagonal of the map
+                float offsetY = (float) Math.sqrt(Math.pow((double) getTileArrayHeight() / 2, 2) + Math.pow((double) getTileArrayWidth() / 2, 2));
+                // to account for size of the tile sprites
+                offsetY = offsetY * 320;
+                // to account for the height of the tiles -> the middle of the top side of the tile should be in the origin
+                offsetY = offsetY - 660;
+                // to account for the width of the tiles -> the middle of the tile should be in the origin, not the bottom left corner
+                float halfTileSpriteWidth = 540;
 
-                //Vector2 tempPt = twoDToIso(new Vector2(tempX, tempY));
+                tileArray[y][x].render(batch, originX + position.x - halfTileSpriteWidth, originY + position.y + offsetY);
 
-                //Vector2 tempPt = twoDToIso( new Vector2(tempX, tempY), 45f );
-
-                tileArray[y][x].render( batch, position.x, position.y );
             }
         }
     }
@@ -264,13 +200,10 @@ public class Map {
 
     public Vector2 twoDToIso45(int ex, int why) {
 
-        float x = ex;
-        float y = why;
-
         Vector2 rotatedPt = new Vector2(0, 0);
 
-        rotatedPt.y = ( ((x - y) * 320 ) + (y * 320 * 2) ) * -1;
-        rotatedPt.x = ( ((y - x) * 450) ) * -1;
+        rotatedPt.y = ((((float) ex - (float) why) * 320) + ((float) why * 320 * 2)) * -1;
+        rotatedPt.x = ((((float) why - (float) ex) * 450)) * -1;
 
         return rotatedPt;
     }
@@ -306,7 +239,7 @@ public class Map {
      * is invoked with the given {@code InteractionChain}.
      *
      * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
-     * @return true if at least one {@code TileContent} performs an update; false otherwise
+     * @return List of {@code TileContents} that handled the update
      * @see TileContent#handleUpdate(InteractionChain, Vector2, Interaction, TileContent)
      */
     public List<TileContent> updateMap(InteractionChain chain, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
@@ -316,12 +249,7 @@ public class Map {
                 if (tileArray[i][j].getTileContent() == null) {
                     continue;
                 }
-                updated.addAll(tileArray[i][j].getTileContent().handleUpdate(
-                    chain,
-                    new Vector2(i, j),
-                    interaction,
-                    handler
-                ));
+                updated.addAll(tileArray[i][j].getTileContent().handleUpdate(chain, new Vector2(i, j), interaction, handler));
             }
         }
         return updated;

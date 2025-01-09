@@ -1,8 +1,7 @@
 package tech.underoaks.coldcase.state.tileContent;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.*;
 import tech.underoaks.coldcase.state.InteractionChain;
@@ -14,17 +13,15 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 public class GoalObject extends TileContent {
 
-    private static final Texture texture = TextureController.getInstance().getGoalObjectTexture();
-
-    private static final Sprite sprite = new Sprite(texture);
+    private final Sprite sprite = new Sprite( TextureController.getInstance().getGoalObjectTexture());
 
     public GoalObject() {
-        super(texture, true, true);
+        super( TextureController.getInstance().getGoalObjectTexture(), true, false);
         this.visibilityState = VisibilityStates.TRANSCENDENT;
     }
 
     @Override
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (sprite != null) {
             sprite.setPosition(x, y);

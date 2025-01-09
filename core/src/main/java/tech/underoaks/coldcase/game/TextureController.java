@@ -29,6 +29,11 @@ public class TextureController {
     private Texture detectiveTextureEast;
     private Texture detectiveTextureWest;
     private Texture ghostTexture;
+    private Texture ghostTextureNorth;
+    private Texture ghostTextureSouth;
+    private Texture ghostTextureEast;
+    private Texture ghostTextureWest;
+
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
@@ -38,7 +43,7 @@ public class TextureController {
         this.testItem02Texture = factory.create("./isometric tileset/separated images/TEST_ITEM02.png");
         this.doorTriggerTexture = factory.create("./isometric tileset/separated images/tile_069.png");
         this.testContentTexture = factory.create("./isometric tileset/separated images/tile_050.png");
-        this.portalObjectTexture = factory.create("./sprites/block_ghost.png");
+        this.portalObjectTexture = factory.create("./sprites/portal.png");
         this.wallTexture = factory.create("./sprites/block_detective.png");
         this.movableBlockTexture = factory.create("./sprites/block_detective.png");
         this.movableBlockTranscendantTexture = factory.create("sprites/block_transcendent_2.png");
@@ -55,7 +60,12 @@ public class TextureController {
         this.detectiveTextureEast = factory.create("./sprites/player_detective_right.png");
         this.detectiveTextureWest = factory.create("./sprites/player_detective_left.png");
 
-        this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Placeholder.png");
+        this.ghostTexture = factory.create("./sprites/Sprite_Ghost_Right.png");
+        this.ghostTextureNorth = factory.create("./sprites/Sprite_Ghost_Up.png");
+        this.ghostTextureWest = factory.create("./sprites/Sprite_Ghost_Left.png");
+        this.ghostTextureSouth = factory.create("./sprites/Sprite_Ghost_Down.png");
+        this.ghostTextureEast = factory.create("./sprites/Sprite_Ghost_Right.png");
+
     }
 
     public static TextureController create(boolean isDetective, TextureFactory factory) {
@@ -76,6 +86,14 @@ public class TextureController {
 
     public static boolean exists() {
         return instance != null;
+    }
+
+    public static void setIsDetective(boolean isDetective) {
+        TextureController.isDetective = isDetective;
+    }
+
+    public static boolean getIsDetective() {
+        return isDetective;
     }
 
     public Texture getEmptyTileTexture() {
@@ -143,19 +161,22 @@ public class TextureController {
     }
 
     public Texture getPlayerTextureNorth() {
-        return isDetective ? detectiveTextureNorth : ghostTexture;
+        return isDetective ? detectiveTextureNorth : ghostTextureNorth;
     }
 
     public Texture getPlayerTextureSouth() {
-        return isDetective ? detectiveTextureSouth : ghostTexture;
+        return isDetective ? detectiveTextureSouth : ghostTextureSouth;
     }
 
     public Texture getPlayerTextureEast() {
-        return isDetective ? detectiveTextureEast : ghostTexture;
+        return isDetective ? detectiveTextureEast : ghostTextureEast;
     }
 
     public Texture getPlayerTextureWest() {
-        return isDetective ? detectiveTextureWest : ghostTexture;
+        return isDetective ? detectiveTextureWest : ghostTextureWest;
     }
 
+    public Texture getGhostTexture() { return ghostTexture; }
+
+    public Texture getDetectiveTexture() { return detectiveTexture; }
 }

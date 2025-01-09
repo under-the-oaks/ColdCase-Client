@@ -123,4 +123,25 @@ public class Messages {
             this.setRemoteGameControllerInstanceId(remoteGameControllerInstanceId);
         }
     }
+
+    public static class lobbyIdMessage{
+        String lobbyId;
+
+        public lobbyIdMessage(String lobbyId) {
+            this.lobbyId = lobbyId;
+        }
+        public lobbyIdMessage(){}
+
+        public String getLobbyId() {
+            return lobbyId;
+        }
+
+        public void setLobbyId(String lobbyId) {
+            this.lobbyId = lobbyId;
+        }
+    }
+
+    public static class startGameMessage{
+        public startGameMessage(){}
+    }
 }
