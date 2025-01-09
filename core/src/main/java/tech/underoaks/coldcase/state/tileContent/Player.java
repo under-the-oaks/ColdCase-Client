@@ -25,7 +25,6 @@ public class Player extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
 
         Vector2 targetPosition = switch (interaction.getActionDirection()) {
@@ -81,9 +80,6 @@ public class Player extends TileContent {
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
-
-        System.out.println("Player position: " + x + ", " + y);
-
     }
 
     @Override

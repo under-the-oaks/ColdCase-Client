@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.state.tileContent.UpdateTileContentException;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -22,6 +23,14 @@ import java.util.List;
 public class Map {
 
     public Tile[][] tileArray;
+
+    /**
+     * The size of each tile in pixels
+     */
+    static float tileSize = 1080;
+
+
+    private boolean isSnapshotMap = false;
 
     /**
      * Default constructor for Map needed for deserialization in {@link MapGenerator}
@@ -271,4 +280,49 @@ public class Map {
             }
         }
     }
+
+    /**
+     * Returns whether the map is a snapshot map.
+     *
+     * @return true if the map is a snapshot map, false otherwise.
+     */
+    public boolean isSnapshotMap() {
+        return isSnapshotMap;
+    }
+
+    /**
+     * Sets the snapshot map status.
+     *
+     * @param snapshotMap true if the map is a snapshot map, false otherwise.
+     */
+    public void setIsSnapshotMap(boolean snapshotMap) {
+        isSnapshotMap = snapshotMap;
+    }
+
+    /**
+     * Checks if the player is on the specified tile position.
+     *
+     * @param tilePosition The position of the tile to check.
+     * @return true if the player's position is the same as the tile's position, false otherwise.
+     */
+    public static boolean isPlayerOnTile(Vector2 tilePosition) {
+        Vector2 playerPosition = PlayerController.getInstance().getPlayerPosition();
+        return playerPosition.equals(tilePosition);
+    }
+
+    /**
+     * Checks if the player is next to the specified tile position.
+     * The player is considered next to the tile if they are adjacent in any of the four cardinal directions.
+     *
+     * @param tilePosition The position of the tile to check.
+     * @return true if the player is adjacent to the tile (either to the left, right, above, or below), false otherwise.
+     */
+    public static boolean isPlayerNextToTile(Vector2 tilePosition) {
+        Vector2 playerPosition = PlayerController.getInstance().getPlayerPosition();
+        return playerPosition.equals(tilePosition.cpy().add(1, 0)) ||
+            playerPosition.equals(tilePosition.cpy().add(0, 1)) ||
+            playerPosition.equals(tilePosition.cpy().sub(1, 0)) ||
+            playerPosition.equals(tilePosition.cpy().sub(0, 1));
+    }
+
 }

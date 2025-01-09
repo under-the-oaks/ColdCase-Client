@@ -246,25 +246,6 @@ public class GameController {
         return new InteractionChain(snapshot);
     }
 
-    /**
-     * Ends the current level and exits the game.
-     */
-    public void endLevel() {
-        System.out.println("Ending the level...");
-        Gdx.app.exit();
-        System.exit(0);
-
-    }
-
-    /**
-     * Loads the next level (to be implemented).
-     */
-    private void loadNextLevel() {
-        System.out.println("Loading next level...");
-        //TODO: Load new Level
-
-    }
-
 
     /**
      * Creates a new InteractionChain based on an existing chain.
@@ -287,7 +268,6 @@ public class GameController {
      * @return A queue of pending actions, or null if the action was unsuccessful.
      */
     public Queue<Interaction> handleTriggerRemoteInteraction(Interaction interaction, boolean suppressTranscendentFollowUp) {
-        System.out.println("handleAppendRemoteInteraction Called");
 
         InteractionChain currentChain = interactions.peek();
         InteractionChain chain = createInteractionChain(currentChain);

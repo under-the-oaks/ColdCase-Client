@@ -16,6 +16,7 @@ public class Snapshot {
      */
     public Snapshot(Map originalMap) {
         this.snapshotMap = deepCopyMap(originalMap);
+        this.snapshotMap.setIsSnapshotMap(true);
     }
 
     public Map getSnapshotMap() {
