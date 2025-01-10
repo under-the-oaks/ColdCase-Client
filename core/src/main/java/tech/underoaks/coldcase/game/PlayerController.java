@@ -13,6 +13,13 @@ public class PlayerController implements InputProcessor {
     private Vector2 playerPosition;
     private Direction lookDirection = Direction.EAST;
 
+    private float keyHoldTime = 0f;
+    private static final float AUTO_MOVE_TIME = 0.06f;
+    private boolean onlyW = false;
+    private boolean onlyS = false;
+    private boolean onlyA = false;
+    private boolean onlyD = false;
+
     public TileContent getInventory() {
         return inventory;
     }
@@ -22,7 +29,7 @@ public class PlayerController implements InputProcessor {
 
         //debug
         if (inventory != null) {
-            System.out.println("Inventory:"+this.inventory.toString());
+            System.out.println("Inventory:"+this.inventory);
         }
     }
 
@@ -56,9 +63,11 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (!GameController.getInstance().isPendingGSUQueueEmpty()) {
+        if (!GameController.getInstance().isPendingGSUQueueEmpty() || onlyD || onlyA || onlyS || onlyW) {
             return false;
         }
+
+        System.out.println(lookDirection);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             if (lookDirection == Direction.NORTH) {
@@ -116,8 +125,51 @@ public class PlayerController implements InputProcessor {
         return false;
     }
 
+    public void update() {
+        if (keyHoldTime < AUTO_MOVE_TIME) {
+            keyHoldTime += Gdx.graphics.getDeltaTime();
+        }
+
+        if (keyHoldTime >= AUTO_MOVE_TIME) {
+
+            if (Gdx.input.isKeyPressed(Input.Keys.W) && !onlyD && !onlyA && !onlyS) {
+                movePlayer(Direction.NORTH);
+                onlyW = true;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) && !onlyD && !onlyA && !onlyW) {
+                movePlayer(Direction.SOUTH);
+                onlyS = true;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A) && !onlyD && !onlyW && !onlyS) {
+                movePlayer(Direction.WEST);
+                onlyA = true;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) && !onlyW && !onlyA && !onlyS) {
+                movePlayer(Direction.EAST);
+                onlyD = true;
+            }
+            keyHoldTime = 0f;
+        }
+    }
+
+    private void movePlayer(Direction direction) {
+        GameController.getInstance().triggerAction(new Interaction(playerPosition, direction, Player.class));
+    }
+
+    /**
+     * Called when a key was released
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return whether the input was processed
+     */
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.W || keycode == Input.Keys.S ||
+            keycode == Input.Keys.A || keycode == Input.Keys.D) {
+            keyHoldTime = 0f;
+
+            onlyD = false;
+            onlyA = false;
+            onlyS = false;
+            onlyW = false;
+        }
         return false;
     }
 

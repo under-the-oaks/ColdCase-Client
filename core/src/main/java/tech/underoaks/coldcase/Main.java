@@ -2,10 +2,11 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.game.UITextureController;
-import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -47,8 +48,8 @@ public class Main extends Game {
         super.render();
         float delta = Gdx.graphics.getDeltaTime();
         fixedUpdate(delta);
-
     }
+
 
     /**
      * Fixed update method to trigger Methods every 0.1 seconds
@@ -64,6 +65,13 @@ public class Main extends Game {
 
             // all fixed update methods below
             StageManager.getInstance().update();
+
+        }
+        if (fixedUpdateClock >= 0.075f) {
+            fixedUpdateClock = 0f;
+            if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.D)){
+                PlayerController.getInstance().update();
+            }
         }
     }
 
