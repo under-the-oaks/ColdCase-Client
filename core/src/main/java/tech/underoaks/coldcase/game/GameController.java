@@ -15,11 +15,17 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import java.util.Stack;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.UUID;
 
 /**
  * Central manager responsible for handling interactions within the game.
  */
 public class GameController {
+    /**
+     * UUID of this GameController instance
+     */
+    public final UUID uuid;
+
     /**
      * Singleton instance of GameController
      */
@@ -40,6 +46,10 @@ public class GameController {
      */
     private final Queue<GameStateUpdate> pendingUpdates = new LinkedList<>();
 
+    private GameController() {
+        this.uuid = UUID.randomUUID();
+    }
+
     /**
      * Retrieves the singleton instance of the GameController.
      *
@@ -50,6 +60,13 @@ public class GameController {
             instance = new GameController();
         }
         return instance;
+    }
+
+    /**
+     * Removes the currently running instance
+     */
+    public static void destroy() {
+        instance = null;
     }
 
     /**
@@ -229,25 +246,6 @@ public class GameController {
         return new InteractionChain(snapshot);
     }
 
-    /**
-     * Ends the current level and exits the game.
-     */
-    public void endLevel() {
-        System.out.println("Ending the level...");
-        Gdx.app.exit();
-        System.exit(0);
-
-    }
-
-    /**
-     * Loads the next level (to be implemented).
-     */
-    private void loadNextLevel() {
-        System.out.println("Loading next level...");
-        //TODO: Load new Level
-
-    }
-
 
     /**
      * Creates a new InteractionChain based on an existing chain.
@@ -270,7 +268,6 @@ public class GameController {
      * @return A queue of pending actions, or null if the action was unsuccessful.
      */
     public Queue<Interaction> handleTriggerRemoteInteraction(Interaction interaction, boolean suppressTranscendentFollowUp) {
-        System.out.println("handleAppendRemoteInteraction Called");
 
         InteractionChain currentChain = interactions.peek();
         InteractionChain chain = createInteractionChain(currentChain);

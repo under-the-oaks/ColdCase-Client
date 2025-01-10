@@ -1,6 +1,7 @@
 package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
@@ -24,7 +25,6 @@ public class Player extends TileContent {
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
-
         int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
 
         Vector2 targetPosition = switch (interaction.getActionDirection()) {
@@ -69,7 +69,7 @@ public class Player extends TileContent {
      *              adjusted by adding 8 units for positioning purposes.
      */
     @Override
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (currentTexture != null) {
             batch.draw(currentTexture, x, y + 540);
@@ -80,7 +80,6 @@ public class Player extends TileContent {
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
-
     }
 
     @Override

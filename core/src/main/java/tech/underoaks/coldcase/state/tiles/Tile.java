@@ -1,8 +1,8 @@
 package tech.underoaks.coldcase.state.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
 /**
@@ -45,13 +45,12 @@ public abstract class Tile implements Cloneable {
      * @param x     the x-coordinate for rendering the tile
      * @param y     the y-coordinate for rendering the tile
      */
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
 
         if (texture != null) {
             batch.draw(sprite, x, y);
         }
 
-        batch.draw(sprite, x, y);
         if (tileContent != null) {
             tileContent.render(batch, x, y);
         }
@@ -76,7 +75,7 @@ public abstract class Tile implements Cloneable {
     public TileContent popTileContent() {
         if (this.tileContent == null) {
             return null;
-        } else if (this.tileContent.tileContent == null) {
+        } else if (this.tileContent.getNextContent() == null) {
             TileContent content = this.tileContent;
             this.tileContent = null;
             return content;
@@ -105,6 +104,22 @@ public abstract class Tile implements Cloneable {
             throw new AssertionError(e);
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Tile other = (Tile) obj;
+
+        // Compare tileContent: both should be either equal or both should be null
+        if (tileContent != null ? !tileContent.equals(other.tileContent) : other.tileContent != null) {
+            return false;  // tileContent is not equal or one is null, return false
+        }
+
+        return true;
+    }
+
 
     public void dispose() {
         if (texture != null) {
