@@ -80,10 +80,4 @@ public class GameStage extends AbstractStage {
         font.draw(batch, "FPS: " + fps, 100, getHeight() - 100);
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        GameController.getInstance().getCurrentMap().dispose();
-    }
-
 }

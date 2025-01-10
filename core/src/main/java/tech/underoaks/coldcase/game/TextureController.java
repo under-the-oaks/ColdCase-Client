@@ -1,9 +1,8 @@
 package tech.underoaks.coldcase.game;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
-public class TextureController extends AssetManager {
+public class TextureController {
     private static TextureController instance;
 
     private static boolean isDetective = true;
@@ -35,8 +34,8 @@ public class TextureController extends AssetManager {
     private Texture ghostTextureEast;
     private Texture ghostTextureWest;
 
-
     private TextureController(TextureFactory factory) {
+
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
         this.groundTileTexture = factory.create("./sprites/block_detective_2.png");
 
@@ -180,4 +179,5 @@ public class TextureController extends AssetManager {
     public Texture getGhostTexture() { return ghostTexture; }
 
     public Texture getDetectiveTexture() { return detectiveTexture; }
+
 }
