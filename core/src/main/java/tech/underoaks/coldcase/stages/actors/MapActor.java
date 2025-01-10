@@ -2,37 +2,24 @@ package tech.underoaks.coldcase.stages.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
-
 import java.nio.file.Path;
-import java.util.Properties;
 
+/**
+ * Actor representing the game map in the stage.
+ * The MapActor is responsible for loading and rendering the map and player onto the screen.
+ * It also handles setting up the map based on a provided path.
+ *
+ * @author Max Becker, Jean-Luc Wenserski
+ */
 public class MapActor extends Actor {
 
     private Map map;
-    private final Properties properties = Main .getProperties();
-
-    public MapActor() {
-        if(!properties.containsKey("map_path")) {
-            throw new RuntimeException("Missing required property: map_path");
-        }
-        if(!properties.containsKey("role")) {
-            throw new RuntimeException("Missing required property role");
-        }
-        String path = properties.getProperty("map_path");
-        boolean detective = switch (properties.getProperty("role")) {
-            case "detective" -> true;
-            case "ghost" -> false;
-            default -> throw new RuntimeException("Unknown role: " + properties.getProperty("role"));
-        };
-        map = setupMap(path);
-    }
 
     public MapActor(String path){
         setupMap(path);
@@ -43,7 +30,13 @@ public class MapActor extends Actor {
         map.render(batch, getOriginX(), getOriginY());
     }
 
-    private Map setupMap(String path) {
+    /**
+     * Sets up the map by deserializing the map data from the specified file path.
+     * It also updates the game controller with the current map and sets the player's initial position.
+     *
+     * @param path The file path to the map data that will be loaded.
+     */
+    private void setupMap(String path) {
 
         map = MapGenerator.serializeContentToMap(Path.of(path), TextureController.getIsDetective());
 
@@ -52,6 +45,5 @@ public class MapActor extends Actor {
 
         PlayerController.getInstance().setPlayerPosition(gameController.getCurrentMap().getTileContentByType(Player.class));
 
-        return map;
     }
 }

@@ -32,7 +32,7 @@ public class Main extends Game {
 
         // Texture Management
         if (!TextureController.exists()) {
-            TextureController.create(true, new TextureFactory());
+            TextureController.create(new TextureFactory());
         }
         if (!UITextureController.exists()) {
             UITextureController.create(new TextureFactory());
