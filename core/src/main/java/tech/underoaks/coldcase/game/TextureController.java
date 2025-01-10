@@ -1,8 +1,9 @@
 package tech.underoaks.coldcase.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
-public class TextureController {
+public class TextureController extends AssetManager {
     private static TextureController instance;
 
     private static boolean isDetective = true;

@@ -6,6 +6,7 @@ import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.MapGenerator;
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.Player;
 
@@ -18,16 +19,6 @@ public class MapActor extends Actor {
     private final Properties properties = Main .getProperties();
 
     public MapActor() {
-        map = setupMap();
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        map.render(batch, getOriginX(), getOriginY());
-    }
-
-    private Map setupMap() {
-
         if(!properties.containsKey("map_path")) {
             throw new RuntimeException("Missing required property: map_path");
         }
@@ -40,8 +31,21 @@ public class MapActor extends Actor {
             case "ghost" -> false;
             default -> throw new RuntimeException("Unknown role: " + properties.getProperty("role"));
         };
+        map = setupMap(path);
+    }
 
-        map = MapGenerator.serializeContentToMap(Path.of(path), detective);
+    public MapActor(String path){
+        setupMap(path);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        map.render(batch, getOriginX(), getOriginY());
+    }
+
+    private Map setupMap(String path) {
+
+        map = MapGenerator.serializeContentToMap(Path.of(path), TextureController.getIsDetective());
 
         GameController gameController = GameController.getInstance();
         gameController.setCurrentMap(map);

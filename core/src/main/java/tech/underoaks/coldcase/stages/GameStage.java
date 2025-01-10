@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.stages.actors.InventoryActor;
 import tech.underoaks.coldcase.stages.actors.MapActor;
@@ -13,17 +14,21 @@ import tech.underoaks.coldcase.stages.actors.MapActor;
  * GameStage class -> initializes alle game relevant actors and handles fixed updates
  */
 public class GameStage extends AbstractStage {
+    private final String path;
     private float fixedUpdateClock = 0f;
     MapActor mapActor;
 
-    GameStage() {
+    GameStage(Levels level) {
         super();
+        this.path = level.getMapPath();
     }
 
     @Override
     public void buildStage(InputMultiplexer inputMultiplexer) {
         Gdx.input.setInputProcessor(PlayerController.getInstance());
-        mapActor = new MapActor();
+
+        mapActor = new MapActor(path);
+
         mapActor.setOrigin(getWidth() / 2, getHeight() / 2);
         addActor(mapActor);
 
@@ -34,6 +39,7 @@ public class GameStage extends AbstractStage {
 
         inputMultiplexer.addProcessor(PlayerController.getInstance());
     }
+
 
     @Override
     public void render(float delta) {

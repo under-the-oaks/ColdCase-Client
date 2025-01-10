@@ -2,6 +2,7 @@ package tech.underoaks.coldcase.remote;
 
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
