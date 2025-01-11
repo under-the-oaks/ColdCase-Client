@@ -7,6 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.state.tileContent.Player;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
+/**
+ * Handles player input and movement
+ *
+ * @author MaxBecker, Toni Bingenheimer
+ * @Contributor: Jean-Luc Wenserski, Jonathan Christe
+ */
 public class PlayerController implements InputProcessor {
 
     private static PlayerController instance;
