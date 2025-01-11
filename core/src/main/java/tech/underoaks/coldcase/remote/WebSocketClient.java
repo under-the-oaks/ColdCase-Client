@@ -129,4 +129,8 @@ public class WebSocketClient {
             System.err.println("Failed to send message: " + e.getMessage());
         }
     }
+
+    public boolean isConnectionOpen() {
+        return session.isOpen();
+    }
 }
