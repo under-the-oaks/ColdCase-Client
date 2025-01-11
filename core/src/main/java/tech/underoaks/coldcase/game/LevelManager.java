@@ -53,6 +53,7 @@ public class LevelManager {
      * @param level The level to be loaded.
      */
     public void loadLevel(Levels level){
+        PlayerController.getInstance().setInventory(null);
         StageManager.getInstance().setNextStage(Stages.GAME, level);
     }
 }
