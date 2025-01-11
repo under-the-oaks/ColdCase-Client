@@ -33,7 +33,7 @@ public class MoveUpdateTest {
     public static void beforeAll() {
         TextureFactory mockTextureFactory = mock(TextureFactory.class);
         when(mockTextureFactory.create(anyString())).thenReturn(mock(Texture.class));
-        TextureController.create(false, mockTextureFactory);
+        TextureController.create(mockTextureFactory);
     }
 
     @AfterAll
