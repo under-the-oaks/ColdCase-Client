@@ -36,7 +36,6 @@ public class LevelManager {
      * and sets the next stage to the main menu.
      */
     public void loadNextLevel() {
-        System.out.println(Levels.values().length);
         if(currentLevelIndex < Levels.values().length){
             loadLevel(Levels.values()[currentLevelIndex]);
         }else {
