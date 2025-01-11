@@ -34,6 +34,10 @@ public class TextureController {
     private Texture ghostTextureEast;
     private Texture ghostTextureWest;
 
+    private Texture trigger_closed;
+
+    private Texture trigger_opened;
+
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
@@ -65,6 +69,9 @@ public class TextureController {
         this.ghostTextureWest = factory.create("./sprites/Sprite_Ghost_Left.png");
         this.ghostTextureSouth = factory.create("./sprites/Sprite_Ghost_Down.png");
         this.ghostTextureEast = factory.create("./sprites/Sprite_Ghost_Right.png");
+
+        this.trigger_closed = factory.create("./sprites/Trigger_closed.png");
+        this.trigger_opened = factory.create("./sprites/Trigger_opened.png");
 
     }
 
@@ -179,4 +186,7 @@ public class TextureController {
     public Texture getGhostTexture() { return ghostTexture; }
 
     public Texture getDetectiveTexture() { return detectiveTexture; }
+
+    public Texture getTrigger_closed() { return trigger_closed; }
+    public Texture getTrigger_opened() { return trigger_opened; }
 }
