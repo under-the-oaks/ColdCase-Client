@@ -10,7 +10,7 @@ import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.stages.actors.InventoryActor;
 import tech.underoaks.coldcase.stages.actors.MapActor;
-import tech.underoaks.coldcase.stages.actors.pauseMenu;
+import tech.underoaks.coldcase.stages.actors.PauseMenu;
 
 /**
  * GameStage class -> initializes alle game relevant actors and handles fixed updates
@@ -19,7 +19,7 @@ public class GameStage extends AbstractStage {
     private final String path;
     private float fixedUpdateClock = 0f;
     MapActor mapActor;
-    pauseMenu pauseMenu;
+    PauseMenu pauseMenu;
 
     InputMultiplexer inputMultiplexer;
 
@@ -48,7 +48,7 @@ public class GameStage extends AbstractStage {
         addActor(inventoryActor);
 
         // add pause menu Group
-        pauseMenu = new pauseMenu();
+        pauseMenu = new PauseMenu();
         pauseMenu.setVisible(false);
         pauseMenu.setSize(getWidth(), getHeight());
         addActor(pauseMenu);

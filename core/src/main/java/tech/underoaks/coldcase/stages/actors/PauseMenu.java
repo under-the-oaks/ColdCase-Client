@@ -19,9 +19,9 @@ import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
-public class pauseMenu extends Group {
+public class PauseMenu extends Group {
 
-    public pauseMenu() {
+    public PauseMenu() {
         super();
 
         Skin skin = UITextureController.getInstance().getSkin();
