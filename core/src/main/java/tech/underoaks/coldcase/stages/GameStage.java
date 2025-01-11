@@ -20,7 +20,11 @@ public class GameStage extends AbstractStage {
 
     GameStage(Levels level) {
         super();
-        this.path = level.getMapPath();
+        if(level == null){
+            this.path = "maps/Map_GoalDemo";
+        }else {
+            this.path = level.getMapPath();
+        }
     }
 
     @Override

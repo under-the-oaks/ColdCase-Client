@@ -7,7 +7,9 @@ package tech.underoaks.coldcase.game;
  */
 public enum Levels {
     LEVEL_01("maps/Map_GoalDemo"),
-    LEVEL_02("maps/Map_Mvp");
+    LEVEL_02("maps/Map_Mvp"),
+    LEVEL_03("maps/New_Level_Test_Medium"),
+    LEVEL_04("maps/New_Level_Test_Hard");
 
     private final String mapPath;
     Levels(String mapPath) {

@@ -20,7 +20,7 @@ public enum Stages {
      */
     GAME {
         public AbstractStage getScreen(Object... params) {
-            Levels level = (params.length > 0 && params[0] instanceof Levels) ? (Levels) params[0] : Levels.LEVEL_01;
+            Levels level = (params.length > 0 && params[0] instanceof Levels) ? (Levels) params[0] : null;
             return new GameStage(level);
         }
     },
