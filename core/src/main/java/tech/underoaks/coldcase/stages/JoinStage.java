@@ -47,10 +47,18 @@ public class JoinStage extends AbstractStage {
         connectButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String sessionID = sessionIDField.getText();
-                TextureController.setIsDetective(false);
-                System.out.println("Connecting to session: " + sessionID);
-                WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
+                System.out.println("Connect button clicked");
+                System.out.println("WebSocketClient.exists(): " + WebSocketClient.exists());
+                if (WebSocketClient.exists()) {
+                    System.out.println("WebSocketClient.getInstance().isConnectionOpen(): " + WebSocketClient.getInstance().isConnectionOpen());
+                }
+                if (!WebSocketClient.exists() || !WebSocketClient.getInstance().isConnectionOpen()) {
+                    String sessionID = sessionIDField.getText();
+                    TextureController.setIsDetective(false);
+                    Main.getProperties().setProperty("role", "ghost");
+                    System.out.println("Connecting to session: " + sessionID);
+                    WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
+                }
             }
         });
 
