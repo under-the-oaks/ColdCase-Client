@@ -11,7 +11,7 @@ import tech.underoaks.coldcase.state.tileContent.TileContent;
  * Handles player input and movement
  *
  * @author MaxBecker, Toni Bingenheimer
- * @Contributor: Jean-Luc Wenserski, Jonathan Christe
+ * @Contributor Jean-Luc Wenserski, Jonathan Christe
  */
 public class PlayerController implements InputProcessor {
 
@@ -79,7 +79,6 @@ public class PlayerController implements InputProcessor {
                 case Input.Keys.A -> movePlayer(Direction.WEST);
                 case Input.Keys.D -> movePlayer(Direction.EAST);
             }
-            System.out.println(lookDirection);
             isMoving = true;
             moveKeycode = keycode;
             return true;
