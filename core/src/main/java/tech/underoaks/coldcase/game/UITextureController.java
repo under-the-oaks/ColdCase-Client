@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,8 +34,8 @@ public class UITextureController {
     }
 
     private void instantiateFont() {
-        this.font = new BitmapFont();
-        this.font.getData().setScale(20);
+        this.font = new BitmapFont(Gdx.files.internal("font/TypoFont.fnt"));
+        this.font.getData().setScale(10);
     }
 
     private void instantiateSkin() {
