@@ -6,6 +6,7 @@ package tech.underoaks.coldcase.game;
  * @author Jean-Luc Wenserski
  */
 public enum Levels {
+    LEVEL_TEST("test_plain"),
     LEVEL_01("maps/Map_GoalDemo"),
     LEVEL_02("maps/Map_Mvp"),
     LEVEL_03("maps/New_Level_Test_Medium"),
