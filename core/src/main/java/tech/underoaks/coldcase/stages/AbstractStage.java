@@ -44,4 +44,9 @@ public abstract class AbstractStage extends Stage implements Screen {
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+    @Override
+    public boolean keyDown(int keyCode) {
+        return super.keyDown(keyCode);
+    }
 }

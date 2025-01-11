@@ -33,7 +33,7 @@ public class JoinStage extends AbstractStage {
         this.addActor(table);
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 

@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.LevelManager;
-import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
@@ -48,7 +47,7 @@ public class HostStage extends AbstractStage {
         this.addActor(table);
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 
@@ -80,7 +79,7 @@ public class HostStage extends AbstractStage {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                WebSocketMessagesManager.startGame();
+                WebSocketMessagesManager.startGame(0);
                 LevelManager.getInstance().loadNextLevel();
             }
         });
