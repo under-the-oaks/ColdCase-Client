@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
 
 /**
  * A WebSocket client for communicating with the remote game server.
@@ -20,6 +21,10 @@ public class WebSocketClient {
     private static String lobbyID = "";
 
     public static WebSocketClient create(String websocket_url, String session_id) {
+        if(!Objects.equals(session_id, "new")){
+            lobbyID = session_id;
+        }
+
         if(instance != null) {
             throw new IllegalStateException("WebSocketClient already created");
         }
@@ -30,35 +35,17 @@ public class WebSocketClient {
             URI uri = new URI("ws://" + websocket_url + "/?session=" + session_id);
             System.out.println("Connecting to Server " + uri);
             session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
-            lobbyID = session_id;
             System.out.println("Connected to WebSocket server on:"+websocket_url);
         } catch (Exception e) {
             System.err.println("Error during WebSocket connection: " + e.getMessage());
-            e.printStackTrace();    //TODO Handle error better / correctly
+            e.printStackTrace();
         }
 
         return instance;
     }
 
     public static WebSocketClient create(String websocket_url) {
-        if(instance != null) {
-            throw new IllegalStateException("WebSocketClient already created");
-        }
-        instance = new WebSocketClient();
-
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            URI uri = new URI("ws://" + websocket_url + "/?session=" + "new");
-            System.out.println("Connecting to Server " + uri);
-            session = container.connectToServer(WebSocketClient.class, uri); // Initialize the session
-
-            System.out.println("Connected to WebSocket server.");
-        } catch (Exception e) {
-            System.err.println("Error during WebSocket connection: " + e.getMessage());
-            e.printStackTrace();    //TODO Handle error better / correctly
-        }
-
-        return instance;
+        return create(websocket_url,"new");
     }
 
 
@@ -93,7 +80,7 @@ public class WebSocketClient {
 
     /**
      * this message gets invoked when a message is received from the server.
-     * it !it dosen´t has access to the fields of this class
+     * it !it doesn´t has access to the fields of this class
      *
      * @param message the received message as a {@link String}.
      */
@@ -128,5 +115,9 @@ public class WebSocketClient {
         } catch (IOException e) {
             System.err.println("Failed to send message: " + e.getMessage());
         }
+    }
+
+    public boolean isConnectionOpen() {
+        return session.isOpen();
     }
 }

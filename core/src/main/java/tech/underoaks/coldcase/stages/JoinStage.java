@@ -33,7 +33,7 @@ public class JoinStage extends AbstractStage {
         this.addActor(table);
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 
@@ -47,11 +47,18 @@ public class JoinStage extends AbstractStage {
         connectButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String sessionID = sessionIDField.getText();
-                TextureController.setIsDetective(false);
-                Main.getProperties().setProperty("role", "ghost");
-                System.out.println("Connecting to session: " + sessionID);
-                WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
+                System.out.println("Connect button clicked");
+                System.out.println("WebSocketClient.exists(): " + WebSocketClient.exists());
+                if (WebSocketClient.exists()) {
+                    System.out.println("WebSocketClient.getInstance().isConnectionOpen(): " + WebSocketClient.getInstance().isConnectionOpen());
+                }
+                if (!WebSocketClient.exists() || !WebSocketClient.getInstance().isConnectionOpen()) {
+                    String sessionID = sessionIDField.getText();
+                    TextureController.setIsDetective(false);
+                    Main.getProperties().setProperty("role", "ghost");
+                    System.out.println("Connecting to session: " + sessionID);
+                    WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
+                }
             }
         });
 

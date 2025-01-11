@@ -2,6 +2,7 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
@@ -31,10 +32,10 @@ public class Main extends Game {
         }
 
         // Texture Management
-        if(!TextureController.exists()) {
-            TextureController.create(true, new TextureFactory());
+        if (!TextureController.exists()) {
+            TextureController.create(new TextureFactory());
         }
-        if(!UITextureController.exists()) {
+        if (!UITextureController.exists()) {
             UITextureController.create(new TextureFactory());
         }
 
@@ -48,7 +49,6 @@ public class Main extends Game {
         float delta = Gdx.graphics.getDeltaTime();
         fixedUpdate(delta);
     }
-
 
     /**
      * Fixed update method to trigger Methods every 0.1 seconds
@@ -71,5 +71,10 @@ public class Main extends Game {
 
     public static Properties getProperties() {
         return properties;
+    }
+
+    public void dispose() {
+        super.dispose();
+        GameController.getInstance().getCurrentMap().dispose();
     }
 }

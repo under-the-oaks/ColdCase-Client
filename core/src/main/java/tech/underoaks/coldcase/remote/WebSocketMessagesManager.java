@@ -2,6 +2,8 @@ package tech.underoaks.coldcase.remote;
 
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.LevelManager;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -85,8 +87,12 @@ public class WebSocketMessagesManager {
         WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
-    public static void startGame() {
-        WebSocketClient.getInstance().send(json.toJson(new Messages.startGameMessage(), Object.class));
+    public static void startGame(int levelIndex) {
+        WebSocketClient.getInstance().send(json.toJson(new Messages.startGameMessage(levelIndex), Object.class));
+    }
+
+    public static void exitToMainMenuMessage() {
+        WebSocketClient.getInstance().send(json.toJson(new Messages.exitToMainMenuMessage(), Object.class));
     }
 
     /**
@@ -143,7 +149,11 @@ public class WebSocketMessagesManager {
                         WebSocketMessagesManager.getInstance().callback(messageObj);
                     }
                     case Messages.startGameMessage messageObj -> {
-                        StageManager.getInstance().setNextStage(Stages.GAME);
+                        LevelManager.getInstance().loadLevel(Levels.values()[messageObj.levelIndex]);
+                    }
+                    case Messages.exitToMainMenuMessage messageObj -> {
+                        StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
+                        LevelManager.getInstance().currentLevelIndex = 0;
                     }
                     case null, default -> System.out.println("unknown message");
                 }
