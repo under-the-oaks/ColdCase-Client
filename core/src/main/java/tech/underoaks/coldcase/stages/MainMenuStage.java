@@ -65,7 +65,7 @@ public class MainMenuStage extends AbstractStage {
 //        table.setDebug(true);
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 
