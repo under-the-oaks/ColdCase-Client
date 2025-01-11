@@ -2,7 +2,6 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
@@ -60,18 +59,13 @@ public class Main extends Game {
      */
     private void fixedUpdate(float delta) {
         fixedUpdateClock += delta;
-        if (fixedUpdateClock >= 0.1f) {
+        if (fixedUpdateClock >= 0.075f) {
             fixedUpdateClock = 0f;
 
             // all fixed update methods below
             StageManager.getInstance().update();
+            PlayerController.getInstance().update();
 
-        }
-        if (fixedUpdateClock >= 0.075f) {
-            fixedUpdateClock = 0f;
-            if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.D)){
-                PlayerController.getInstance().update();
-            }
         }
     }
 
