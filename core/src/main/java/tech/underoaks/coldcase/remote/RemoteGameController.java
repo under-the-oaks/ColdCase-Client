@@ -34,7 +34,7 @@ public class RemoteGameController implements AutoCloseable {
      * blocks until timeout or responseMessage completes the futureObj.
      * </p>
      */
-    public RemoteGameController() {
+    public RemoteGameController() throws TimeoutException {
 
         CompletableFuture<Object> future = new CompletableFuture<>();
         remoteGameControllerInstanceId = UUID.randomUUID().toString(); // Automatically generate a unique ID
@@ -48,10 +48,6 @@ public class RemoteGameController implements AutoCloseable {
             }
         } catch (ExecutionException | InterruptedException e) {
             System.err.println(Arrays.toString(e.getStackTrace()));
-            //TODO should this trigger an abort gsu?
-        } catch (TimeoutException e) {
-            System.err.println("TIMEOUT in createRemoteInteractionChain");
-            //TODO retry?
         }
 
 
@@ -88,21 +84,18 @@ public class RemoteGameController implements AutoCloseable {
         CompletableFuture<Object> future = new CompletableFuture<>(); //used for synchronisation
 
         WebSocketMessagesManager.getInstance().appendRemoteInteraction(remoteGameControllerInstanceId, future, interaction, suppressTranscendentFollowUp);
-        String callId = UUID.randomUUID().toString(); // Automatically generate a unique ID
+
 
         try {
-            Object returnObj = future.get(60, TimeUnit.SECONDS);// Block until the response is provided
+            Object returnObj = future.get(3, TimeUnit.SECONDS);// Block until the response is provided
             if (returnObj instanceof Messages.AppendRemoteInteractionResponseMessage messageObj) {
                 return messageObj.getInteractions();
             }
         } catch (ExecutionException | InterruptedException e) {
             System.err.println(Arrays.toString(e.getStackTrace()));
-            //TODO
         } catch (TimeoutException e) {
             System.err.println("TIMEOUT in triggerAction");
             return null; // return in case of timeout
-        } finally {
-            //TODO may needs to remove future?
         }
 
         return null;//return in case server times out or responded with wrong data

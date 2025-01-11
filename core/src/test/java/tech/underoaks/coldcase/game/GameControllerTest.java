@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.concurrent.TimeoutException;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -224,6 +225,8 @@ public class GameControllerTest {
             Assertions.assertNotNull(expectedChain.getPendingRemoteActions());
             Assertions.assertEquals(1, expectedChain.getPendingRemoteActions().size());
             Assertions.assertEquals(interactionB, expectedChain.getPendingRemoteActions().poll());
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -240,6 +243,8 @@ public class GameControllerTest {
             GameController.triggerRemoteAction(expectedChain, interactionA);
             Assertions.assertNotNull(expectedChain.getPendingRemoteActions());
             Assertions.assertEquals(0, expectedChain.getPendingRemoteActions().size());
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
         }
     }
 
