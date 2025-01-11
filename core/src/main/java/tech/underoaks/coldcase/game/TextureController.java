@@ -83,6 +83,10 @@ public class TextureController {
         return instance;
     }
 
+    public static void destroy() {
+        instance = null;
+    }
+
     public static TextureController getInstance() {
         if (instance == null) {
             throw new IllegalStateException("TextureController not initialized");

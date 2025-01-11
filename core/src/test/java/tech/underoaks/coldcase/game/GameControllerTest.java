@@ -35,6 +35,11 @@ public class GameControllerTest {
         TextureController.create(mockTextureFactory);
     }
 
+    @AfterAll
+    public static void afterAll() {
+        TextureController.destroy();
+    }
+
     @BeforeEach
     public void beforeEach() throws URISyntaxException {
         game = new HeadlessApplicationListener();

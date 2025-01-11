@@ -68,7 +68,7 @@ public class TileTest {
     public void setUp(){
         game = new HeadlessApplicationListener();
 
-        // Mock Variablen befüllen
+        // Mock Variablen befÃ¼llen
 
         mockTexture = mock(Texture.class);
         when(mockTexture.getWidth()).thenReturn(32);
