@@ -41,7 +41,7 @@ public final class MapGenerator {
     public static Map serializeContentToMap(Path path, boolean isDetective) {
 
         // set Texture Controller to the correct mode
-        TextureController.setIsDetective(isDetective);
+        //TextureController.setIsDetective(isDetective);
 
         Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
         List<String> lines = null;

@@ -5,11 +5,16 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
+import tech.underoaks.coldcase.state.updates.ChangeTextureUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 import java.util.Objects;
 
 public class Door_Trigger extends TileContent{
+
+    private final Texture trigger_closed = TextureController.getInstance().getTrigger_closed();
+    private final Texture trigger_opened = TextureController.getInstance().getTrigger_opened();
+    private static boolean isOpen = false;
 
     public Door_Trigger() {
         super(TextureController.getInstance().getTrigger_closed(), true, false);
@@ -18,7 +23,18 @@ public class Door_Trigger extends TileContent{
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
 
-        if (Objects.equals(interaction.getCaller(), Player.class.getName())){
+        if (Objects.equals(interaction.getCaller(), Player.class.getName())) {
+
+            int childIndex = chain.getSnapshot().getSnapshotMap().getChildIndex(interaction.getTargetPos(), this);
+
+            if (!isOpen) {
+                chain.addGameStateUpdate(new ChangeTextureUpdate(trigger_opened, interaction.getTargetPos(), childIndex));
+                isOpen = true;
+            } else {
+                chain.addGameStateUpdate(new ChangeTextureUpdate(trigger_closed, interaction.getTargetPos(), childIndex));
+                isOpen = false;
+            }
+
             chain.addRemoteAction(new Interaction(interaction.getTargetPos(), interaction.getActionDirection(), this.getClass()));
         }
 
