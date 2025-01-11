@@ -52,7 +52,7 @@ public class GameStage extends AbstractStage {
         fixedUpdate(delta);
 
         getBatch().begin();
-        renderFPS(getBatch());
+        //renderFPS(getBatch());
         getBatch().end();
 
     }
