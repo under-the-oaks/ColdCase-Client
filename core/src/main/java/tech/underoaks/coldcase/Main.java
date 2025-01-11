@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.game.UITextureController;
@@ -47,7 +48,6 @@ public class Main extends Game {
         super.render();
         float delta = Gdx.graphics.getDeltaTime();
         fixedUpdate(delta);
-
     }
 
     /**
@@ -59,11 +59,13 @@ public class Main extends Game {
      */
     private void fixedUpdate(float delta) {
         fixedUpdateClock += delta;
-        if (fixedUpdateClock >= 0.1f) {
+        if (fixedUpdateClock >= 0.075f) {
             fixedUpdateClock = 0f;
 
             // all fixed update methods below
             StageManager.getInstance().update();
+            PlayerController.getInstance().update();
+
         }
     }
 

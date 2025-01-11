@@ -16,4 +16,13 @@ public enum Direction {
             case WEST -> new Vector2(-0, -1);
         };
     }
+
+    public int getKey() {
+        return switch (this) {
+            case NORTH -> 19;
+            case SOUTH -> 20;
+            case EAST -> 22;
+            case WEST -> 21;
+        };
+    }
 }
