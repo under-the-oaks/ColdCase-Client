@@ -35,7 +35,6 @@ public class TextureController {
     private Texture ghostTextureWest;
 
     private Texture trigger_closed;
-
     private Texture trigger_opened;
 
 
@@ -75,11 +74,11 @@ public class TextureController {
 
     }
 
-    public static TextureController create(boolean isDetective, TextureFactory factory) {
+    public static TextureController create(TextureFactory factory) {
         if (instance != null) {
             throw new IllegalStateException("TextureController already initialized");
         }
-        TextureController.isDetective = isDetective;
+
         instance = new TextureController(factory);
         return instance;
     }

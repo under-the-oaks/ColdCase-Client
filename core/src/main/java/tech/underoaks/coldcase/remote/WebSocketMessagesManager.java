@@ -2,6 +2,8 @@ package tech.underoaks.coldcase.remote;
 
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.LevelManager;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -143,7 +145,7 @@ public class WebSocketMessagesManager {
                         WebSocketMessagesManager.getInstance().callback(messageObj);
                     }
                     case Messages.startGameMessage messageObj -> {
-                        StageManager.getInstance().setNextStage(Stages.GAME);
+                        LevelManager.getInstance().loadNextLevel();
                     }
                     case null, default -> System.out.println("unknown message");
                 }

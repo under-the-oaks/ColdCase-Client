@@ -49,7 +49,6 @@ public class JoinStage extends AbstractStage {
             public void clicked(InputEvent event, float x, float y) {
                 String sessionID = sessionIDField.getText();
                 TextureController.setIsDetective(false);
-                Main.getProperties().setProperty("role", "ghost");
                 System.out.println("Connecting to session: " + sessionID);
                 WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
             }
