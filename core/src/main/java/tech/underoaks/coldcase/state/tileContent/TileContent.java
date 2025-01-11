@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
@@ -97,6 +98,12 @@ public abstract class TileContent implements Cloneable {
             if (handler != null) {
                 return handler;
             }
+        }
+
+        // Wenn auf dem Player eine Interaktion durchführt wird, wird unabhängig von dessen Ergebnis der Command als 'behandelt' betrachtet.
+        if(this.getClass() == Player.class) {
+            action(chain, interaction);
+            return this;
         }
 
         return action(chain, interaction) ? this : null;
@@ -282,10 +289,8 @@ public abstract class TileContent implements Cloneable {
         if (isObjectPassable != other.isObjectPassable) return false;
         if (visibilityState != other.visibilityState) return false;
 
-        if (texture != null ? !texture.equals(other.texture) : other.texture != null) return false;
-        if (sprite != null ? !sprite.equals(other.sprite) : other.sprite != null) return false;
-
-        return true;
+        if (!Objects.equals(texture, other.texture)) return false;
+        return Objects.equals(sprite, other.sprite);
     }
 
 
