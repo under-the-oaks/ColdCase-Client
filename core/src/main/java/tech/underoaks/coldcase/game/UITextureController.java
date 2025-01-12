@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 /**
  * This class is responsible for providing the skin for the UI elements.
  *
- * @implNote Helpful for testing i think
+ * @author mabe.edu
  */
 public class UITextureController {
 

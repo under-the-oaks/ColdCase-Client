@@ -24,6 +24,8 @@ import java.util.List;
  * <p>
  * It provides methods for serializing and deserializing maps to and from JSON.
  * The JSON format used is the one provided by the {@link Json} class provided by libGDX.
+ *
+ * @author mabe.edu
  */
 public final class MapGenerator {
 
