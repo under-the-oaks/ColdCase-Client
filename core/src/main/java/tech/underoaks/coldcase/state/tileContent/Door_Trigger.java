@@ -2,7 +2,9 @@ package tech.underoaks.coldcase.state.tileContent;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.ChangeTextureUpdate;
@@ -22,6 +24,15 @@ public class Door_Trigger extends TileContent{
 
     @Override
     public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
+
+        // No Glove in Inventory
+        if(interaction.getUuid().equals(GameController.getInstance().uuid.toString()))
+        {
+            if(PlayerController.getInstance().getInventory() == null || PlayerController.getInstance().getInventory().getClass() != GloveItem.class){
+                System.out.println( "Insufficient inventory - Glove needed" );
+                return false;
+            }
+        }
 
         if (Objects.equals(interaction.getCaller(), Player.class.getName())) {
 
