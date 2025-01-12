@@ -102,10 +102,10 @@ public class UITextureController {
         return skin;
     }
 
-    public Vector2 getButtonSize(float width, float height) {
+    public Vector2 getButtonSize() {
         //button size
-        float buttonWidth = width / 2;
-        float buttonHeight = height / 10;
+        float buttonWidth = 3000;
+        float buttonHeight = 2000;
 
         return new Vector2(buttonWidth, buttonHeight);
     }

@@ -9,13 +9,15 @@ public class TextureController {
 
     // Texturen
     private Texture emptyTileTexture;
-    private Texture groundTileTexture;
+    private Texture detectiveGroundTileTexture;
+    private Texture ghostGroundTileTexture;
     private Texture testItemTexture;
     private Texture testItem02Texture;
     private Texture doorTriggerTexture;
     private Texture testContentTexture;
     private Texture portalObjectTexture;
-    private Texture wallTexture;
+    private Texture detectiveWallTexture;
+    private Texture ghostWallTexture;
     private Texture movableBlockTexture;
     private Texture movableBlockTranscendantTexture;
     private Texture transcendentTestBlockTexture;
@@ -35,20 +37,21 @@ public class TextureController {
     private Texture ghostTextureWest;
 
     private Texture trigger_closed;
-
     private Texture trigger_opened;
 
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
-        this.groundTileTexture = factory.create("./sprites/block_detective_2.png");
+        this.detectiveGroundTileTexture = factory.create("./sprites/block_detective_2.png");
+        this.ghostGroundTileTexture = factory.create("./sprites/block_ghost_4.png");
 
         this.testItemTexture = factory.create("./isometric tileset/separated images/TEST_ITEM.png");
         this.testItem02Texture = factory.create("./isometric tileset/separated images/TEST_ITEM02.png");
         this.doorTriggerTexture = factory.create("./isometric tileset/separated images/tile_069.png");
         this.testContentTexture = factory.create("./isometric tileset/separated images/tile_050.png");
         this.portalObjectTexture = factory.create("./sprites/portal.png");
-        this.wallTexture = factory.create("./sprites/block_detective.png");
+        this.detectiveWallTexture = factory.create("./sprites/block_detective.png");
+        this.ghostWallTexture = factory.create("./sprites/block_ghost_3.png");
         this.movableBlockTexture = factory.create("./sprites/block_detective.png");
         this.movableBlockTranscendantTexture = factory.create("sprites/block_transcendent_2.png");
         this.transcendentTestBlockTexture = factory.create("sprites/block_transcendent_2.png");
@@ -75,13 +78,17 @@ public class TextureController {
 
     }
 
-    public static TextureController create(boolean isDetective, TextureFactory factory) {
+    public static TextureController create(TextureFactory factory) {
         if (instance != null) {
             throw new IllegalStateException("TextureController already initialized");
         }
-        TextureController.isDetective = isDetective;
+
         instance = new TextureController(factory);
         return instance;
+    }
+
+    public static void destroy() {
+        instance = null;
     }
 
     public static TextureController getInstance() {
@@ -108,7 +115,7 @@ public class TextureController {
     }
 
     public Texture getGroundTileTexture() {
-        return groundTileTexture;
+        return isDetective ? detectiveGroundTileTexture : ghostGroundTileTexture;
     }
 
     public Texture getTestItemTexture() {
@@ -132,7 +139,7 @@ public class TextureController {
     }
 
     public Texture getWallTexture() {
-        return wallTexture;
+        return isDetective ? detectiveWallTexture : ghostWallTexture;
     }
 
     public Texture getMovableBlockTexture() {

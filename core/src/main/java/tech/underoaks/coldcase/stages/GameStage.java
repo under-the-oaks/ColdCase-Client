@@ -1,29 +1,44 @@
 package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.stages.actors.InventoryActor;
 import tech.underoaks.coldcase.stages.actors.MapActor;
+import tech.underoaks.coldcase.stages.actors.PauseMenu;
 
 /**
  * GameStage class -> initializes alle game relevant actors and handles fixed updates
  */
 public class GameStage extends AbstractStage {
+    private final String path;
     private float fixedUpdateClock = 0f;
     MapActor mapActor;
+    PauseMenu pauseMenu;
 
-    GameStage() {
+    InputMultiplexer inputMultiplexer;
+
+    GameStage(Levels level) {
         super();
+        if (level == null) {
+            this.path = "maps/Map_GoalDemo";
+        } else {
+            this.path = level.getMapPath();
+        }
     }
 
     @Override
     public void buildStage(InputMultiplexer inputMultiplexer) {
+        this.inputMultiplexer = inputMultiplexer;
         Gdx.input.setInputProcessor(PlayerController.getInstance());
-        mapActor = new MapActor();
+
+        mapActor = new MapActor(path);
+
         mapActor.setOrigin(getWidth() / 2, getHeight() / 2);
         addActor(mapActor);
 
@@ -32,7 +47,13 @@ public class GameStage extends AbstractStage {
         inventoryActor.setSize(2000, 2000);
         addActor(inventoryActor);
 
-        inputMultiplexer.addProcessor(PlayerController.getInstance());
+        // add pause menu Group
+        pauseMenu = new PauseMenu();
+        pauseMenu.setVisible(false);
+        pauseMenu.setSize(getWidth(), getHeight());
+        addActor(pauseMenu);
+
+        this.inputMultiplexer.addProcessor(PlayerController.getInstance());
     }
 
     @Override
@@ -42,7 +63,7 @@ public class GameStage extends AbstractStage {
         fixedUpdate(delta);
 
         getBatch().begin();
-        renderFPS(getBatch());
+        //renderFPS(getBatch());
         getBatch().end();
 
     }
@@ -62,6 +83,20 @@ public class GameStage extends AbstractStage {
         }
     }
 
+    @Override
+    public boolean keyDown(int keyCode) {
+        boolean handled = super.keyDown(keyCode);
+        if (keyCode == Input.Keys.ESCAPE) {
+            if (pauseMenu.isVisible()) {
+                inputMultiplexer.addProcessor(PlayerController.getInstance());
+            } else {
+                inputMultiplexer.removeProcessor(PlayerController.getInstance());
+            }
+            pauseMenu.setVisible(!pauseMenu.isVisible());
+        }
+        return handled;
+    }
+
     /**
      * Renders the current FPS in the top left corner
      *
@@ -72,12 +107,6 @@ public class GameStage extends AbstractStage {
         font.getData().setScale(20);
         int fps = Gdx.graphics.getFramesPerSecond();
         font.draw(batch, "FPS: " + fps, 100, getHeight() - 100);
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        GameController.getInstance().getCurrentMap().dispose();
     }
 
 }

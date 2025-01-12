@@ -312,17 +312,22 @@ public class Map {
 
     /**
      * Checks if the player is next to the specified tile position.
-     * The player is considered next to the tile if they are adjacent in any of the four cardinal directions.
+     * The player is considered next to the tile if they are adjacent in any of the four cardinal directions
+     * or diagonally adjacent.
      *
      * @param tilePosition The position of the tile to check.
-     * @return true if the player is adjacent to the tile (either to the left, right, above, or below), false otherwise.
+     * @return true if the player is adjacent to the tile (either to the left, right, above, below, or diagonally), false otherwise.
      */
     public static boolean isPlayerNextToTile(Vector2 tilePosition) {
         Vector2 playerPosition = PlayerController.getInstance().getPlayerPosition();
-        return playerPosition.equals(tilePosition.cpy().add(1, 0)) ||
-            playerPosition.equals(tilePosition.cpy().add(0, 1)) ||
-            playerPosition.equals(tilePosition.cpy().sub(1, 0)) ||
-            playerPosition.equals(tilePosition.cpy().sub(0, 1));
+        return playerPosition.equals(tilePosition.cpy().add(1, 0)) ||  // Right
+            playerPosition.equals(tilePosition.cpy().add(0, 1)) ||  // Above
+            playerPosition.equals(tilePosition.cpy().sub(1, 0)) ||  // Left
+            playerPosition.equals(tilePosition.cpy().sub(0, 1)) ||  // Below
+            playerPosition.equals(tilePosition.cpy().add(1, 1)) ||  // Top-right diagonal
+            playerPosition.equals(tilePosition.cpy().add(1, -1)) || // Bottom-right diagonal
+            playerPosition.equals(tilePosition.cpy().add(-1, 1)) || // Top-left diagonal
+            playerPosition.equals(tilePosition.cpy().add(-1, -1));  // Bottom-left diagonal
     }
 
 }
