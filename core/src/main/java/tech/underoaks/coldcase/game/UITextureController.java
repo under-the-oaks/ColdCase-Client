@@ -138,7 +138,7 @@ public class UITextureController {
      * @return The letter corresponding to the number.
      * @throws IllegalArgumentException If the number is not between 1 and 26.
      */
-    public char mapIntToLetter(int number, boolean isUpperCase) {
+    public static char mapIntToLetter(int number, boolean isUpperCase) {
         if (number < 1 || number > 26) {
             throw new IllegalArgumentException("Number must be between 1 and 26");
         }

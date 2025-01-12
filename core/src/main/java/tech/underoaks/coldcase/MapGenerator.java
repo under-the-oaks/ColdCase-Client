@@ -125,7 +125,7 @@ public final class MapGenerator {
                     if (tileArray[j][k] instanceof EmptyTile && j == mapSize.x - 1 && k != mapSize.y - 1) {
                         tileArray[j][k].pushTileContent(new UIContentTileContent(Integer.toString(k), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_LEFT));
                     } else if (tileArray[j][k] instanceof EmptyTile && j != mapSize.x - 1 && k == mapSize.y - 1) {
-                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(UITextureController.getInstance().mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(UITextureController.mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
                     } else if (tileArray[j][k] instanceof EmptyTile) {
                         tileArray[j][k].pushTileContent(new InvisibleWall());
                         continue;
