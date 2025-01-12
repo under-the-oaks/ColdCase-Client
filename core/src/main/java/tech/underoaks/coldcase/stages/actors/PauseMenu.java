@@ -67,7 +67,7 @@ public class PauseMenu extends Group {
         exitButton.setSize(buttonWidth, buttonHeight);
 
         // Add buttons to the table
-        table.add(resetButton).width(buttonWidth).height(buttonHeight);
+        table.add(resetButton).width(buttonWidth).height(buttonHeight).padBottom(160);
         table.row();
         table.add(exitButton).width(buttonWidth).height(buttonHeight);
 
