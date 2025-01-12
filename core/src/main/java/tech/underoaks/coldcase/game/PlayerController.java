@@ -11,7 +11,7 @@ import tech.underoaks.coldcase.state.tileContent.TileContent;
  * Handles player input and movement
  *
  * @author MaxBecker, Toni Bingenheimer
- * @Contributor Jean-Luc Wenserski, Jonathan Christe
+ * @contributor Jean-Luc Wenserski, Jonathan Christe
  */
 public class PlayerController implements InputProcessor {
 
