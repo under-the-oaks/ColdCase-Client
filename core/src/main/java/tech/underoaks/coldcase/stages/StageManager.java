@@ -8,7 +8,9 @@ import com.badlogic.gdx.Screen;
 public class StageManager {
 
     private Stages nextStage;
+    private Object[] nextStageParams;
     private static StageManager instance;
+
     public static StageManager getInstance() {
         if (instance == null) {
             throw new IllegalStateException("TextureController not initialized");
@@ -49,14 +51,16 @@ public class StageManager {
         }
     }
 
-    public void setNextStage(Stages nextStage) {
+    public void setNextStage(Stages nextStage, Object... params) {
         this.nextStage = nextStage;
+        this.nextStageParams = params;
     }
 
     public void update() {
         if (nextStage != null) {
-            showScreen(nextStage);
+            showScreen(nextStage,nextStageParams);
             nextStage = null;
+            nextStageParams = null;
         }
     }
 }

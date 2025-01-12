@@ -7,11 +7,22 @@ import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.state.tileContent.Player;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 
+/**
+ * Handles player input and movement
+ *
+ * @author MaxBecker, Toni Bingenheimer
+ * @contributor Jean-Luc Wenserski, Jonathan Christe
+ */
 public class PlayerController implements InputProcessor {
 
     private static PlayerController instance;
     private Vector2 playerPosition;
     private Direction lookDirection = Direction.EAST;
+
+    private float keyHoldTime = 0f;
+    private boolean isMoving = false;
+    private int moveKeycode = -1;
+    private static final float AUTO_MOVE_TIME = 0.04f;
 
     public TileContent getInventory() {
         return inventory;
@@ -22,7 +33,7 @@ public class PlayerController implements InputProcessor {
 
         //debug
         if (inventory != null) {
-            System.out.println("Inventory:"+this.inventory.toString());
+            System.out.println("Inventory:" + this.inventory);
         }
     }
 
@@ -50,6 +61,7 @@ public class PlayerController implements InputProcessor {
     public void setPlayerDirection(Direction lookDirection) {
         this.lookDirection = lookDirection;
     }
+
     public Direction getPlayerDirection() {
         return lookDirection;
     }
@@ -60,52 +72,16 @@ public class PlayerController implements InputProcessor {
             return false;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            if (lookDirection == Direction.NORTH) {
-                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.NORTH, Player.class))) {
-                    return true;
-                }
-            } else {
-                lookDirection = Direction.NORTH;
-                Player.updateTexture(lookDirection);
-                return true;
+        if (keycode == Input.Keys.W || keycode == Input.Keys.S || keycode == Input.Keys.A || keycode == Input.Keys.D) {
+            switch (keycode) {
+                case Input.Keys.W -> movePlayer(Direction.NORTH);
+                case Input.Keys.S -> movePlayer(Direction.SOUTH);
+                case Input.Keys.A -> movePlayer(Direction.WEST);
+                case Input.Keys.D -> movePlayer(Direction.EAST);
             }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            if (lookDirection == Direction.SOUTH) {
-                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.SOUTH, Player.class))) {
-                    return true;
-                }
-            } else {
-                lookDirection = Direction.SOUTH;
-                Player.updateTexture(lookDirection);
-                return true;
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            if (lookDirection == Direction.WEST) {
-                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.WEST, Player.class))) {
-                    return true;
-                }
-            } else {
-                lookDirection = Direction.WEST;
-                Player.updateTexture(lookDirection);
-                return true;
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            if (lookDirection == Direction.EAST) {
-                if (GameController.getInstance().triggerAction(new Interaction(playerPosition, Direction.EAST, Player.class))) {
-                    return true;
-                }
-            } else {
-                lookDirection = Direction.EAST;
-                Player.updateTexture(lookDirection);
-                return true;
-            }
+            isMoving = true;
+            moveKeycode = keycode;
+            return true;
         }
 
         // Interact
@@ -116,9 +92,45 @@ public class PlayerController implements InputProcessor {
         return false;
     }
 
+    public void update() {
+        if (!isMoving) return;
+
+        if (keyHoldTime < AUTO_MOVE_TIME) {
+            keyHoldTime += Gdx.graphics.getDeltaTime();
+        }
+
+        if (keyHoldTime >= AUTO_MOVE_TIME) {
+            movePlayer(lookDirection);
+            keyHoldTime = 0f;
+        }
+    }
+
+    private void movePlayer(Direction direction) {
+        if (lookDirection == direction) {
+            GameController.getInstance().triggerAction(new Interaction(playerPosition, direction, Player.class));
+        } else {
+            lookDirection = direction;
+            Player.updateTexture(lookDirection);
+        }
+    }
+
+    /**
+     * Called when a key was released
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return whether the input was processed
+     */
     @Override
     public boolean keyUp(int keycode) {
+        if ( keycode == moveKeycode) {
+            resetMovement();
+        }
         return false;
+    }
+
+    public void resetMovement() {
+        isMoving = false;
+        keyHoldTime = 0f;
     }
 
     @Override

@@ -142,6 +142,22 @@ public class Messages {
     }
 
     public static class startGameMessage{
+        int levelIndex;
+        public startGameMessage(int levelIndex) {
+            this.levelIndex = levelIndex;
+        }
         public startGameMessage(){}
+
+        public int getLevelIndex() {
+            return levelIndex;
+        }
+
+        public void setLevelIndex(int levelIndex) {
+            this.levelIndex = levelIndex;
+        }
+    }
+
+    public static class exitToMainMenuMessage{
+        public exitToMainMenuMessage(){}
     }
 }

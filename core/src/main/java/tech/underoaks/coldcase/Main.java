@@ -2,10 +2,11 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import tech.underoaks.coldcase.game.GameController;
+import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.game.UITextureController;
-import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -31,10 +32,10 @@ public class Main extends Game {
         }
 
         // Texture Management
-        if(!TextureController.exists()) {
-            TextureController.create(true, new TextureFactory());
+        if (!TextureController.exists()) {
+            TextureController.create(new TextureFactory());
         }
-        if(!UITextureController.exists()) {
+        if (!UITextureController.exists()) {
             UITextureController.create(new TextureFactory());
         }
 
@@ -47,7 +48,6 @@ public class Main extends Game {
         super.render();
         float delta = Gdx.graphics.getDeltaTime();
         fixedUpdate(delta);
-
     }
 
     /**
@@ -59,15 +59,22 @@ public class Main extends Game {
      */
     private void fixedUpdate(float delta) {
         fixedUpdateClock += delta;
-        if (fixedUpdateClock >= 0.1f) {
+        if (fixedUpdateClock >= 0.075f) {
             fixedUpdateClock = 0f;
 
             // all fixed update methods below
             StageManager.getInstance().update();
+            PlayerController.getInstance().update();
+
         }
     }
 
     public static Properties getProperties() {
         return properties;
+    }
+
+    public void dispose() {
+        super.dispose();
+        GameController.getInstance().getCurrentMap().dispose();
     }
 }

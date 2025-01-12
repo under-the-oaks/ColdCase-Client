@@ -18,6 +18,7 @@ public abstract class AbstractStage extends Stage implements Screen {
     // Subclasses must load actors in this method
     public abstract void buildStage(InputMultiplexer inputMultiplexer);
 
+
     @Override
     public void render(float delta) {
         // Clear screen
@@ -26,8 +27,8 @@ public abstract class AbstractStage extends Stage implements Screen {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // Calling to Stage methods
-        super.act(delta);
         super.draw();
+        super.act(delta);
     }
 
     @Override
@@ -43,4 +44,9 @@ public abstract class AbstractStage extends Stage implements Screen {
     @Override public void hide() {}
     @Override public void pause() {}
     @Override public void resume() {}
+
+    @Override
+    public boolean keyDown(int keyCode) {
+        return super.keyDown(keyCode);
+    }
 }
