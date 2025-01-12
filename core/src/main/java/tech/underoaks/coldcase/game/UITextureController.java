@@ -125,4 +125,8 @@ public class UITextureController {
     public Texture getMenuBackground() {
         return menuBackground;
     }
+
+    public BitmapFont getFont() {
+        return font;
+    }
 }

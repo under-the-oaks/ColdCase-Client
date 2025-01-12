@@ -7,6 +7,7 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.InvisibleWall;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.TileContents;
+import tech.underoaks.coldcase.state.tileContent.UIContentTileContent;
 import tech.underoaks.coldcase.state.tiles.EmptyTile;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.tiles.Tiles;
@@ -16,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import static tech.underoaks.coldcase.helper.HelperFunctions.mapIntToLetter;
 
 /**
  * Class for generating maps from text files.
@@ -107,18 +110,22 @@ public final class MapGenerator {
         }
 
         // extract the tile content layers
-        for (int i = 2; i < mapLayers.size(); i++) {
+        for (int i = 2; i < mapLayers.size(); i++) { // layer
             List<String> tileContents = mapLayers.get(i);
-            for (int j = 0; j < mapSize.x; j++) {
+            for (int j = 0; j < mapSize.x; j++) { // row
                 String[] tileContentRow = new String[0];
                 try {
                     tileContentRow = tileContents.get(j).split(" ");
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Index out of bounds: " + e.getMessage());
+                    System.out.println("Index out of bounds: adding empty row");
                 }
-                for (int k = 0; k < mapSize.y; k++) {
+                for (int k = 0; k < mapSize.y; k++) { // column
                     // if the Tile is an instance of EmptyTile, push an Invisible Wall to it so the player cant walk on it
-                    if (tileArray[j][k] instanceof EmptyTile) {
+                    if (tileArray[j][k] instanceof EmptyTile && j == mapSize.x - 1 && k != mapSize.y - 1) {
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(Integer.toString(k), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_LEFT));
+                    } else if (tileArray[j][k] instanceof EmptyTile && j != mapSize.x - 1 && k == mapSize.y - 1) {
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
+                    } else if (tileArray[j][k] instanceof EmptyTile) {
                         tileArray[j][k].pushTileContent(new InvisibleWall());
                         continue;
                     }

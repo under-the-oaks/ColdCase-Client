@@ -41,6 +41,7 @@ public class TextureController {
 
     private TextureController(TextureFactory factory) {
         this.emptyTileTexture = factory.create("./isometric tileset/separated images/tile_101.png");
+//        this.emptyTileTexture = factory.create("./sprites/block_detective_4.png");
         this.groundTileTexture = factory.create("./sprites/block_detective_2.png");
 
         this.testItemTexture = factory.create("./isometric tileset/separated images/TEST_ITEM.png");
