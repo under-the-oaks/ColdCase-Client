@@ -20,25 +20,26 @@ public class JoinStage extends AbstractStage {
     private TextField sessionIDField;
     private TextButton connectButton;
     private Label hostLabel;
-    private Image hostImage;
     private Label teammateLabel;
-    private Image teammateImage;
     private TextButton backButton;
 
     @Override
     public void buildStage(InputMultiplexer inputMultiplexer) {
+
+        //add Bg
+        addActor(UITextureController.getInstance().getMenuBackground());
 
         Table table = new Table();
         table.setFillParent(true); // Fill the entire stage
         this.addActor(table);
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 
         // TextField for entering Session ID
-        sessionIDField = new TextField("", skin.get("input", TextField.TextFieldStyle.class));
+        sessionIDField = new TextField("", skin);
         sessionIDField.setMessageText("Enter Session ID"); // Placeholder text
         sessionIDField.setAlignment(1);
 
@@ -56,11 +57,9 @@ public class JoinStage extends AbstractStage {
         });
 
         //Image and Caption
-        hostImage = new Image(TextureController.getInstance().getDetectiveTexture());
         hostLabel = new Label("You are the detective", skin);
         hostLabel.setAlignment(1); // Center the text
 
-        teammateImage = new Image(TextureController.getInstance().getGhostTexture());
         teammateLabel = new Label("Your teammate is the ghost", skin);
         teammateLabel.setAlignment(1); // Center the text
 
@@ -73,29 +72,23 @@ public class JoinStage extends AbstractStage {
         });
 
         Table topRow = new Table();
-        topRow.add(sessionIDField).width(buttonWidth).height(buttonHeight).padRight(10);
-        topRow.add(connectButton).width(buttonWidth/2).height(buttonHeight);
+
+        topRow.add(sessionIDField).width(8000).height(buttonHeight).padRight(100);
+        topRow.add(connectButton).width(buttonWidth).height(buttonHeight);
 
         Table playerSelectionTable = new Table();
-        playerSelectionTable.add(teammateImage).width(1080*4).height(1080*4);
-        playerSelectionTable.add().width(1080).height(1080);
-        playerSelectionTable.add(hostImage).width(1080*4).height(1080*4);
+        playerSelectionTable.add();
         playerSelectionTable.row();
         playerSelectionTable.add(teammateLabel);
         playerSelectionTable.add();
         playerSelectionTable.add(hostLabel);
 
         // Arrange components in the table
-        table.add(topRow).padBottom(20);
+        table.add(topRow).padBottom(160);
         table.row();
-        table.add(playerSelectionTable).padBottom(20);
+        table.add(playerSelectionTable).padBottom(160);
         table.row();
         table.add(backButton).width(buttonWidth).height(buttonHeight).fillX().uniformX();
 
-        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGB565);
-        bgPixmap.setColor(Color.GRAY);
-        bgPixmap.fill();
-        TextureRegionDrawable textureRegionDrawableBg = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
-        table.setBackground(textureRegionDrawableBg);
     }
 }

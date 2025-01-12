@@ -5,11 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 
 /**
  * This class is responsible for providing the skin for the UI elements.
@@ -26,6 +29,7 @@ public class UITextureController {
     private Texture buttonDown;
     private Texture reloadButton;
     private Texture menuBackground;
+    private final int buttonSizeMultiplyer = 4;
 
     private UITextureController(TextureFactory factory) {
         instantiateUITextures(factory);
@@ -64,19 +68,23 @@ public class UITextureController {
         bgPixmap.setColor(Color.WHITE);
         bgPixmap.fill();
         inputTextFieldStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
-        this.skin.add("input", inputTextFieldStyle);
+        this.skin.add("default", inputTextFieldStyle);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        labelStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         this.skin.add("default", labelStyle);
 
     }
 
     private void instantiateUITextures(TextureFactory factory) {
-        this.buttonUp = factory.create("./sprites/ui/button_up.png");
-        this.buttonDown = factory.create("./sprites/ui/button_down.png");
-        this.menuBackground = factory.create("./sprites/ui/PlaceholderBackground.png");
+        this.buttonUp = factory.create("./sprites/ui/button_new_ghost.png");
+        this.buttonDown = factory.create("./sprites/ui/button_new_detective.png");
+        this.menuBackground = factory.create("./sprites/ui/hintergrund_06.png");
         this.reloadButton = factory.create("./sprites/ui/Placeholder_reloadButton.png");
     }
 
@@ -103,10 +111,10 @@ public class UITextureController {
         return skin;
     }
 
-    public Vector2 getButtonSize(float width, float height) {
+    public Vector2 getButtonSize() {
         //button size
-        float buttonWidth = width / 2;
-        float buttonHeight = height / 10;
+        float buttonWidth = this.buttonUp.getWidth()*buttonSizeMultiplyer;
+        float buttonHeight = this.buttonUp.getHeight()*buttonSizeMultiplyer;
 
         return new Vector2(buttonWidth, buttonHeight);
     }
@@ -123,7 +131,11 @@ public class UITextureController {
         return new TextureRegionDrawable(new TextureRegion(reloadButton));
     }
 
-    public Texture getMenuBackground() {
-        return menuBackground;
+    public Image getMenuBackground() {
+
+        Image backgroundImage = new Image(new TextureRegionDrawable(new TextureRegion(menuBackground)));
+        backgroundImage.setFillParent(true);
+        backgroundImage.setScaling(Scaling.fill);
+        return backgroundImage;
     }
 }

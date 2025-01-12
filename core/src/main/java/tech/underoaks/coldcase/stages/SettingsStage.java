@@ -23,7 +23,7 @@ public class SettingsStage extends AbstractStage {
     public void buildStage(InputMultiplexer inputMultiplexer) {
 
         //button size
-        Vector2 buttonSize = UITextureController.getInstance().getButtonSize(getWidth(), getHeight());
+        Vector2 buttonSize = UITextureController.getInstance().getButtonSize();
         float buttonWidth = buttonSize.x;
         float buttonHeight = buttonSize.y;
 
