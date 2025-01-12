@@ -60,6 +60,14 @@ public class UIContentTileContent extends TileContent {
     public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
         return false;
     }
+
+    /**
+     * The different ways the text can be shifted and tilted.
+     * <p>
+     *     The shift values are the x and y coordinates of the text relative to the tile.
+     *     The tilt values are the angles of rotation around the x, y, and z axes.
+     *     The text is rendered at the tile's position, then shifted and tilted according to these values.
+     */
     public enum UIContentTileContentShift {
         SHIFT_BLOCKSIDE_LEFT(690, 810, 0, 0, 0),
         SHIFT_BLOCKSIDE_RIGHT(210, 810, 0, 0, 0),

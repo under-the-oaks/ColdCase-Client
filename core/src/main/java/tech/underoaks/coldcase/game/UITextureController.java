@@ -129,4 +129,23 @@ public class UITextureController {
     public BitmapFont getFont() {
         return font;
     }
+
+    /**
+     * Maps an integer to a letter.
+     *
+     * @param number     The number to map to a letter. Must be between 1 and 26. 1 corresponds to 'a' or 'A', 2 to 'b' or 'B', etc.
+     * @param isUpperCase Whether the letter should be uppercase.
+     * @return The letter corresponding to the number.
+     * @throws IllegalArgumentException If the number is not between 1 and 26.
+     */
+    public char mapIntToLetter(int number, boolean isUpperCase) {
+        if (number < 1 || number > 26) {
+            throw new IllegalArgumentException("Number must be between 1 and 26");
+        }
+        if (isUpperCase) {
+            return (char) ('A' + number - 1);
+        } else {
+            return (char) ('a' + number - 1);
+        }
+    }
 }

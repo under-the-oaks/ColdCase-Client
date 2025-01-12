@@ -3,6 +3,7 @@ package tech.underoaks.coldcase;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import tech.underoaks.coldcase.game.TextureController;
+import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.InvisibleWall;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -17,8 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static tech.underoaks.coldcase.helper.HelperFunctions.mapIntToLetter;
 
 /**
  * Class for generating maps from text files.
@@ -124,7 +123,7 @@ public final class MapGenerator {
                     if (tileArray[j][k] instanceof EmptyTile && j == mapSize.x - 1 && k != mapSize.y - 1) {
                         tileArray[j][k].pushTileContent(new UIContentTileContent(Integer.toString(k), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_LEFT));
                     } else if (tileArray[j][k] instanceof EmptyTile && j != mapSize.x - 1 && k == mapSize.y - 1) {
-                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(UITextureController.getInstance().mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
                     } else if (tileArray[j][k] instanceof EmptyTile) {
                         tileArray[j][k].pushTileContent(new InvisibleWall());
                         continue;
