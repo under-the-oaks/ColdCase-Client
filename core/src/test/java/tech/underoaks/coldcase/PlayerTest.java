@@ -154,11 +154,11 @@ public class PlayerTest {
                 Direction.WEST,   // Richtung
                 Player.class
         );
-        boolean result = game.gameController.triggerAction(interaction_arrange);
+        boolean result = game.gameController.triggerAction(interaction_act);
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertFalse(result);
+        Assertions.assertTrue(result); // Auch wenn eine Aktion fehlschlägt, gilt die Aktion als 'behandelt'
         Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(0, 3).topTileContent());
     }
 
@@ -193,7 +193,7 @@ public class PlayerTest {
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertFalse(result);
+        Assertions.assertTrue(result); // Auch wenn eine Aktion fehlschlägt, gilt die Aktion als 'behandelt'
         Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(3, 3).topTileContent());
     }
 }
