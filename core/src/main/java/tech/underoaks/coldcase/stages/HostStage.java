@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.LevelManager;
+import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
@@ -80,7 +81,7 @@ public class HostStage extends AbstractStage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 WebSocketMessagesManager.startGame(0);
-                LevelManager.getInstance().loadNextLevel();
+                LevelManager.getInstance().loadLevel(Levels.values()[0]);
             }
         });
 

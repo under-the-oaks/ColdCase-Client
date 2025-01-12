@@ -36,13 +36,12 @@ public class LevelManager {
      * and sets the next stage to the main menu.
      */
     public void loadNextLevel() {
-        if(currentLevelIndex < Levels.values().length){
+        if(++currentLevelIndex <= Levels.values().length){
             loadLevel(Levels.values()[currentLevelIndex]);
         }else {
             currentLevelIndex = 0;
             StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
         }
-        currentLevelIndex++;
     }
 
     /**
