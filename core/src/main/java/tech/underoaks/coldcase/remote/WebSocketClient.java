@@ -1,7 +1,12 @@
 package tech.underoaks.coldcase.remote;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
+import org.glassfish.grizzly.http.server.SessionManager;
+import tech.underoaks.coldcase.stages.AbstractStage;
+import tech.underoaks.coldcase.stages.StageManager;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
@@ -11,6 +16,7 @@ import java.util.Objects;
  * <p>
  * This singleton class establishes and manages a WebSocket connection to the server,
  * providing methods for sending and receiving messages.
+ * autrh
  * </p>
  */
 @ClientEndpoint
@@ -18,17 +24,19 @@ public class WebSocketClient {
     private static final Json json = new Json();
     private static Session session;
     private static WebSocketClient instance = null;
-    private static String lobbyID = "";
+    private static String lobbyID = null;
 
-    public static WebSocketClient create(String websocket_url, String session_id) {
+
+    //TODO javadoc
+    public void connect(String websocket_url, String session_id) {
+        if(this.isConnectionOpen() || session_id.isEmpty()){
+            return;
+        }
+
         if(!Objects.equals(session_id, "new")){
             lobbyID = session_id;
         }
 
-        if(instance != null) {
-            throw new IllegalStateException("WebSocketClient already created");
-        }
-        instance = new WebSocketClient();
 
         try {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
@@ -39,13 +47,12 @@ public class WebSocketClient {
         } catch (Exception e) {
             System.err.println("Error during WebSocket connection: " + e.getMessage());
             e.printStackTrace();
+            return;
         }
-
-        return instance;
     }
-
-    public static WebSocketClient create(String websocket_url) {
-        return create(websocket_url,"new");
+    //TODO javadoc
+    public void connect(String websocket_url) {
+        connect(websocket_url,"new");
     }
 
 
@@ -60,7 +67,7 @@ public class WebSocketClient {
      */
     public static WebSocketClient getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("WebSocketClient not created");
+            instance = new WebSocketClient();
         }
         return instance;
     }
@@ -70,12 +77,17 @@ public class WebSocketClient {
     }
 
     public static String getLobbyID() {
+        if( lobbyID == "new"){
+            return null;
+        }
         return lobbyID;
     }
 
     @OnOpen
     public void onOpen(Session session) {
         //System.out.println("Connected to server");
+        AbstractStage stage = StageManager.getInstance().getCurrentStage();
+        stage.onConnected();
     }
 
     /**
@@ -102,6 +114,7 @@ public class WebSocketClient {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("Connection closed: " + closeReason);
+        StageManager.getInstance().getCurrentStage().onDisconnected();
     }
 
     /**
@@ -117,7 +130,33 @@ public class WebSocketClient {
         }
     }
 
+    /**
+     * Closes the current WebSocket session gracefully.
+     * <p>
+     * This method checks if the WebSocket session is open and attempts to close it.
+     * If the session is already closed or not initialized, it simply returns true.
+     * In case of an IOException during the closing process, it logs the error and returns false.
+     * </p>
+     *
+     * @return {@code true} if the session was closed successfully or was already closed,
+     *         {@code false} if an error occurred while attempting to close the session.
+     */
+    public boolean closeSession(){
+        if (session != null && session.isOpen()) {
+            try {
+                session.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE,""));
+                lobbyID = null;
+                System.out.println("WebSocket session closed successfully.");
+            } catch (IOException e) {
+                System.err.println("Error while closing WebSocket session: " + e.getMessage());
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isConnectionOpen() {
+        if(session == null)return false;
         return session.isOpen();
     }
 }

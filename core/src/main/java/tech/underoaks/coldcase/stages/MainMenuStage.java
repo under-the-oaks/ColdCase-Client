@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
+import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
 
 public class MainMenuStage extends AbstractStage {
 
@@ -39,7 +40,6 @@ public class MainMenuStage extends AbstractStage {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (WebSocketClient.exists()) return;
                 StageManager.getInstance().showScreen(Stages.JOIN);
             }
         });

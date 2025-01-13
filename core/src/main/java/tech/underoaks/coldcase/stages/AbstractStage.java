@@ -49,4 +49,8 @@ public abstract class AbstractStage extends Stage implements Screen {
     public boolean keyDown(int keyCode) {
         return super.keyDown(keyCode);
     }
+
+    public void onConnected(){};
+
+    public void onDisconnected(){};
 }
