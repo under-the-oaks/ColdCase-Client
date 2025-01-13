@@ -1,32 +1,33 @@
 package tech.underoaks.coldcase.stages;
 
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
 import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.LevelManager;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
-
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.util.Objects;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * The HostStage is a screen in the game where the host player can start a session,
+ * view the session ID, and manage the connection. The host will have the option to start the game
+ * and manage the session ID.
+ * This screen extends {@link AbstractStage}.
+ *
+ * @author mabe.edu
+ * @coauthor jean874
+ */
 public class HostStage extends AbstractStage {
 
     private final Skin skin = UITextureController.getInstance().getSkin();

@@ -3,22 +3,24 @@ package tech.underoaks.coldcase.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 
-import static java.lang.Thread.sleep;
-
+/**
+ * The JoinStage is a screen in the game where players can connect to a session using a session ID.
+ * It allows players to input a session ID, view connection status, and navigate back to the main menu.
+ * This screen is part of the game's user interface and extends the {@link AbstractStage}.
+ *
+ * @author mabe.edu
+ * @coauthor jean874
+ */
 public class JoinStage extends AbstractStage {
     private final Skin skin = UITextureController.getInstance().getSkin();
     private TextField sessionIDField;
@@ -104,11 +106,13 @@ public class JoinStage extends AbstractStage {
 
     }
 
+    /**
+     * This method is called when the connection is successfully established.
+     * It updates the UI to show that the user is connected and disables the connect button.
+     */
     @Override
     public void onConnected() {
-        System.out.println("test");
         Gdx.app.postRunnable(() -> {
-            System.out.println("test");
             connectionStatusLabel.setText("Connected");
             connectionStatusLabel.setColor(Color.GREEN);
             connectButton.setDisabled(true);
@@ -117,6 +121,10 @@ public class JoinStage extends AbstractStage {
         });
     }
 
+    /**
+     * This method is called when the connection is disconnected.
+     * It updates the UI to show that the user is not connected and enables the connect button.
+     */
     @Override
     public void onDisconnected() {
         connectionStatusLabel.setText("Not Connected");

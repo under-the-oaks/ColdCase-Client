@@ -1,9 +1,7 @@
 package tech.underoaks.coldcase.remote;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
-import org.glassfish.grizzly.http.server.SessionManager;
 import tech.underoaks.coldcase.stages.AbstractStage;
 import tech.underoaks.coldcase.stages.StageManager;
 
@@ -16,7 +14,8 @@ import java.util.Objects;
  * <p>
  * This singleton class establishes and manages a WebSocket connection to the server,
  * providing methods for sending and receiving messages.
- * autrh
+ * @author jean874
+ * @coauthor mabe.edu, Danmyrer
  * </p>
  */
 @ClientEndpoint
@@ -27,7 +26,13 @@ public class WebSocketClient {
     private static String lobbyID = null;
 
 
-    //TODO javadoc
+    /**
+     * Connects to the WebSocket server using the specified WebSocket URL and session ID.
+     * If the session ID is "new", a new session will be created; otherwise, the provided session ID will be used.
+     *
+     * @param websocket_url the URL of the WebSocket server.
+     * @param session_id the session ID to use (or "new" for a new session).
+     */
     public void connect(String websocket_url, String session_id) {
         if(this.isConnectionOpen() || session_id.isEmpty()){
             return;
@@ -47,20 +52,25 @@ public class WebSocketClient {
         } catch (Exception e) {
             System.err.println("Error during WebSocket connection: " + e.getMessage());
             e.printStackTrace();
-            return;
+
         }
     }
-    //TODO javadoc
+
+    /**
+     * Connects to the WebSocket server using the specified WebSocket URL.
+     * The session ID is automatically set to "new" to create a new session.
+     *
+     * @param websocket_url the URL of the WebSocket server.
+     */
     public void connect(String websocket_url) {
         connect(websocket_url,"new");
     }
 
 
-
     /**
      * Retrieves the singleton instance of the WebSocket client.
      * <p>
-     * If the instance is not yet initialized, this method initializes it and connects to the WebSocket server.
+     * If the instance is not yet initialized, this method initializes it.
      * </p>
      *
      * @return the singleton instance of the WebSocket client.
@@ -72,10 +82,12 @@ public class WebSocketClient {
         return instance;
     }
 
-    public static boolean exists() {
-        return instance != null;
-    }
-
+    /**
+     * Retrieves the current lobby ID if it exists.
+     * If the session ID is "new", it returns null.
+     *
+     * @return the current lobby ID, or null if a new session is created.
+     */
     public static String getLobbyID() {
         if( lobbyID == "new"){
             return null;
@@ -83,9 +95,16 @@ public class WebSocketClient {
         return lobbyID;
     }
 
+    /**
+     * This method is invoked when a WebSocket connection is established.
+     * It triggers the corresponding action in the current game stage.
+     * !it doesn´t has access to the fields of this class
+     *
+     * @param session the WebSocket session.
+     */
     @OnOpen
     public void onOpen(Session session) {
-        //System.out.println("Connected to server");
+        System.out.println("Connected to server");
         AbstractStage stage = StageManager.getInstance().getCurrentStage();
         stage.onConnected();
     }
@@ -98,10 +117,6 @@ public class WebSocketClient {
      */
     @OnMessage
     public void onMessage(String message) {
-        //System.out.println("incoming:");
-        //System.out.println(json.prettyPrint(message));
-        //Object deserializedObject = json.fromJson(Object.class, message);
-        // Example of parsing Lobby ID from server response
         Object deserializedObject = json.fromJson(Object.class, message);
         if (deserializedObject instanceof Messages.lobbyIdMessage) {
             lobbyID = ((Messages.lobbyIdMessage) deserializedObject).getLobbyId();
@@ -111,6 +126,14 @@ public class WebSocketClient {
         }
     }
 
+    /**
+     * This method is invoked when the WebSocket connection is closed.
+     * It triggers the corresponding action in the current game stage.
+     *  it !it doesn´t has access to the fields of this class
+     *
+     * @param session the WebSocket session.
+     * @param closeReason the reason for the connection closure.
+     */
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("Connection closed: " + closeReason);
@@ -155,6 +178,11 @@ public class WebSocketClient {
         return true;
     }
 
+    /**
+     * Checks if the WebSocket connection is open.
+     *
+     * @return {@code true} if the WebSocket session is open, {@code false} otherwise.
+     */
     public boolean isConnectionOpen() {
         if(session == null)return false;
         return session.isOpen();
