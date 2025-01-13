@@ -91,7 +91,9 @@ public class HostStage extends AbstractStage {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                StageManager.getInstance().showScreen(Stages.MAIN_MENU);
+                if (WebSocketClient.getInstance().closeSession()) {
+                    StageManager.getInstance().showScreen(Stages.MAIN_MENU);
+                }
             }
         });
 
@@ -115,27 +117,22 @@ public class HostStage extends AbstractStage {
 
 
         // setup lobby
-        try {
-            if (WebSocketClient.getInstance() != null) {
-                setSessionIDField(WebSocketClient.getLobbyID());
-            }
-        } catch (IllegalStateException e) {
-            WebSocketClient.create(Main.getProperties().getProperty("websocket_url"));
+        WebSocketClient.getInstance().connect(Main.getProperties().getProperty("websocket_url"));
 
-            // execute this on a new Thread to load in the Session ID asynchronously to loading in the stage
-            new Thread(() -> {
-                String updatedSessionID = WebSocketClient.getLobbyID();
-                while (Objects.equals(updatedSessionID, "")) {
-                    try {
-                        sleep(100);
-                        updatedSessionID = WebSocketClient.getLobbyID();
-                    } catch (InterruptedException v) {
-                        throw new RuntimeException("Interrupted while waiting for Session ID: " + v);
-                    }
-                    setSessionIDField(updatedSessionID);
+        // execute this on a new Thread to load in the Session ID asynchronously to loading in the stage
+        new Thread(() -> {
+            String updatedSessionID = WebSocketClient.getLobbyID();
+            while (Objects.equals(updatedSessionID, null)) {
+                try {
+                    sleep(100);
+                    updatedSessionID = WebSocketClient.getLobbyID();
+                } catch (InterruptedException v) {
+                    throw new RuntimeException("Interrupted while waiting for Session ID: " + v);
                 }
-            }).start();
-        }
+                setSessionIDField(updatedSessionID);
+            }
+        }).start();
+
 
     }
 
