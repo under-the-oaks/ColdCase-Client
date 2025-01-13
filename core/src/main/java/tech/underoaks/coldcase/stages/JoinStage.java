@@ -96,9 +96,8 @@ public class JoinStage extends AbstractStage {
         // Arrange components in the table
         table.add(topRow).padBottom(160);
         table.row();
-        table.add(connectionStatusLabel).padBottom(20);
+        table.add(connectionStatusLabel).padBottom(160);
         table.row();
-        table.add(playerSelectionTable).padBottom(20);
         table.add(playerSelectionTable).padBottom(160);
         table.row();
         table.add(backButton).width(buttonWidth).height(buttonHeight).fillX().uniformX();
