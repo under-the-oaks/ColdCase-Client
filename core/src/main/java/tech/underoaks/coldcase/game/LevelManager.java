@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.game;
 
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -36,10 +37,13 @@ public class LevelManager {
      * and sets the next stage to the main menu.
      */
     public void loadNextLevel() {
-        if(++currentLevelIndex <= Levels.values().length){
+        if(++currentLevelIndex < Levels.values().length){
             loadLevel(Levels.values()[currentLevelIndex]);
         }else {
             currentLevelIndex = 0;
+            if (WebSocketClient.getInstance().closeSession()) {
+                StageManager.getInstance().showScreen(Stages.MAIN_MENU);
+            }
             StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
         }
     }
