@@ -41,8 +41,8 @@ public class Hole extends TileContent{
         Vector2 pos = interaction.getTargetPos();
         pos = pos.cpy().add(interaction.getActionDirection().getVector());
 
-        if(pos.equals(tilePosition) && handler instanceof MovableBlockTranscendent){
-            System.out.println("test");
+        if(pos.equals(tilePosition) && handler instanceof MovableBlock){
+
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition,chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition,this)));
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition,chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition,handler)));
         }
