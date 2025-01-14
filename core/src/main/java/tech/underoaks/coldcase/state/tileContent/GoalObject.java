@@ -16,7 +16,7 @@ public class GoalObject extends TileContent {
     private final Sprite sprite = new Sprite( TextureController.getInstance().getGoalObjectTexture());
 
     public GoalObject() {
-        super( TextureController.getInstance().getGoalObjectTexture(), true, false);
+        super( TextureController.getInstance().getGoalObjectTexture(), false, false);
         this.visibilityState = VisibilityStates.TRANSCENDENT;
     }
 
