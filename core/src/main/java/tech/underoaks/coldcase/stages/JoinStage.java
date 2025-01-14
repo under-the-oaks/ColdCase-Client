@@ -68,10 +68,10 @@ public class JoinStage extends AbstractStage {
         });
 
         //Image and Caption
-        hostLabel = new Label("You are the detective", skin);
+        hostLabel = new Label("You are the ghost", skin);
         hostLabel.setAlignment(1); // Center the text
 
-        teammateLabel = new Label("Your teammate is the ghost", skin);
+        teammateLabel = new Label("Your teammate is the detective", skin);
         teammateLabel.setAlignment(1); // Center the text
 
         backButton = new TextButton("Back", skin);
