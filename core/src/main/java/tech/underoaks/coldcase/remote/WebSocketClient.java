@@ -2,9 +2,9 @@ package tech.underoaks.coldcase.remote;
 
 import com.badlogic.gdx.utils.Json;
 import jakarta.websocket.*;
-import tech.underoaks.coldcase.stages.AbstractStage;
 import tech.underoaks.coldcase.stages.StageManager;
-
+import tech.underoaks.coldcase.stages.Stages;
+import tech.underoaks.coldcase.stages.AbstractStage;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
@@ -137,7 +137,12 @@ public class WebSocketClient {
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
         System.out.println("Connection closed: " + closeReason);
-        StageManager.getInstance().getCurrentStage().onDisconnected();
+        if(closeReason.getCloseCode().equals(CloseReason.CloseCodes.NORMAL_CLOSURE)){
+            StageManager.getInstance().getCurrentStage().onDisconnected();
+        }else {
+            StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
+        }
+
     }
 
     /**
