@@ -7,6 +7,7 @@ import tech.underoaks.coldcase.game.PlayerController;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.game.UITextureController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
 
@@ -74,6 +75,7 @@ public class Main extends Game {
     }
 
     public void dispose() {
+        WebSocketClient.getInstance().closeSession();
         super.dispose();
         GameController.getInstance().getCurrentMap().dispose();
     }

@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 
 /**
  * This class is responsible for providing the skin for the UI elements.
@@ -25,6 +27,7 @@ public class UITextureController {
     private Texture buttonDown;
     private Texture reloadButton;
     private Texture menuBackground;
+    private final int buttonSizeMultiplyer = 4;
 
     private UITextureController(TextureFactory factory) {
         instantiateUITextures(factory);
@@ -33,8 +36,8 @@ public class UITextureController {
     }
 
     private void instantiateFont() {
-        this.font = new BitmapFont();
-        this.font.getData().setScale(20);
+        this.font = new BitmapFont(Gdx.files.internal("font/TypoFont.fnt"));
+        this.font.getData().setScale(10);
     }
 
     private void instantiateSkin() {
@@ -63,19 +66,23 @@ public class UITextureController {
         bgPixmap.setColor(Color.WHITE);
         bgPixmap.fill();
         inputTextFieldStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap)));
-        this.skin.add("input", inputTextFieldStyle);
+        this.skin.add("default", inputTextFieldStyle);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGB565);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        labelStyle.background = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
         this.skin.add("default", labelStyle);
 
     }
 
     private void instantiateUITextures(TextureFactory factory) {
-        this.buttonUp = factory.create("./sprites/ui/button_up.png");
-        this.buttonDown = factory.create("./sprites/ui/button_down.png");
-        this.menuBackground = factory.create("./sprites/ui/PlaceholderBackground.png");
+        this.buttonUp = factory.create("./sprites/ui/button_new_ghost.png");
+        this.buttonDown = factory.create("./sprites/ui/button_new_detective.png");
+        this.menuBackground = factory.create("./sprites/ui/hintergrund_06.png");
         this.reloadButton = factory.create("./sprites/ui/Placeholder_reloadButton.png");
     }
 
@@ -104,8 +111,8 @@ public class UITextureController {
 
     public Vector2 getButtonSize() {
         //button size
-        float buttonWidth = 3000;
-        float buttonHeight = 2000;
+        float buttonWidth = this.buttonUp.getWidth()*buttonSizeMultiplyer;
+        float buttonHeight = this.buttonUp.getHeight()*buttonSizeMultiplyer;
 
         return new Vector2(buttonWidth, buttonHeight);
     }
@@ -122,8 +129,12 @@ public class UITextureController {
         return new TextureRegionDrawable(new TextureRegion(reloadButton));
     }
 
-    public Texture getMenuBackground() {
-        return menuBackground;
+    public Image getMenuBackground() {
+
+        Image backgroundImage = new Image(new TextureRegionDrawable(new TextureRegion(menuBackground)));
+        backgroundImage.setFillParent(true);
+        backgroundImage.setScaling(Scaling.fill);
+        return backgroundImage;
     }
 
     public BitmapFont getFont() {

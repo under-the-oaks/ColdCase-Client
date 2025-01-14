@@ -30,7 +30,8 @@ public class TextureController {
     private Texture portalObjectTexture;
     private Texture detectiveWallTexture;
     private Texture ghostWallTexture;
-    private Texture movableBlockTexture;
+    private Texture movableBlockTextureDetective;
+    private Texture movableBlockTextureGhost;
     private Texture movableBlockTranscendantTexture;
     private Texture transcendentTestBlockTexture;
     private Texture goalObjectTexture;
@@ -64,7 +65,8 @@ public class TextureController {
         this.portalObjectTexture = factory.create("./sprites/portal.png");
         this.detectiveWallTexture = factory.create("./sprites/block_detective.png");
         this.ghostWallTexture = factory.create("./sprites/block_ghost_3.png");
-        this.movableBlockTexture = factory.create("./sprites/block_detective.png");
+        this.movableBlockTextureDetective = factory.create("./sprites/block_detective_4.png");
+        this.movableBlockTextureGhost = factory.create("./sprites/block_ghost.png");
         this.movableBlockTranscendantTexture = factory.create("sprites/block_transcendent_2.png");
         this.transcendentTestBlockTexture = factory.create("sprites/block_transcendent_2.png");
         this.goalObjectTexture = factory.create("./sprites/object_goal_detective_2.png");
@@ -155,7 +157,7 @@ public class TextureController {
     }
 
     public Texture getMovableBlockTexture() {
-        return movableBlockTexture;
+        return isDetective ? movableBlockTextureDetective :movableBlockTextureGhost ;
     }
 
     public Texture getMovableBlockTranscendantTexture() {

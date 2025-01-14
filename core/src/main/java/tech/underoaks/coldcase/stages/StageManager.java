@@ -4,12 +4,17 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import tech.underoaks.coldcase.game.TextureController;
 
 public class StageManager {
 
     private Stages nextStage;
     private Object[] nextStageParams;
     private static StageManager instance;
+
+    private AbstractStage currentStage;
 
     public static StageManager getInstance() {
         if (instance == null) {
@@ -33,7 +38,7 @@ public class StageManager {
     public void showScreen(Stages stage, Object... params) {
 
         // Get current screen to dispose it
-        Screen currentStage = game.getScreen();
+        currentStage = (AbstractStage) game.getScreen();
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -49,6 +54,7 @@ public class StageManager {
         if (currentStage != null) {
             currentStage.dispose();
         }
+        currentStage = newStage;
     }
 
     public void setNextStage(Stages nextStage, Object... params) {
@@ -62,5 +68,9 @@ public class StageManager {
             nextStage = null;
             nextStageParams = null;
         }
+    }
+
+    public AbstractStage getCurrentStage() {
+        return currentStage;
     }
 }
