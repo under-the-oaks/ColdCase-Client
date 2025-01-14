@@ -1,23 +1,30 @@
 package tech.underoaks.coldcase.stages;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.Main;
 import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 
+/**
+ * The JoinStage is a screen in the game where players can connect to a session using a session ID.
+ * It allows players to input a session ID, view connection status, and navigate back to the main menu.
+ * This screen is part of the game's user interface and extends the {@link AbstractStage}.
+ *
+ * @author mabe.edu
+ * @coauthor jean874
+ */
 public class JoinStage extends AbstractStage {
     private final Skin skin = UITextureController.getInstance().getSkin();
     private TextField sessionIDField;
+    private Label connectionStatusLabel;
     private TextButton connectButton;
     private Label hostLabel;
     private Label teammateLabel;
@@ -43,23 +50,20 @@ public class JoinStage extends AbstractStage {
         sessionIDField.setMessageText("Enter Session ID"); // Placeholder text
         sessionIDField.setAlignment(1);
 
+        // Label for connection status
+        connectionStatusLabel = new Label("Not Connected", skin);
+        connectionStatusLabel.setColor(Color.RED);
+        connectionStatusLabel.setAlignment(1); // Center the text
+
         // Connect Button next to the TextField
         connectButton = new TextButton("Connect", skin);
         connectButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Connect button clicked");
-                System.out.println("WebSocketClient.exists(): " + WebSocketClient.exists());
-                if (WebSocketClient.exists()) {
-                    System.out.println("WebSocketClient.getInstance().isConnectionOpen(): " + WebSocketClient.getInstance().isConnectionOpen());
-                }
-                if (!WebSocketClient.exists() || !WebSocketClient.getInstance().isConnectionOpen()) {
-                    String sessionID = sessionIDField.getText();
-                    TextureController.setIsDetective(false);
-                    Main.getProperties().setProperty("role", "ghost");
-                    System.out.println("Connecting to session: " + sessionID);
-                    WebSocketClient.create(Main.getProperties().getProperty("websocket_url"), sessionID);
-                }
+
+                String sessionID = sessionIDField.getText();
+                System.out.println("Connecting to session: " + sessionID);
+                WebSocketClient.getInstance().connect(Main.getProperties().getProperty("websocket_url"),sessionID);
             }
         });
 
@@ -74,6 +78,7 @@ public class JoinStage extends AbstractStage {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                WebSocketClient.getInstance().closeSession();
                 StageManager.getInstance().showScreen(Stages.MAIN_MENU);
             }
         });
@@ -88,14 +93,44 @@ public class JoinStage extends AbstractStage {
         playerSelectionTable.row();
         playerSelectionTable.add(teammateLabel);
         playerSelectionTable.add();
+        playerSelectionTable.row();
         playerSelectionTable.add(hostLabel);
 
         // Arrange components in the table
         table.add(topRow).padBottom(160);
         table.row();
+        table.add(connectionStatusLabel).padBottom(160);
+        table.row();
         table.add(playerSelectionTable).padBottom(160);
         table.row();
         table.add(backButton).width(buttonWidth).height(buttonHeight).fillX().uniformX();
 
+    }
+
+    /**
+     * This method is called when the connection is successfully established.
+     * It updates the UI to show that the user is connected and disables the connect button.
+     */
+    @Override
+    public void onConnected() {
+        Gdx.app.postRunnable(() -> {
+            connectionStatusLabel.setText("Connected");
+            connectionStatusLabel.setColor(Color.GREEN);
+            connectButton.setDisabled(true);
+            connectButton.setTouchable(Touchable.disabled);
+            TextureController.setIsDetective(false);
+        });
+    }
+
+    /**
+     * This method is called when the connection is disconnected.
+     * It updates the UI to show that the user is not connected and enables the connect button.
+     */
+    @Override
+    public void onDisconnected() {
+        connectionStatusLabel.setText("Not Connected");
+        connectionStatusLabel.setColor(Color.RED);
+        connectButton.setDisabled(false);
+        connectButton.setTouchable(Touchable.enabled);
     }
 }
