@@ -2,6 +2,18 @@ package tech.underoaks.coldcase.game;
 
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * This class is responsible for providing the textures for the game elements.
+ * <p>
+ * It provides the textures for the tiles, the player, the items, the walls, etc.
+ * The textures are loaded from the assets folder.
+ * The textures are loaded only once and are stored in memory.
+ * The textures are accessed through the methods provided by this class.
+ * <p>
+ * The textures are loaded using the {@link TextureFactory} class.
+ *
+ * @author mabe.edu, Danmyer
+ **/
 public class TextureController {
     private static TextureController instance;
 
@@ -192,10 +204,19 @@ public class TextureController {
         return isDetective ? detectiveTextureWest : ghostTextureWest;
     }
 
-    public Texture getGhostTexture() { return ghostTexture; }
+    public Texture getGhostTexture() {
+        return ghostTexture;
+    }
 
-    public Texture getDetectiveTexture() { return detectiveTexture; }
+    public Texture getDetectiveTexture() {
+        return detectiveTexture;
+    }
 
-    public Texture getTrigger_closed() { return trigger_closed; }
-    public Texture getTrigger_opened() { return trigger_opened; }
+    public Texture getTrigger_closed() {
+        return trigger_closed;
+    }
+
+    public Texture getTrigger_opened() {
+        return trigger_opened;
+    }
 }
