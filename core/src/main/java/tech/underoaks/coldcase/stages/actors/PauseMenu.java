@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.*;
 import tech.underoaks.coldcase.game.LevelManager;
 import tech.underoaks.coldcase.game.Levels;
 import tech.underoaks.coldcase.game.UITextureController;
+import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
 import tech.underoaks.coldcase.stages.StageManager;
 import tech.underoaks.coldcase.stages.Stages;
@@ -44,6 +45,7 @@ public class PauseMenu extends Group {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 WebSocketMessagesManager.exitToMainMenuMessage();
+                WebSocketClient.getInstance().closeSession();
                 StageManager.getInstance().showScreen(Stages.MAIN_MENU);
 
                 LevelManager.getInstance().currentLevelIndex = 0;

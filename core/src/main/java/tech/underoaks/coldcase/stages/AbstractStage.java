@@ -8,7 +8,18 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Screen;
 
-
+/**
+ * Abstract class representing a stage in the game. A stage is a container for actors
+ * that handles input, rendering, and updates. This class implements the {@link Screen} interface
+ * and provides a foundation for custom stages in the game.
+ * <p>
+ * Subclasses must implement the {@link #buildStage(InputMultiplexer)} method to add actors
+ * and configure input processors. The `render` method handles screen rendering and updates
+ * the stage.
+ * </p>
+ * @author mabe.edu
+ * @coauthor jean874
+ */
 public abstract class AbstractStage extends Stage implements Screen {
 
     protected AbstractStage() {
@@ -49,4 +60,16 @@ public abstract class AbstractStage extends Stage implements Screen {
     public boolean keyDown(int keyCode) {
         return super.keyDown(keyCode);
     }
+
+    /**
+     * This method is called when the stage successfully establishes a connection.
+     * It can be overridden in subclasses to handle specific actions upon connection.
+     */
+    public void onConnected(){}
+
+    /**
+     * This method is called when the stage is disconnected.
+     * It can be overridden in subclasses to handle specific actions upon disconnection.
+     */
+    public void onDisconnected(){}
 }
