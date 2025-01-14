@@ -101,6 +101,7 @@ public class HostStage extends AbstractStage {
         Table playerSelectionTable = new Table();
         playerSelectionTable.row();
         playerSelectionTable.add(hostLabel);
+        playerSelectionTable.row();
         playerSelectionTable.add(teammateLabel);
 
         Table sessionIDTable = new Table();

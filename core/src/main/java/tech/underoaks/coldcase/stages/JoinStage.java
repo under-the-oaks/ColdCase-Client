@@ -93,6 +93,7 @@ public class JoinStage extends AbstractStage {
         playerSelectionTable.row();
         playerSelectionTable.add(teammateLabel);
         playerSelectionTable.add();
+        playerSelectionTable.row();
         playerSelectionTable.add(hostLabel);
 
         // Arrange components in the table
