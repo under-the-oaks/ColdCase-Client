@@ -71,5 +71,7 @@ public abstract class AbstractStage extends Stage implements Screen {
      * This method is called when the stage is disconnected.
      * It can be overridden in subclasses to handle specific actions upon disconnection.
      */
-    public void onDisconnected(){}
+    public void onDisconnected(){
+        StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
+    }
 }
