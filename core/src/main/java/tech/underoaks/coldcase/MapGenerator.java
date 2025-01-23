@@ -2,11 +2,12 @@ package tech.underoaks.coldcase;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
-import tech.underoaks.coldcase.game.TextureController;
+import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.InvisibleWall;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.TileContents;
+import tech.underoaks.coldcase.state.tileContent.UIContentTileContent;
 import tech.underoaks.coldcase.state.tiles.EmptyTile;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.tiles.Tiles;
@@ -22,6 +23,8 @@ import java.util.List;
  * <p>
  * It provides methods for serializing and deserializing maps to and from JSON.
  * The JSON format used is the one provided by the {@link Json} class provided by libGDX.
+ *
+ * @author mabe.edu
  */
 public final class MapGenerator {
 
@@ -40,7 +43,8 @@ public final class MapGenerator {
      */
     public static Map serializeContentToMap(Path path, boolean isDetective) {
 
-        TextureController.create(isDetective);
+        // set Texture Controller to the correct mode
+        //TextureController.setIsDetective(isDetective);
 
         Path tilePath = Path.of(path + (isDetective ? "/map.detective" : "/map.ghost"));
         List<String> lines = null;
@@ -106,18 +110,22 @@ public final class MapGenerator {
         }
 
         // extract the tile content layers
-        for (int i = 2; i < mapLayers.size(); i++) {
+        for (int i = 2; i < mapLayers.size(); i++) { // layer
             List<String> tileContents = mapLayers.get(i);
-            for (int j = 0; j < mapSize.x; j++) {
+            for (int j = 0; j < mapSize.x; j++) { // row
                 String[] tileContentRow = new String[0];
                 try {
                     tileContentRow = tileContents.get(j).split(" ");
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.println("Index out of bounds: " + e.getMessage());
+                    System.out.println("Index out of bounds: adding empty row");
                 }
-                for (int k = 0; k < mapSize.y; k++) {
+                for (int k = 0; k < mapSize.y; k++) { // column
                     // if the Tile is an instance of EmptyTile, push an Invisible Wall to it so the player cant walk on it
-                    if (tileArray[j][k] instanceof EmptyTile) {
+                    if (tileArray[j][k] instanceof EmptyTile && j == mapSize.x - 1 && k != mapSize.y - 1) {
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(Integer.toString(k), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_LEFT));
+                    } else if (tileArray[j][k] instanceof EmptyTile && j != mapSize.x - 1 && k == mapSize.y - 1) {
+                        tileArray[j][k].pushTileContent(new UIContentTileContent(String.valueOf(UITextureController.mapIntToLetter(j + 1, true)), UIContentTileContent.UIContentTileContentShift.SHIFT_BLOCKSIDE_RIGHT));
+                    } else if (tileArray[j][k] instanceof EmptyTile) {
                         tileArray[j][k].pushTileContent(new InvisibleWall());
                         continue;
                     }

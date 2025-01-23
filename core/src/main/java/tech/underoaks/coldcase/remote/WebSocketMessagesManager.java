@@ -2,6 +2,10 @@ package tech.underoaks.coldcase.remote;
 
 import tech.underoaks.coldcase.game.GameController;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.LevelManager;
+import tech.underoaks.coldcase.game.Levels;
+import tech.underoaks.coldcase.stages.StageManager;
+import tech.underoaks.coldcase.stages.Stages;
 
 import java.util.Queue;
 import java.util.UUID;
@@ -83,6 +87,14 @@ public class WebSocketMessagesManager {
         WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
+    public static void startGame(int levelIndex) {
+        WebSocketClient.getInstance().send(json.toJson(new Messages.startGameMessage(levelIndex), Object.class));
+    }
+
+    public static void exitToMainMenuMessage() {
+        WebSocketClient.getInstance().send(json.toJson(new Messages.exitToMainMenuMessage(), Object.class));
+    }
+
     /**
      * Completes the future associated with a given message.
      *
@@ -103,13 +115,13 @@ public class WebSocketMessagesManager {
      * This method runs asynchronously and dispatches messages based on their type.
      * </p>
      *
-     * @param message the raw message received as a {@link String}.
+     * @param deserializedObject the deserialized message.
      */
-    public static void handleIncomingMessages(String message) {
+    public static void handleIncomingMessages(Object deserializedObject) {
         // Run asynchronously with CompletableFuture
         CompletableFuture.runAsync(() -> {
             try {
-                Object deserializedObject = json.fromJson(Object.class, message);
+                //Object deserializedObject = json.fromJson(Object.class, message);
 
                 switch (deserializedObject) {
                     case Messages.CreateRemoteInteractionChainMessage messageObj -> {
@@ -124,17 +136,24 @@ public class WebSocketMessagesManager {
                     }
                     case Messages.ApplyRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleApplyRemoteGSUsMessage();
-                        System.out.println("ApplyRemoteGSUs called but function is missing for now");
+                        //System.out.println("ApplyRemoteGSUs called but function is missing for now");
                     }
                     case Messages.AbortRemoteGSUsMessage messageObj -> {
                         GameController.getInstance().handleAbortRemoteGSUsMessage();
-                        System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
+                        //System.out.println("AbortRemoteGSUsMessage called but function is missing for now");
                     }
                     case Messages.AppendRemoteInteractionResponseMessage messageObj -> {
                         WebSocketMessagesManager.getInstance().callback(messageObj);
                     }
                     case Messages.CreateRemoteInteractionChainResponseMessage messageObj -> {   //not needed for now
                         WebSocketMessagesManager.getInstance().callback(messageObj);
+                    }
+                    case Messages.startGameMessage messageObj -> {
+                        LevelManager.getInstance().loadLevel(Levels.values()[messageObj.levelIndex]);
+                    }
+                    case Messages.exitToMainMenuMessage messageObj -> {
+                        StageManager.getInstance().setNextStage(Stages.MAIN_MENU);
+                        LevelManager.getInstance().currentLevelIndex = 0;
                     }
                     case null, default -> System.out.println("unknown message");
                 }

@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.state.tileContent;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
@@ -9,10 +10,10 @@ import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The {@code TileContent} class represents the content that can be placed on a {@code Tile}.
@@ -67,7 +68,7 @@ public abstract class TileContent implements Cloneable {
      * @param x     the x-coordinate for rendering the tile
      * @param y     the y-coordinate for rendering the tile
      */
-    public void render(SpriteBatch batch, float x, float y) {
+    public void render(Batch batch, float x, float y) {
         if (sprite != null) {
             batch.draw(sprite, x, y + 410);
         }
@@ -97,6 +98,12 @@ public abstract class TileContent implements Cloneable {
             if (handler != null) {
                 return handler;
             }
+        }
+
+        // Wenn auf dem Player eine Interaktion durchführt wird, wird unabhängig von dessen Ergebnis der Command als 'behandelt' betrachtet.
+        if(this.getClass() == Player.class) {
+            action(chain, interaction);
+            return this;
         }
 
         return action(chain, interaction) ? this : null;
@@ -269,5 +276,22 @@ public abstract class TileContent implements Cloneable {
         this.texture = texture;
         this.sprite = new Sprite(texture);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        TileContent other = (TileContent) obj;
+
+        if (isPlayerPassable != other.isPlayerPassable) return false;
+        if (isObjectPassable != other.isObjectPassable) return false;
+        if (visibilityState != other.visibilityState) return false;
+
+        if (!Objects.equals(texture, other.texture)) return false;
+        return Objects.equals(sprite, other.sprite);
+    }
+
 
 }

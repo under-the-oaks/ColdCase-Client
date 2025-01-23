@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import tech.underoaks.coldcase.game.TextureController;
+import tech.underoaks.coldcase.game.TextureFactory;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tileContent.TileContents;
@@ -42,7 +43,7 @@ public class MapGeneratorTest {
              MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)
              ) {
 
-            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean())).thenReturn(null);
+            textureControllerMockedStatic.when(() -> TextureController.create(new TextureFactory())).thenReturn(null);
             mockedFiles.when(() -> java.nio.file.Files.readAllLines(any())).thenReturn(mockLines);
 
             tilesMockedStatic.when(() -> Tiles.getNewTileClassByIndex(anyInt())).thenReturn(mockedTile);
@@ -61,7 +62,7 @@ public class MapGeneratorTest {
     @Test
     public void testSerializeContentToMap_null() {
         try(MockedStatic<TextureController> textureControllerMockedStatic = Mockito.mockStatic(TextureController.class)) {
-            textureControllerMockedStatic.when(() -> TextureController.create(anyBoolean())).thenReturn(null);
+            textureControllerMockedStatic.when(() -> TextureController.create(new TextureFactory())).thenReturn(null);
             assertThrows(AssertionError.class, () -> MapGenerator.serializeContentToMap(null, true));
         }
     }

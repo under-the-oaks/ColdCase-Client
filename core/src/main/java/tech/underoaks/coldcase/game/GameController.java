@@ -1,6 +1,5 @@
 package tech.underoaks.coldcase.game;
 
-import com.badlogic.gdx.Gdx;
 import tech.underoaks.coldcase.remote.RemoteGameController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Map;
@@ -15,11 +14,18 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import java.util.Stack;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.UUID;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Central manager responsible for handling interactions within the game.
  */
 public class GameController {
+    /**
+     * UUID of this GameController instance
+     */
+    public final UUID uuid;
+
     /**
      * Singleton instance of GameController
      */
@@ -40,6 +46,10 @@ public class GameController {
      */
     private final Queue<GameStateUpdate> pendingUpdates = new LinkedList<>();
 
+    private GameController() {
+        this.uuid = UUID.randomUUID();
+    }
+
     /**
      * Retrieves the singleton instance of the GameController.
      *
@@ -50,6 +60,13 @@ public class GameController {
             instance = new GameController();
         }
         return instance;
+    }
+
+    /**
+     * Removes the currently running instance
+     */
+    public static void destroy() {
+        instance = null;
     }
 
     /**
@@ -71,6 +88,9 @@ public class GameController {
 
             GameController.triggerQueuedLocalActions(interactions, chain);
             GameController.triggerQueuedRemoteActions(chain);
+        } catch (TimeoutException e) {
+            System.err.println("TIMEOUT in triggerAction");
+            return false;
         } finally {
             interactions.pop();
         }
@@ -120,6 +140,9 @@ public class GameController {
             }
 
             return true;
+        } catch (TimeoutException e) {
+            System.err.println("TIMEOUT");
+            return false;
         } finally {
             if (remote != null) {
                 remote.close();
@@ -181,7 +204,7 @@ public class GameController {
      * @param chain           The interaction chain to use.
      * @param interaction     The interaction to trigger.
      */
-    public static void triggerRemoteAction(InteractionChain chain, Interaction interaction) {
+    public static void triggerRemoteAction(InteractionChain chain, Interaction interaction) throws TimeoutException {
         try (RemoteGameController remote = new RemoteGameController()) {
             Queue<Interaction> newRemoteActions = remote.triggerAction(interaction);
             if (newRemoteActions == null) {
@@ -229,25 +252,6 @@ public class GameController {
         return new InteractionChain(snapshot);
     }
 
-    /**
-     * Ends the current level and exits the game.
-     */
-    public void endLevel() {
-        System.out.println("Ending the level...");
-        Gdx.app.exit();
-        System.exit(0);
-
-    }
-
-    /**
-     * Loads the next level (to be implemented).
-     */
-    private void loadNextLevel() {
-        System.out.println("Loading next level...");
-        //TODO: Load new Level
-
-    }
-
 
     /**
      * Creates a new InteractionChain based on an existing chain.
@@ -270,7 +274,6 @@ public class GameController {
      * @return A queue of pending actions, or null if the action was unsuccessful.
      */
     public Queue<Interaction> handleTriggerRemoteInteraction(Interaction interaction, boolean suppressTranscendentFollowUp) {
-        System.out.println("handleAppendRemoteInteraction Called");
 
         InteractionChain currentChain = interactions.peek();
         InteractionChain chain = createInteractionChain(currentChain);
@@ -347,7 +350,7 @@ public class GameController {
      *
      * @param chain The current interaction chain.
      */
-    private static void triggerQueuedRemoteActions(InteractionChain chain) {
+    private static void triggerQueuedRemoteActions(InteractionChain chain) throws TimeoutException {
         // Trigger locally queued remote actions
         Interaction action;
         while ((action = chain.getPendingRemoteActions().poll()) != null) {
