@@ -48,7 +48,7 @@ public class TextureController {
     private Texture ghostTextureSouth;
     private Texture ghostTextureEast;
     private Texture ghostTextureWest;
-
+    private Texture holeTexture;
     private Texture trigger_closed;
     private Texture trigger_opened;
 
@@ -90,6 +90,7 @@ public class TextureController {
         this.trigger_closed = factory.create("./sprites/Trigger_closed.png");
         this.trigger_opened = factory.create("./sprites/Trigger_opened.png");
 
+        this.holeTexture = factory.create("./sprites/tileContent_hole.png");
     }
 
     public static TextureController create(TextureFactory factory) {
@@ -218,5 +219,9 @@ public class TextureController {
 
     public Texture getTrigger_opened() {
         return trigger_opened;
+    }
+
+    public Texture holeTexture() {
+        return holeTexture;
     }
 }
