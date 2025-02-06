@@ -10,9 +10,6 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +20,6 @@ import java.util.List;
 public class Map {
 
     public Tile[][] tileArray;
-
-    /**
-     * The size of each tile in pixels
-     */
-    static float tileSize = 1080;
-
 
     private boolean isSnapshotMap = false;
 
@@ -77,47 +68,6 @@ public class Map {
 
     public int getTileArrayHeight() {
         return tileArray.length;
-    }
-
-    /**
-     * Reads a map file and returns a 2D List of integers representing the map
-     *
-     * @param path Path to the file
-     * @return 2D-List of integers representing the map
-     */
-    private static List<List<Integer>> readMapFile(Path path) {
-        List<List<Integer>> rawTiles = new ArrayList<>();
-        try {
-            List<String> lines = Files.readAllLines(path);
-            for (int i = 0; i < lines.size(); i++) {
-                String[] split = lines.get(i).split(" ");
-                rawTiles.add(new ArrayList<>());
-                for (String s : split) {
-                    rawTiles.get(i).add(Integer.parseInt(s));
-                }
-            }
-
-
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return rawTiles;
-    }
-
-    /**
-     * Determines the maximum width of the matrix (the longest row).
-     *
-     * @param matrix A List of Tiles representing the matrix.
-     * @return The maximum width (length of the longest row).
-     */
-    private static int getMatrixWidth(List<List<Tile>> matrix) {
-        int max = Integer.MIN_VALUE;
-        for (List<Tile> row : matrix) {
-            int length = row.size();
-            max = Math.max(length, max);
-        }
-        return max;
     }
 
     public int getChildIndex(Vector2 tile, TileContent tileContent) {
@@ -198,7 +148,7 @@ public class Map {
 
     }
 
-    public Vector2 twoDToIso45(int ex, int why) {
+    public static Vector2 twoDToIso45(int ex, int why) {
 
         Vector2 rotatedPt = new Vector2(0, 0);
 
