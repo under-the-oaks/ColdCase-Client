@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.*;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.Snapshot;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
@@ -18,8 +18,12 @@ import tech.underoaks.coldcase.state.updates.UpdateTypes;
 import tech.underoaks.coldcase.state.updates.GameStateUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -75,9 +79,10 @@ class MapTest{
         }
 
         @Override
-        public boolean action(InteractionChain chain, Interaction interaction) throws GameStateUpdateException {
+        public boolean action(InteractionChain chain, Interaction interaction) {
             return false;
         }
+
         @Override
         public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
 
@@ -112,7 +117,7 @@ class MapTest{
         }
 
         @Override
-        public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException {
+        public boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) {
             return true;
         }
     }
@@ -359,5 +364,90 @@ class MapTest{
 
         Assertions.assertThrows( IllegalStateException.class, () -> mockMap.updateUntilStable( brokenChain, interaction, handler ));
 
+    }
+
+    @Test
+    public void IsPlayerNextToTileTest() throws URISyntaxException {
+        // ARRANGE
+        TextureFactory mockTextureFactory =  mock(TextureFactory.class);
+        when(mockTextureFactory.create(anyString())).thenReturn(mock(Texture.class));
+        TextureController.create(mockTextureFactory);
+
+        Map map = MapGenerator.serializeContentToMap(Path.of(
+            Objects.requireNonNull(getClass().getClassLoader().getResource("Map_Test_GloveItem")).toURI()
+        ), true);
+        GameController.getInstance().setCurrentMap(map);
+
+        Vector2 playerPosition = new Vector2(3, 1);
+        PlayerController.getInstance().setPlayerPosition(playerPosition);
+
+        int[] indices = {1,0,-1};
+
+        // ACT, ASSERT
+        for(int index_a : indices) {
+            for(int index_b : indices) {
+                if(index_a == 0 && index_b == 0) continue;
+
+                Vector2 testPosition = new Vector2(
+                    playerPosition.x + index_a,
+                    playerPosition.y + index_b
+                );
+                Assertions.assertTrue(Map.isPlayerNextToTile(testPosition));
+            }
+        }
+        Assertions.assertFalse(Map.isPlayerNextToTile(playerPosition));
+        Assertions.assertFalse(Map.isPlayerNextToTile(new Vector2(-10, -10)));
+
+        GameController.destroy();
+        PlayerController.destroy();
+        TextureController.destroy();
+    }
+
+    /**
+     * Berechnung:
+     * x = 450*(0 - 0) = 0
+     * y = -320*(0 + 0) = 0
+     */
+    @Test
+    public void TwoDToIso45Test_Zero() {
+        Vector2 result = Map.twoDToIso45(0, 0);
+        Assertions.assertEquals(0.0f, result.x, 0.001f);
+        Assertions.assertEquals(0.0f, result.y, 0.001f);
+    }
+
+    /**
+     * Berechnung:
+     * x = 450*(1 - 0) = 450
+     * y = -320*(1 + 0) = -320
+     */
+    @Test
+    public void TwoDToIso45Test_PositiveInput() {
+        Vector2 result = Map.twoDToIso45(1, 0);
+        Assertions.assertEquals(450.0f, result.x, 0.001f);
+        Assertions.assertEquals(-320.0f, result.y, 0.001f);
+    }
+
+    /**
+     * Berechnung:
+     * x = 450*(2 - 1) = 450
+     * y = -320*(2 + 1) = -960
+     */
+    @Test
+    public void TwoDToIso45Test_MixedInput() {
+        Vector2 result = Map.twoDToIso45(2, 1);
+        Assertions.assertEquals(450.0f, result.x, 0.001f);
+        Assertions.assertEquals(-960.0f, result.y, 0.001f);
+    }
+
+    /**
+     * Berechnung:
+     * x = 450*(-1 - (-2)) = 450*(1) = 450
+     * y = -320*(-1 + (-2)) = -320*(-3) = 960
+     */
+    @Test
+    public void TwoDToIso45Test_NegativeInput() {
+        Vector2 result = Map.twoDToIso45(-1, -2);
+        Assertions.assertEquals(450.0f, result.x, 0.001f);
+        Assertions.assertEquals(960.0f, result.y, 0.001f);
     }
 }
