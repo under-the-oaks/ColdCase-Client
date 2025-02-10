@@ -53,7 +53,6 @@ public class MovableBlockTest {
 
     @Test
     public void testInteractionWithoutGlove() {
-        // Handschuh nicht im Inventar
         PlayerController.getInstance().setInventory(null);
 
         Interaction interaction = new Interaction(
@@ -71,7 +70,6 @@ public class MovableBlockTest {
 
     @Test
     public void testInteractionWithGlove() {
-        // Handschuh ins Inventar hinzufügen
         PlayerController.getInstance().setInventory(new GloveItem());
 
         Interaction interaction = new Interaction(
@@ -102,10 +100,8 @@ public class MovableBlockTest {
         game.gameController.triggerAction(interaction);
         game.gameController.applyNextPendingGSU();
 
-        // Ist das Objekt nicht mehr an seiner alten Position?
         Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
 
-        // Ist das Objekt an seiner neuen Position?
         Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(2,3).topTileContent());
 
     }
@@ -123,10 +119,8 @@ public class MovableBlockTest {
         game.gameController.triggerAction(interaction);
         game.gameController.applyNextPendingGSU();
 
-        // Ist das Objekt nicht mehr an seiner alten Position?
         Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
 
-        // Ist das Objekt an seiner neuen Position?
         Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(0,3).topTileContent());
 
     }
@@ -144,10 +138,8 @@ public class MovableBlockTest {
         game.gameController.triggerAction(interaction);
         game.gameController.applyNextPendingGSU();
 
-        // Ist das Objekt nicht mehr an seiner alten Position?
         Assertions.assertNull(game.gameController.getCurrentMap().getTile(3,2).topTileContent());
 
-        // Ist das Objekt an seiner neuen Position?
         Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(3,1).topTileContent());
 
     }
@@ -165,10 +157,8 @@ public class MovableBlockTest {
         game.gameController.triggerAction(interaction);
         game.gameController.applyNextPendingGSU();
 
-        // Ist das Objekt nicht mehr an seiner alten Position?
         Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
 
-        // Ist das Objekt an seiner neuen Position?
         Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(1,4).topTileContent());
 
     }
@@ -177,8 +167,8 @@ public class MovableBlockTest {
     public void testInvalidMovement_OutOfBounds() {
         // ARRANGE
         Interaction interaction_arrange = new Interaction(
-            new Vector2(3, 1), // Startposition
-            Direction.WEST, // Richtung
+            new Vector2(3, 1),
+            Direction.WEST,
             MovableBlock.class
         );
         TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
@@ -188,15 +178,15 @@ public class MovableBlockTest {
 
         // ACT
         Interaction interaction_act = new Interaction(
-            new Vector2(3, 0), // Startposition
-            Direction.WEST,   // Richtung
+            new Vector2(3, 0),
+            Direction.WEST,
             MovableBlock.class
         );
         boolean result = game.gameController.triggerAction(interaction_act);
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertTrue(result); // Auch wenn eine Aktion fehlschlägt, gilt die Aktion als 'behandelt'
+        Assertions.assertTrue(result);
         Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(0, 3).topTileContent());
     }
 
@@ -204,8 +194,8 @@ public class MovableBlockTest {
     public void testInvalidMovement_NotPassable() {
         // ARRANGE
         Interaction interaction_arrangeA = new Interaction(
-            new Vector2(3, 1), // Startposition
-            Direction.EAST, // Richtung
+            new Vector2(3, 1),
+            Direction.EAST,
             MovableBlock.class
         );
         TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
@@ -214,8 +204,8 @@ public class MovableBlockTest {
         game.gameController.applyNextPendingGSU();
 
         Interaction interaction_arrangeB = new Interaction(
-            new Vector2(3, 2), // Startposition
-            Direction.EAST, // Richtung
+            new Vector2(3, 2),
+            Direction.EAST,
             MovableBlock.class
         );
         game.gameController.triggerAction(interaction_arrangeB);
@@ -223,15 +213,15 @@ public class MovableBlockTest {
 
         //ACT
         Interaction interaction_arrangeC = new Interaction(
-            new Vector2(3, 3), // Startposition
-            Direction.EAST, // Richtung
+            new Vector2(3, 3),
+            Direction.EAST,
             MovableBlock.class
         );
         boolean result = game.gameController.triggerAction(interaction_arrangeC);
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertTrue(result); // Auch wenn eine Aktion fehlschlägt, gilt die Aktion als 'behandelt'
+        Assertions.assertTrue(result);
         Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(3, 3).topTileContent());
     }
 }
