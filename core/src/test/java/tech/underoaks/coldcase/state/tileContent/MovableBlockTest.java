@@ -38,7 +38,7 @@ public class MovableBlockTest {
         game.gameController = GameController.getInstance();
 
         Map map = MapGenerator.serializeContentToMap(Path.of(
-            Objects.requireNonNull(getClass().getClassLoader().getResource("Map_Test")).toURI()
+            Objects.requireNonNull(getClass().getClassLoader().getResource("Map_Test_Hole")).toURI()
         ), true);
         game.gameController.setCurrentMap(map);
 
@@ -52,176 +52,169 @@ public class MovableBlockTest {
     }
 
     @Test
-    public void testInteractionWithoutGlove() {
-        PlayerController.getInstance().setInventory(null);
-
-        Interaction interaction = new Interaction(
-            new Vector2(9, 3),
-            Direction.EAST,
-            MovableBlock.class
-        );
-
-        boolean result = game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        // ASSERT
-        Assertions.assertFalse(result, "Block sollte ohne Handschuh nicht bewegbar sein.");
-    }
-
-    @Test
-    public void testInteractionWithGlove() {
-        PlayerController.getInstance().setInventory(new GloveItem());
-
-        Interaction interaction = new Interaction(
-            new Vector2(3, 1),
-            Direction.EAST,
-            MovableBlock.class
-        );
-
-        boolean result = game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        // ASSERT
-        Assertions.assertTrue(result, "Block sollte mit Handschuh bewegbar sein.");
-        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 3).topTileContent());
-        Assertions.assertNotNull(game.gameController.getCurrentMap().getTile(2, 3).topTileContent());
-    }
-
-    @Test
-    public void testInteractionEast() {
-        Interaction interaction = new Interaction(
-            new Vector2(3, 1),
-            Direction.EAST,
-            MovableBlock.class
-        );
-
-        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
-
-        game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
-
-        Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(2,3).topTileContent());
-
-    }
-
-    @Test
-    public void testInteractionWest() {
-        Interaction interaction = new Interaction(
-            new Vector2(3, 1),
-            Direction.WEST,
-            MovableBlock.class
-        );
-
-        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
-
-        game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
-
-        Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(0,3).topTileContent());
-
-    }
-
-    @Test
-    public void testInteractionNorth() {
-        Interaction interaction = new Interaction(
-            new Vector2(3, 1),
-            Direction.NORTH,
-            MovableBlock.class
-        );
-
-        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 3).topTileContent();
-
-        game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        Assertions.assertNull(game.gameController.getCurrentMap().getTile(3,2).topTileContent());
-
-        Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(3,1).topTileContent());
-
-    }
-
-    @Test
-    public void testInteractionSouth() {
-        Interaction interaction = new Interaction(
-            new Vector2(3, 1),
-            Direction.SOUTH,
-            MovableBlock.class
-        );
-
-        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
-
-        game.gameController.triggerAction(interaction);
-        game.gameController.applyNextPendingGSU();
-
-        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1,3).topTileContent());
-
-        Assertions.assertSame(expectedBlock,game.gameController.getCurrentMap().getTile(1,4).topTileContent());
-
-    }
-
-    @Test
-    public void testInvalidMovement_OutOfBounds() {
+    public void testMove() {
         // ARRANGE
         Interaction interaction_arrange = new Interaction(
-            new Vector2(3, 1),
-            Direction.WEST,
-            MovableBlock.class
+            new Vector2(8, 2), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
         );
-        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
-
-        game.gameController.triggerAction(interaction_arrange);
-        game.gameController.applyNextPendingGSU();
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+        PlayerController.getInstance().setInventory(new GloveItem());
 
         // ACT
-        Interaction interaction_act = new Interaction(
-            new Vector2(3, 0),
-            Direction.WEST,
-            MovableBlock.class
-        );
-        boolean result = game.gameController.triggerAction(interaction_act);
+        boolean res = game.gameController.triggerAction(interaction_arrange);
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertTrue(result);
-        Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(0, 3).topTileContent());
+        Assertions.assertTrue(res, "Action needs to be successful");
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
     }
 
     @Test
-    public void testInvalidMovement_NotPassable() {
+    public void testMoveNOK_GloveNeeded() {
         // ARRANGE
-        Interaction interaction_arrangeA = new Interaction(
-            new Vector2(3, 1),
-            Direction.EAST,
-            MovableBlock.class
+        Interaction interaction_arrange = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
         );
-        TileContent expectedPlayer = game.gameController.getCurrentMap().getTile(1, 3).topTileContent();
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
 
-        game.gameController.triggerAction(interaction_arrangeA);
-        game.gameController.applyNextPendingGSU();
-
-        Interaction interaction_arrangeB = new Interaction(
-            new Vector2(3, 2),
-            Direction.EAST,
-            MovableBlock.class
-        );
-        game.gameController.triggerAction(interaction_arrangeB);
-        game.gameController.applyNextPendingGSU();
-
-        //ACT
-        Interaction interaction_arrangeC = new Interaction(
-            new Vector2(3, 3),
-            Direction.EAST,
-            MovableBlock.class
-        );
-        boolean result = game.gameController.triggerAction(interaction_arrangeC);
+        // ACT
+        boolean res = game.gameController.triggerAction(interaction_arrange);
         game.gameController.applyNextPendingGSU();
 
         // ASSERT
-        Assertions.assertTrue(result);
-        Assertions.assertSame(expectedPlayer, game.gameController.getCurrentMap().getTile(3, 3).topTileContent());
+        Assertions.assertFalse(res, "Action needs to be not successful");
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
+    }
+
+    @Test
+    public void testMoveNOK_GloveNeeded_WrongItem() {
+        // ARRANGE
+        Interaction interaction_arrange = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
+        );
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+        PlayerController.getInstance().setInventory(new TestItem());
+
+        // ACT
+        boolean res = game.gameController.triggerAction(interaction_arrange);
+        game.gameController.applyNextPendingGSU();
+
+        // ASSERT
+        Assertions.assertFalse(res, "Action needs to be not successful");
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
+    }
+
+    @Test
+    public void testMoveOK_GloveNeeded_SkipForRemote() throws URISyntaxException {
+        // ARRANGE
+        Interaction interaction_arrange = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
+        );
+
+        // Destroy current GameController to Change ID
+        afterEach();
+        beforeEach();
+
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+
+        // ACT
+        boolean res = game.gameController.triggerAction(interaction_arrange);
+        game.gameController.applyNextPendingGSU();
+
+        // ASSERT
+        Assertions.assertTrue(res, "Action needs to be successful");
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
+    }
+
+    @Test
+    public void testMoveNOK_OutOfBounds() {
+        // ARRANGE
+        Interaction interaction_arrangeA = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
+        );
+        Interaction interaction_arrangeB = new Interaction(
+            new Vector2(8, 1), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
+        );
+        Interaction interaction_arrangeC = new Interaction(
+            new Vector2(8, 0), // Startposition
+            Direction.WEST, // Richtung
+            Player.class
+        );
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+        PlayerController.getInstance().setInventory(new GloveItem());
+
+        // ACT
+        boolean resA = game.gameController.triggerAction(interaction_arrangeA);
+        game.gameController.applyNextPendingGSU();
+        boolean resB = game.gameController.triggerAction(interaction_arrangeB);
+        game.gameController.applyNextPendingGSU();
+        boolean resC = game.gameController.triggerAction(interaction_arrangeC);
+        game.gameController.applyNextPendingGSU();
+
+        // ASSERT
+        Assertions.assertTrue(resA, "Action needs to be successful");
+        Assertions.assertTrue(resB, "Action needs to be successful");
+        Assertions.assertFalse(resC, "Action needs to be not successful");
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(0, 8).topTileContent());
+    }
+
+    @Test
+    public void testMoveNOK_NotPassable() {
+        // ARRANGE
+        Interaction interaction_arrange = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.SOUTH, // Richtung
+            Player.class
+        );
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+        PlayerController.getInstance().setInventory(new GloveItem());
+
+        // ACT
+        boolean res = game.gameController.triggerAction(interaction_arrange);
+        game.gameController.applyNextPendingGSU();
+
+        // ASSERT
+        Assertions.assertFalse(res, "Action needs to be not successful");
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(1, 8).topTileContent());
+    }
+
+    @Test
+    public void testMoveOK_Passable() {
+        // ARRANGE
+        Interaction interaction_arrange = new Interaction(
+            new Vector2(8, 2), // Startposition
+            Direction.EAST, // Richtung
+            Player.class
+        );
+        TileContent expectedBlock = game.gameController.getCurrentMap().getTile(2, 8).topTileContent();
+        PlayerController.getInstance().setInventory(new GloveItem());
+
+        // ACT
+        boolean res = game.gameController.triggerAction(interaction_arrange);
+        game.gameController.applyNextPendingGSU();
+
+        // ASSERT
+        Assertions.assertTrue(res, "Action needs to be successful");
+        Assertions.assertNull(game.gameController.getCurrentMap().getTile(2, 8).topTileContent());
+        Assertions.assertEquals(expectedBlock, game.gameController.getCurrentMap().getTile(3, 8).topTileContent());
     }
 }
