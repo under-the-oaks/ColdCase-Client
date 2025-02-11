@@ -6,6 +6,17 @@ import tech.underoaks.coldcase.Main;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
+    /**
+     * default-constructor
+     */
+    public Lwjgl3Launcher() {
+        super();
+    }
+
+    /**
+     * main
+     * @param args args
+     */
     public static void main(String[] args) {
         if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
         createApplication();
