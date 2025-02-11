@@ -10,7 +10,9 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
  * so that the player cannot become jesus and walk on water/emptyTiles.
  */
 public class InvisibleWall extends TileContent {
-
+    /**
+     * Default-Constructor
+     */
     public InvisibleWall() {
         super(null, false, false);
     }

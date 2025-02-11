@@ -15,7 +15,6 @@ import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
  * This class handles the rendering of the hole texture and updates based on
  * interactions with movable blocks. If a block is moved into the hole's
  * position, it will remove both the hole and the block from the tile.
- *
  * Author: jean874
  */
 public class Hole extends TileContent{
@@ -23,6 +22,9 @@ public class Hole extends TileContent{
     private static final Texture texture = TextureController.getInstance().holeTexture();
     private static final Sprite sprite = new Sprite(texture);
 
+    /**
+     * Default-Constructor
+     */
     public Hole() {
         super(texture,false,true);
     }

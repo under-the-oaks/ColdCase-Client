@@ -11,11 +11,20 @@ import tech.underoaks.coldcase.state.updates.PlayerPassebilityUpdate;
 
 import java.util.Objects;
 
+/**
+ * A {@link TileContent} that is initially not player-passable.
+ * A {@link Door_Trigger} is able to change this behaviour by setting it to player-passable
+ *
+ * @see Door_Trigger
+ */
 public class Door extends TileContent {
 
     private static final Texture texture_closed = TextureController.getInstance().getDoorTexture_closed();
     private static final Texture texture_open = TextureController.getInstance().getDoorTexture_open();
 
+    /**
+     * Default-Constructor
+     */
     public Door() {
         super(texture_closed, false, false);
     }

@@ -136,6 +136,10 @@ public class HostStage extends AbstractStage {
 
     }
 
+    /**
+     * Sets the ID of the current Session
+     * @param sessionID ID of the current Session
+     */
     public void setSessionIDField(String sessionID) {
         sessionIDField.setText("SessionID: " + sessionID);
     }

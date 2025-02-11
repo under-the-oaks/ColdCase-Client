@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import tech.underoaks.coldcase.game.UITextureController;
 
+/**
+ * The {@link AbstractStage} that contains various settings regarding the game
+ */
 public class SettingsStage extends AbstractStage {
 
     private final Skin skin = UITextureController.getInstance().getSkin();

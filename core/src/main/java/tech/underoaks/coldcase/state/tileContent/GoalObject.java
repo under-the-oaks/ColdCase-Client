@@ -10,11 +10,17 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.updates.EndLevelUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
-
+/**
+ * The {@link TileContent} that needs to be reached by both players to complete a level.
+ * Once both players stand in front of the Content, one can interact with it and trigger the next level.
+ */
 public class GoalObject extends TileContent {
 
     private final Sprite sprite = new Sprite( TextureController.getInstance().getGoalObjectTexture());
 
+    /**
+     * Default-Constructor
+     */
     public GoalObject() {
         super( TextureController.getInstance().getGoalObjectTexture(), false, false);
         this.visibilityState = VisibilityStates.TRANSCENDENT;

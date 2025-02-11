@@ -21,6 +21,10 @@ public class MapActor extends Actor {
 
     private Map map;
 
+    /**
+     * Default-Constructor
+     * @param path The path that points to the map-file
+     */
     public MapActor(String path){
         setupMap(path);
     }

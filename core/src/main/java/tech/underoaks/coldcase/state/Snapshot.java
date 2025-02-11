@@ -19,6 +19,10 @@ public class Snapshot {
         this.snapshotMap.setIsSnapshotMap(true);
     }
 
+    /**
+     * Gets the {@link Map} that is being stored in this Snapshot
+     * @return The {@link Map}
+     */
     public Map getSnapshotMap() {
         return snapshotMap;
     }

@@ -9,12 +9,22 @@ import tech.underoaks.coldcase.state.tileContent.Player;
 
 import java.util.Stack;
 
+/**
+ * A {@link GameStateUpdate} that moves a TileContent from one location to another.
+ */
 public class MoveUpdate extends GameStateUpdate {
 
     private final int sourceIndex;
     private final Vector2 sourcePosition;
     private final Vector2 targetPosition;
 
+    /**
+     * Default-Constructor
+     *
+     * @param sourcePosition The origin position of the TileContent
+     * @param sourceIndex    The {@link Vector2}-Position of the Content that will be updated.
+     * @param targetPosition The target position of the TileContent
+     */
     public MoveUpdate(Vector2 sourcePosition, int sourceIndex, Vector2 targetPosition) {
         super(UpdateTypes.MAP_MODIFICATION);
         this.sourcePosition = sourcePosition;
@@ -44,7 +54,7 @@ public class MoveUpdate extends GameStateUpdate {
             sourceTile.pushTileContent(tileContents.pop());
         }
 
-        if (sourceContent.getClass() == Player.class){
+        if (sourceContent.getClass() == Player.class) {
 
             Vector2 directionVector = targetPosition.cpy().sub(sourcePosition);
 
@@ -60,6 +70,11 @@ public class MoveUpdate extends GameStateUpdate {
         }
     }
 
+    /**
+     * Sets the direction the player is looking towards.
+     *
+     * @param direction the new {@code Direction} for the player
+     */
     public static void setPlayerRotation(Direction direction) {
         Player.updateTexture(direction);
     }
