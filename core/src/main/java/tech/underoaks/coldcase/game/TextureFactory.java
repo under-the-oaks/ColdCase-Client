@@ -7,6 +7,11 @@ import com.badlogic.gdx.graphics.Texture;
  * @implNote Hilfreich fürs Testen
  */
 public class TextureFactory {
+    /**
+     * Creates a new {@link Texture}
+     * @param path ressource identifier for the texture
+     * @return Initialized {@link Texture}
+     */
     public Texture create(String path) {
         return new Texture(path);
     }

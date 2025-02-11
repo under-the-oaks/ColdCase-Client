@@ -25,9 +25,6 @@ import static java.lang.Thread.sleep;
  * view the session ID, and manage the connection. The host will have the option to start the game
  * and manage the session ID.
  * This screen extends {@link AbstractStage}.
- *
- * @author mabe.edu
- * @coauthor jean874
  */
 public class HostStage extends AbstractStage {
 

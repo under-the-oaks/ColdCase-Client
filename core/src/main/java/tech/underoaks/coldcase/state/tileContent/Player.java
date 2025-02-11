@@ -14,10 +14,19 @@ import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.game.Direction;
 
+/**
+ * The {@link TileContent} representing the Player on the playing field.
+ * This Content will be controlled by the {@link PlayerController} in most cases.
+ * @see PlayerController
+ */
 public class Player extends TileContent {
 
+    /** The texture that the player is currently using. This texture indicates the facing direction */
     public static Texture currentTexture;
 
+    /**
+     * Default Constructor
+     */
     public Player() {
         super(TextureController.getInstance().getPlayerTexture(), true, false);
         currentTexture = TextureController.getInstance().getPlayerTexture();
@@ -110,13 +119,14 @@ public class Player extends TileContent {
         }
     }
 
-
+    /**
+     * Notifies the {@link PlayerController} about performed movements of the Player
+     * @param tilePosition The new position
+     * @param actionDirection The direction in which the player has moved
+     */
     public void updateMovement(Vector2 tilePosition, Direction actionDirection) {
-
         Vector2 newPosition = tilePosition.cpy().add(actionDirection.getVector());
         PlayerController.getInstance().setPlayerPosition(newPosition);
         PlayerController.getInstance().setPlayerDirection(actionDirection);
-
     }
-
 }

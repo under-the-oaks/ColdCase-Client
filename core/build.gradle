@@ -18,6 +18,16 @@ dependencies {
     useJUnitPlatform()
   }
 
+  javadoc {
+    configure( options ) {
+      tags(
+        'apiNote:a:"API Note:"',
+        'implSpec:a:"Implementation Requirements:"',
+        'implNote:a:"Implementation Note:"'
+      )
+    }
+  }
+
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
   }

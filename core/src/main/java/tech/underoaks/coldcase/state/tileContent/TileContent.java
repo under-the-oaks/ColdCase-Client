@@ -45,6 +45,17 @@ public abstract class TileContent implements Cloneable {
     private boolean isPlayerPassable;
     private boolean isObjectPassable;
 
+    /**
+     * Constructs a new {@code TileContent} with the specified texture and passability properties.
+     * <p>
+     * If a texture is provided, a new {@link Sprite} is created and its origin is set to the center.
+     * The content's visibility is set to {@link VisibilityStates#PLAYER_ONE_ONLY} by default.
+     * </p>
+     *
+     * @param texture          the {@link Texture} used for rendering the TileContent; may be {@code null}
+     * @param isPlayerPassable {@code true} if the content can be passed by the player, {@code false} otherwise
+     * @param isObjectPassable {@code true} if the content can be passed by objects, {@code false} otherwise
+     */
     public TileContent(Texture texture, boolean isPlayerPassable, boolean isObjectPassable) {
         this.texture = texture;
 
@@ -101,7 +112,7 @@ public abstract class TileContent implements Cloneable {
         }
 
         // Wenn auf dem Player eine Interaktion durchführt wird, wird unabhängig von dessen Ergebnis der Command als 'behandelt' betrachtet.
-        if(this.getClass() == Player.class) {
+        if (this.getClass() == Player.class) {
             action(chain, interaction);
             return this;
         }
@@ -128,6 +139,8 @@ public abstract class TileContent implements Cloneable {
      *
      * @param chain        InteractionChain managing the snapshot.
      * @param tilePosition The position of the currently selected tile.
+     * @param interaction  The interaction that needs to be handled.
+     * @param handler      The TileContent that has been handling the interaction so far.
      * @return True if an update as been performed; False otherwise
      * @throws GameStateUpdateException   If a GameStateUpdate has failed
      * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
@@ -148,6 +161,8 @@ public abstract class TileContent implements Cloneable {
      *
      * @param chain        InteractionChain managing the snapshot.
      * @param tilePosition The position of the currently selected tile.
+     * @param interaction  The interaction that is currently being handled.
+     * @param handler      The TileContent that has been handling the interaction so far.
      * @return True if an update has been performed; False otherwise
      * @throws GameStateUpdateException   If a GameStateUpdate has failed
      * @throws UpdateTileContentException If the TileContent couldn't be updated (due to a failing validation)
@@ -157,16 +172,28 @@ public abstract class TileContent implements Cloneable {
      */
     public abstract boolean update(InteractionChain chain, Vector2 tilePosition, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException;
 
+    /**
+     * Sets the next {@code TileContent} in the stack.
+     *
+     * @param tileContent the {@code TileContent} to set as the next content in the stack
+     */
     public void setNextContent(TileContent tileContent) {
         this.tileContent = tileContent;
     }
 
+    /**
+     * Returns the next {@code TileContent} in the stack.
+     *
+     * @return the next {@code TileContent}, or {@code null} if there is none
+     */
     public TileContent getNextContent() {
         return tileContent;
     }
 
     /**
      * Adds a new content layer on top of the current stack of contents.
+     *
+     * @param tileContent The TileContent that is being injected into the Map
      */
     public void pushContent(TileContent tileContent) {
         if (this.tileContent != null) {
@@ -178,6 +205,8 @@ public abstract class TileContent implements Cloneable {
 
     /**
      * Removes the topmost content layer from the stack and returns it.
+     *
+     * @return The topmost {@link TileContent}
      */
     public TileContent popContent() {
         if (this.tileContent == null) {
@@ -191,6 +220,14 @@ public abstract class TileContent implements Cloneable {
         return this.tileContent.popContent();
     }
 
+    /**
+     * Retrieves the topmost {@code TileContent} in the stack.
+     * <p>
+     * If there are nested contents, this method returns the topmost element. Otherwise, it returns this.
+     * </p>
+     *
+     * @return the topmost {@code TileContent} in the stack
+     */
     public TileContent topContent() {
         if (this.tileContent == null) {
             return this;
@@ -198,30 +235,66 @@ public abstract class TileContent implements Cloneable {
         return this.tileContent.topContent();
     }
 
+    /**
+     * Returns the current visibility state of this {@code TileContent}.
+     *
+     * @return the {@link VisibilityStates} representing the visibility of this content
+     */
     public VisibilityStates getVisibilityState() {
         return visibilityState;
     }
 
+    /**
+     * Sets the visibility state for this {@code TileContent}.
+     *
+     * @param visibilityState the new {@link VisibilityStates} to apply
+     */
     public void setVisibilityState(VisibilityStates visibilityState) {
         this.visibilityState = visibilityState;
     }
 
+    /**
+     * Indicates whether this {@code TileContent} is passable by objects.
+     *
+     * @return {@code true} if objects can pass through this content, {@code false} otherwise
+     */
     public boolean isObjectPassable() {
         return isObjectPassable;
     }
 
+    /**
+     * Sets whether this {@code TileContent} is passable by objects.
+     *
+     * @param objectPassable {@code true} if objects should be able to pass through this content, {@code false} otherwise
+     */
     public void setObjectPassable(boolean objectPassable) {
         isObjectPassable = objectPassable;
     }
 
+    /**
+     * Indicates whether this {@code TileContent} is passable by the player.
+     *
+     * @return {@code true} if the player can pass through this content, {@code false} otherwise
+     */
     public boolean isPlayerPassable() {
         return isPlayerPassable;
     }
 
+    /**
+     * Sets whether this {@code TileContent} is passable by the player.
+     *
+     * @param playerPassable {@code true} if the player should be able to pass through this content, {@code false} otherwise
+     */
     public void setPlayerPassable(boolean playerPassable) {
         isPlayerPassable = playerPassable;
     }
 
+    /**
+     * Disposes of the resources used by this TileContent.
+     * <p>
+     * Releases the underlying texture and disposes any nested {@code TileContent} if present.
+     * </p>
+     */
     public void dispose() {
         if (texture != null) {
             texture.dispose();
@@ -244,6 +317,16 @@ public abstract class TileContent implements Cloneable {
         }
     }
 
+    /**
+     * Returns the index of the specified {@code TileContent} in the content stack.
+     * <p>
+     * The current {@code TileContent} is considered to have index 0. If the specified content is not found,
+     * {@code -1} is returned.
+     * </p>
+     *
+     * @param tileContent the {@code TileContent} whose index is to be determined
+     * @return the index of the specified {@code TileContent}, or {@code -1} if not found
+     */
     public int getChildIndex(TileContent tileContent) {
         if (this == tileContent) {
             return 0;
@@ -258,6 +341,17 @@ public abstract class TileContent implements Cloneable {
         return index + 1;
     }
 
+    /**
+     * Retrieves a {@code TileContent} from the content stack by its index.
+     * <p>
+     * An index of 0 returns this {@code TileContent}. For higher indices, the method traverses the nested content.
+     * If the specified index is not found, an {@code IllegalArgumentException} is thrown.
+     * </p>
+     *
+     * @param i the index of the desired {@code TileContent} (0 for this, 1 for the next, etc.)
+     * @return the {@code TileContent} at the specified index
+     * @throws IllegalArgumentException if no {@code TileContent} exists at the given index
+     */
     public TileContent getTileContentByIndex(int i) {
         if (i == 0) {
             return this;
@@ -268,10 +362,20 @@ public abstract class TileContent implements Cloneable {
         return tileContent.getTileContentByIndex(i - 1);
     }
 
+    /**
+     * Returns the {@link Texture} associated with this {@code TileContent}.
+     *
+     * @return the texture used for rendering, or {@code null} if none is set
+     */
     public Texture getTexture() {
         return texture;
     }
 
+    /**
+     * Sets the texture for this {@code TileContent} and updates its sprite.
+     *
+     * @param texture the new {@link Texture} to be used for rendering
+     */
     public void setTexture(Texture texture) {
         this.texture = texture;
         this.sprite = new Sprite(texture);

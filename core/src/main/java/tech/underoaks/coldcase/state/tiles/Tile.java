@@ -29,6 +29,15 @@ public abstract class Tile implements Cloneable {
 
     private Sprite sprite;
 
+    /**
+     * Constructs a new {@code Tile} with the specified texture.
+     * <p>
+     * This constructor initializes the tile's texture and creates a corresponding {@link Sprite},
+     * setting its origin to the center. The texture is used for rendering the tile.
+     * </p>
+     *
+     * @param texture the {@link Texture} to be used for this tile's appearance
+     */
     public Tile(Texture texture) {
         this.texture = texture;
         this.sprite = new Sprite(texture);
@@ -56,14 +65,36 @@ public abstract class Tile implements Cloneable {
         }
     }
 
+    /**
+     * Retrieves the {@link TileContent} currently placed on this tile.
+     *
+     * @return the current {@code TileContent} on the tile, or {@code null} if none is set
+     */
     public TileContent getTileContent() {
         return tileContent;
     }
 
+    /**
+     * Sets the {@link TileContent} for this tile.
+     * <p>
+     * This method replaces any existing content on the tile with the specified {@code TileContent}.
+     * </p>
+     *
+     * @param tileContent the new {@code TileContent} to set on the tile
+     */
     public void setTileContent(TileContent tileContent) {
         this.tileContent = tileContent;
     }
 
+    /**
+     * Adds the specified {@link TileContent} to this tile.
+     * <p>
+     * If the tile currently has no content, the provided {@code TileContent} is set directly.
+     * Otherwise, the new content is pushed onto the existing content stack.
+     * </p>
+     *
+     * @param tileContent the {@code TileContent} to add to the tile
+     */
     public void pushTileContent(TileContent tileContent) {
         if (this.tileContent == null) {
             this.tileContent = tileContent;
@@ -72,6 +103,17 @@ public abstract class Tile implements Cloneable {
         }
     }
 
+    /**
+     * Removes and returns the top {@link TileContent} from this tile.
+     * <p>
+     * If the tile's content is a stack (i.e., contains nested {@code TileContent}),
+     * this method removes and returns the top element of that stack.
+     * If there is only one content element, it is removed and the tile's content is set to {@code null}.
+     * If the tile has no content, {@code null} is returned.
+     * </p>
+     *
+     * @return the removed {@code TileContent}, or {@code null} if the tile was empty
+     */
     public TileContent popTileContent() {
         if (this.tileContent == null) {
             return null;
@@ -84,6 +126,15 @@ public abstract class Tile implements Cloneable {
         }
     }
 
+    /**
+     * Retrieves the top {@link TileContent} from this tile without removing it.
+     * <p>
+     * If the tile's content is a stack of {@code TileContent} objects, this method returns
+     * the top element of that stack. If the tile has no content, it returns {@code null}.
+     * </p>
+     *
+     * @return the top {@code TileContent} on the tile, or {@code null} if the tile is empty
+     */
     public TileContent topTileContent() {
         if (this.tileContent == null) {
             return null;
@@ -120,7 +171,13 @@ public abstract class Tile implements Cloneable {
         return true;
     }
 
-
+    /**
+     * Releases the resources used by this tile.
+     * <p>
+     * Disposes of the tile's texture if it is not {@code null}, and also calls {@code dispose()}
+     * on its {@link TileContent} if present.
+     * </p>
+     */
     public void dispose() {
         if (texture != null) {
             texture.dispose();
