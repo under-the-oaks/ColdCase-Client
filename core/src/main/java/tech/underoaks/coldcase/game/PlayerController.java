@@ -123,7 +123,7 @@ public class PlayerController implements InputProcessor {
         }
 
         // Interact
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (keycode == Input.Keys.E) {
             GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, Player.class));
             return true;
         }
