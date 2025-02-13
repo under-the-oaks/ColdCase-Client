@@ -72,7 +72,7 @@ configure(subprojects) {
 }
 
 subprojects {
-  version = '$projectVersion'
+  version = "$projectVersion"
   ext.appName = 'Cold Case'
   repositories {
     mavenCentral()
