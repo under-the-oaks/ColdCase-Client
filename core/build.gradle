@@ -19,6 +19,9 @@ dependencies {
   }
 
   javadoc {
+    options {
+      windowTitle = "${project.name} ${project.version}"
+    }
     configure( options ) {
       tags(
         'apiNote:a:"API Note:"',
