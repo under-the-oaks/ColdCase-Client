@@ -6,8 +6,6 @@ package tech.underoaks.coldcase.game;
  * @author Jean-Luc Wenserski
  */
 public enum Levels {
-    //LEVEL_TEST("maps/test_plain"),
-//    LEVEL_01("maps/Map_GoalDemo"),
     /** The first part of the tutorial. */
     LEVEL_05("maps/Map_Tutorial_normalBlock"),
     /** The second part of the tutorial. */

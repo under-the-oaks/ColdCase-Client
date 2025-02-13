@@ -109,7 +109,9 @@ public class StageManager {
      * Checks if a next stage has been set and, if so, transitions to that stage.
      * <p>
      * If a next stage is defined, this method calls {@code showScreen} with the provided stage and parameters,
-     * and then resets the next stage variables.
+     * and then resets the next stage variables.<br>
+     * This is done because the context in which {@code showScreen} can be called doesn't always have the required libGDX context to draw in the application window.
+     * This means that update should only be called from within the scope of the Game class.
      * </p>
      */
     public void update() {
