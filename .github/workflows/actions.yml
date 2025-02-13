@@ -105,9 +105,10 @@ jobs:
       - name: Build Documentation
         run: |
           gradle javadoc
-          mkdir -p ../pages-out/java-docs/
-          mv **/build/docs/javadoc/* ../pages-out/java-docs/
-        # zip -r build/docs/common-javadocs.zip build/docs/*
+          mkdir -p ../pages-out/java-docs/lwjgl3/
+          mkdir -p ../pages-out/java-docs/core/
+          mv lwjgl3/build/docs/javadoc/* ../pages-out/java-docs/lwjgl3/
+          mv core/build/docs/javadoc/* ../pages-out/java-docs/core/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
