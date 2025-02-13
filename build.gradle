@@ -71,13 +71,6 @@ configure(subprojects) {
   }
 }
 
-javadoc {
-  version = '$projectVersion'
-  options {
-    windowTitle = "hallo2"
-  }
-}
-
 subprojects {
   version = '$projectVersion'
   ext.appName = 'Cold Case'
