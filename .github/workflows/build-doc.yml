@@ -2,7 +2,7 @@ name: CI für ColdCase
 on:
   push:
     branches:
-      - development
+      - main
 
 jobs:
   generate-javadoc:
