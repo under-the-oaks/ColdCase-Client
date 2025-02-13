@@ -101,7 +101,7 @@ jobs:
           gradle-version: 8.10.2
 
       - name: Build Client Documentation
-        working-directory: ClodCase-Client
+        working-directory: core
         run: |
           gradle javadoc
           mkdir -p ../pages-out/java-docs/client/core/
