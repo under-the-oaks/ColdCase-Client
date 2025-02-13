@@ -103,7 +103,7 @@ jobs:
       - name: Build Client Documentation
         working-directory: core
         run: |
-          gradle javadoc
+          gradle clean javadoc
           mkdir -p ../pages-out/
           mv ./build/docs/javadoc/* ../pages-out/
 
