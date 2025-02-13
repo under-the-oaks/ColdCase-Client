@@ -78,7 +78,7 @@ jobs:
         with:
           name: build-artifacts
           path: '**/build/libs/*.jar'
-  generate javadoc:
+  generate-javadoc:
     permissions:
       contents: write
       pages: write
@@ -86,7 +86,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
