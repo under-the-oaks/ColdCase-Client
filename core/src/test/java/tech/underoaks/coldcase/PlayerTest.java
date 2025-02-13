@@ -98,7 +98,7 @@ public class PlayerTest {
     @Test
     public void testInteractionNorth() {
         Interaction interaction = new Interaction(
-                new Vector2(3, 2), // Startposition
+                new Vector2(3, 1), // Startposition
                 Direction.NORTH,   // Richtung
                 Player.class
         );
