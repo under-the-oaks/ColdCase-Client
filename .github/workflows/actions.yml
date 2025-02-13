@@ -107,7 +107,7 @@ jobs:
           mkdir -p ../pages-out/java-docs/core/
           cd build/docs
           ls
-          mv ./docs/javadoc/* ../pages-out/java-docs/core/
+          mv /javadoc/* ../pages-out/java-docs/core/
 
       - name: Push to branch
         uses: s0/git-publish-subdir-action@develop
