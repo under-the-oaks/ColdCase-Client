@@ -20,7 +20,7 @@ dependencies {
 
   javadoc {
     options {
-      windowTitle = "${project.name} ${project.version}"
+      windowTitle = "hallo2"
     }
     configure( options ) {
       tags(
@@ -28,6 +28,7 @@ dependencies {
         'implSpec:a:"Implementation Requirements:"',
         'implNote:a:"Implementation Note:"'
       )
+      windowTitle = "hallo"
     }
   }
 
