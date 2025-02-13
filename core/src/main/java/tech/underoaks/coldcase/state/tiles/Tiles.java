@@ -7,7 +7,10 @@ import java.lang.reflect.InvocationTargetException;
  * Used for mapping indices to tile classes.
  */
 public enum Tiles {
-    EMPTY(0, EmptyTile.class), GROUND(1, GroundTile.class);
+    /** {@link EmptyTile} */
+    EMPTY(0, EmptyTile.class),
+    /** {@link GroundTile} */
+    GROUND(1, GroundTile.class);
 
     private final int index;
     private final Class<? extends Tile> tileClass;
@@ -17,6 +20,10 @@ public enum Tiles {
         this.tileClass = tileClass;
     }
 
+    /**
+     * Gets the unique identifier of this Tile
+     * @return index of the Tile
+     */
     public int getIndex() {
         return index;
     }

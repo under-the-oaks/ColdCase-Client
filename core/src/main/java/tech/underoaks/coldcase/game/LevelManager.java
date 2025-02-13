@@ -14,6 +14,9 @@ import tech.underoaks.coldcase.stages.Stages;
 public class LevelManager {
     private static LevelManager instance;
 
+    /**
+     * The index showing which level is currently being played.
+     */
     public int currentLevelIndex = 0;
 
     private LevelManager() {}

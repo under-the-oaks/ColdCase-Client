@@ -12,12 +12,19 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 
 import java.util.Objects;
 
+/**
+ * A {@link TileContent} that is able to unlock a door on the different client.
+ * A {@link GloveItem} is needed to interact with this Content.
+ */
 public class Door_Trigger extends TileContent{
 
     private final Texture trigger_closed = TextureController.getInstance().getTrigger_closed();
     private final Texture trigger_opened = TextureController.getInstance().getTrigger_opened();
     private static boolean isOpen = false;
 
+    /**
+     * Default-Constructor
+     */
     public Door_Trigger() {
         super(TextureController.getInstance().getTrigger_closed(), true, false);
     }

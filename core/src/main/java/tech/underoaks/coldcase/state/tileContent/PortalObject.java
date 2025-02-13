@@ -26,6 +26,9 @@ public class PortalObject extends TileContent{
 
     static final Sprite sprite = new Sprite(texture);
 
+    /**
+     * Default-Constructor
+     */
     public PortalObject() {
         super(texture, false, false);
     }

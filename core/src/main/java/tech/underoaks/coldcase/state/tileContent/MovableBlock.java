@@ -11,8 +11,13 @@ import tech.underoaks.coldcase.state.updates.MoveUpdate;
 import tech.underoaks.coldcase.state.Map;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
+/**
+ * A {@link TileContent} that is able to be moved around the play field. Moving requires a {@link GloveItem}
+ */
 public class MovableBlock extends TileContent {
-
+    /**
+     * Default-Constructor
+     */
     public MovableBlock() {
         super(TextureController.getInstance().getMovableBlockTexture(), false, false);
     }

@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 
+/**
+ * A {@link AbstractStage} containing the data for the main-menu. This stage is being shown when starting the game.
+ */
 public class MainMenuStage extends AbstractStage {
     private Image backgroundImage = UITextureController.getInstance().getMenuBackground();
     private Table table;

@@ -151,6 +151,7 @@ public final class MapGenerator {
      * Note that this does not include the PlayerController or the GameController which are not part of the Map.
      *
      * @param map The {@link Map} to serialize.
+     * @return The resulting JSON-String
      */
     public static String serializeMapToJson(Map map) {
         return json.toJson(map);

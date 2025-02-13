@@ -31,6 +31,10 @@ public class InteractionChain {
      */
     private final Snapshot snapshot;
 
+    /**
+     * Default-Constructor
+     * @param snapshot Deep-Clone of a {@link Map} that will be the Basis of this Simulation.
+     */
     public InteractionChain(Snapshot snapshot) {
         this.snapshot = snapshot;
         this.gsuQueue = new LinkedList<>();
@@ -38,6 +42,10 @@ public class InteractionChain {
         this.pendingRemoteActions = new LinkedList<>();
     }
 
+    /**
+     * Get the currently used Deep-Clone of a {@link Map}.
+     * @return The current {@link Snapshot}
+     */
     public Snapshot getSnapshot() {
         return snapshot;
     }
@@ -77,14 +85,26 @@ public class InteractionChain {
         gsuQueue.add(gsu);
     }
 
+    /**
+     * Gets every {@link GameStateUpdate} that has been successfully simulated in this Chain.
+     * @return Every queued {@link GameStateUpdate}.
+     */
     public Queue<GameStateUpdate> getGSUQueue() {
         return gsuQueue;
     }
 
+    /**
+     * Gets every local {@link Interaction} that still needs to be simulated before approval.
+     * @return Every queued local {@link Interaction}.
+     */
     public Queue<Interaction> getPendingActions() {
         return pendingActions;
     }
 
+    /**
+     * Gets every remote {@link Interaction} that still needs to be simulated before approval.
+     * @return Every queued remote {@link Interaction}.
+     */
     public Queue<Interaction> getPendingRemoteActions() {
         return pendingRemoteActions;
     }

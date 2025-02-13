@@ -11,6 +11,10 @@ public abstract class GameStateUpdate {
      */
     public final UpdateTypes UPDATE_TYPE;
 
+    /**
+     * Default-Constructor
+     * @param updateType {@link UpdateTypes}
+     */
     protected GameStateUpdate(UpdateTypes updateType) {
         this.UPDATE_TYPE = updateType;
     }

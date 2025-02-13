@@ -9,19 +9,34 @@ import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
+/**
+ * Generic {@link TileContent} that is the Base of every Item that can be used in the Game.
+ */
 public class ItemObject extends TileContent{
 
     private Texture inventoryTexture;
 
+    /**
+     * Default-Constructor
+     * @param texture The {@link Texture} that is representing the Item
+     */
     public ItemObject(Texture texture) {
         super(texture, true, true);
         inventoryTexture = texture;
     }
 
+    /**
+     * Gets the Texture that can be used to show the Item inside the Inventory
+     * @return The specified Texture
+     */
     public Texture getInventoryTexture() {
         return inventoryTexture;
     }
 
+    /**
+     * Sets the Texture that can be used to show the Item inside the Inventory
+     * @param inventoryTexture  The specified Texture
+     */
     public void setInventoryTexture(Texture inventoryTexture) {
         this.inventoryTexture = inventoryTexture;
     }
@@ -43,8 +58,6 @@ public class ItemObject extends TileContent{
             chain.addGameStateUpdate(new AddTileContentUpdate(interaction.getTargetPos(), playerInventoryItem));
             return true;
         }
-
-        //return false;
     }
 
     @Override

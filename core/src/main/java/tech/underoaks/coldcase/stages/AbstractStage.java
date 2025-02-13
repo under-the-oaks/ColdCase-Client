@@ -17,16 +17,21 @@ import com.badlogic.gdx.Screen;
  * and configure input processors. The `render` method handles screen rendering and updates
  * the stage.
  * </p>
- * @author mabe.edu
- * @coauthor jean874
  */
 public abstract class AbstractStage extends Stage implements Screen {
 
+    /**
+     * Default-Constructor
+     */
     protected AbstractStage() {
         super( new ExtendViewport(19200, 10800));
     }
 
-    // Subclasses must load actors in this method
+    /**
+     * Builds the current Stage
+     * @param inputMultiplexer Delegates to an ordered list of other InputProcessors
+     * @implNote Subclasses must load actors in this method
+     */
     public abstract void buildStage(InputMultiplexer inputMultiplexer);
 
 

@@ -14,6 +14,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.badlogic.gdx.net.HttpRequestBuilder.json;
 
+/**
+ * The {@code WebSocketMessagesManager} class is responsible for managing the sending and receiving of messages
+ * over the WebSocket connection in the game.
+ * <p>
+ * It handles asynchronous communication by maintaining a thread-safe map of pending callbacks for message responses.
+ * This class provides methods for sending various types of remote messages, such as creating remote interaction chains,
+ * appending interactions, applying or aborting remote game state updates, and controlling game state transitions like
+ * starting a game or exiting to the main menu.
+ * </p>
+ * <p>
+ * The class follows the singleton design pattern to ensure only one instance exists during the application's lifecycle.
+ * It interacts with other components such as {@link GameController}, {@link LevelManager}, and {@link StageManager} to
+ * coordinate remote operations and state updates.
+ * </p>
+ */
 public class WebSocketMessagesManager {
 
     /**
@@ -87,10 +102,28 @@ public class WebSocketMessagesManager {
         WebSocketClient.getInstance().send(json.toJson(new Messages.ApplyRemoteGSUsMessage(remoteGameControllerInstanceId), Object.class));
     }
 
+    /**
+     * Sends a message via the WebSocket connection to start the game at the specified level.
+     * <p>
+     * This method constructs a {@link Messages.startGameMessage} with the provided level index,
+     * serializes it to JSON, and sends it using the {@link WebSocketClient}. The level index should correspond
+     * to an entry in the {@link Levels} enum, indicating which level to load.
+     * </p>
+     *
+     * @param levelIndex the index of the level to start
+     */
     public static void startGame(int levelIndex) {
         WebSocketClient.getInstance().send(json.toJson(new Messages.startGameMessage(levelIndex), Object.class));
     }
 
+    /**
+     * Sends a message via the WebSocket connection to instruct the remote game controller to exit to the main menu.
+     * <p>
+     * This method constructs a {@link Messages.exitToMainMenuMessage}, serializes it to JSON,
+     * and sends it using the {@link WebSocketClient}. When processed, this message should trigger a transition
+     * back to the main menu on the remote system.
+     * </p>
+     */
     public static void exitToMainMenuMessage() {
         WebSocketClient.getInstance().send(json.toJson(new Messages.exitToMainMenuMessage(), Object.class));
     }

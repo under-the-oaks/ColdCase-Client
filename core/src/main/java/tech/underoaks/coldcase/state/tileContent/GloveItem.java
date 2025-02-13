@@ -10,10 +10,16 @@ import tech.underoaks.coldcase.state.updates.AddTileContentUpdate;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
 
+/**
+ * A {@link ItemObject} that can be picked up by the player. It is required to move the {@link MovableBlock}
+ */
 public class GloveItem extends ItemObject {
 
     private final Sprite sprite;
 
+    /**
+     * Default-Constructor
+     */
     public GloveItem() {
         super(TextureController.getInstance().getGloveTexture());
         sprite = new Sprite(TextureController.getInstance().getGloveTexture());

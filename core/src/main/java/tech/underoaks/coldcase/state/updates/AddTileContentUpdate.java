@@ -14,6 +14,11 @@ public class AddTileContentUpdate extends GameStateUpdate {
     private final Vector2 targetPosition;
     private final TileContent targetTileContent;
 
+    /**
+     * Default-Constructor
+     * @param targetPosition The {@link Vector2} that is pointing to the desired Location.
+     * @param targetTileContent The {@link TileContent} that needs to be added.
+     */
     public AddTileContentUpdate(Vector2 targetPosition, TileContent targetTileContent) {
         super(UpdateTypes.MAP_MODIFICATION);
         this.targetPosition = targetPosition;
