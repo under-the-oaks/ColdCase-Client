@@ -104,7 +104,7 @@ jobs:
         working-directory: core
         run: |
           gradle javadoc
-          mkdir -p ../pages-out/java-docs/client/core/
+          mkdir -p ../pages-out/java-docs/core/
           mv **/build/docs/javadoc/* ../pages-out/java-docs/core/
 
       - name: Push to branch
