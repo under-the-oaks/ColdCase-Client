@@ -82,6 +82,8 @@ jobs:
 
 
   generate-javadoc:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
           - name: Deploy javadoc to Github Pages
