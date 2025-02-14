@@ -1,4 +1,4 @@
-![cclogo](https://github.com/user-attachments/assets/487f796b-d500-444a-abe9-fb4e1c6cda75)
+![ColdCase Banner](https://github.com/under-the-oaks/ColdCase-Documentation/blob/31e9dddb233c8022a4ec7349e4e7f3ec5c337de6/Design/Sketches/banner.png)
 
 ## Cold Case Documentation
 
