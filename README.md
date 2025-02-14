@@ -7,7 +7,7 @@
 A detailed documentation of the specifications, including some tutorials on how to set up the project, can be found [here](https://under-the-oaks.github.io/ColdCase-Documentation/starter-topic.html).
 For the technical Javadocs, go [here](https://under-the-oaks.github.io/ColdCase-Client/index.html).
 
-## LibGDX read me
+---
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
