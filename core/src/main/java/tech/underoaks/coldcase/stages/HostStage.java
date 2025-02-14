@@ -1,5 +1,6 @@
 package tech.underoaks.coldcase.stages;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,8 +15,6 @@ import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.game.UITextureController;
 import tech.underoaks.coldcase.remote.WebSocketClient;
 import tech.underoaks.coldcase.remote.WebSocketMessagesManager;
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.Objects;
 
 import static java.lang.Thread.sleep;
@@ -63,7 +62,7 @@ public class HostStage extends AbstractStage {
         copyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sessionIDField.getText().substring(11)), null);
+                Gdx.app.getClipboard().setContents(sessionIDField.getText().substring(11));
             }
         });
 
