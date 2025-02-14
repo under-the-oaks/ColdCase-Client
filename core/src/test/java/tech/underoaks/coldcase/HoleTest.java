@@ -78,4 +78,17 @@ public class HoleTest {
         verify(mockChain, times(4)).addGameStateUpdate(any(RemoveTileContentUpdate.class));
         Assertions.assertTrue(result);
     }
+
+    @Test
+    public void dontAcceptNonMovableBlock() throws Exception {
+        InteractionChain mockChain = mock(InteractionChain.class);
+        doNothing().when(mockChain).addGameStateUpdate(any());
+        when(mockChain.getSnapshot()).thenReturn(new Snapshot(map));
+
+        boolean result = holeObj.update(mockChain, new Vector2(0, 0),
+            new Interaction(new Vector2(1, 0), Direction.NORTH, Player.class), new Door_Trigger());
+
+        Assertions.assertFalse(result);
+
+    }
 }
