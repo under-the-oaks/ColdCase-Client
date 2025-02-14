@@ -1,13 +1,11 @@
 ![ColdCase Banner](https://github.com/under-the-oaks/ColdCase-Documentation/blob/31e9dddb233c8022a4ec7349e4e7f3ec5c337de6/Design/Sketches/banner.png)
 
-## Cold Case Documentation
-
-A detailed documentation of the Specifications, including some tutorials to setup the project, can be found [here](https://under-the-oaks.github.io/ColdCase-Documentation/starter-topic.html).
-For the technical javadoc's go to [here](https://under-the-oaks.github.io/ColdCase-Client/index.html).
-
-## Pipeline
 [![CI für ColdCase](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml/badge.svg)](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml)
 
+## Cold Case Documentation
+
+A detailed documentation of the specifications, including some tutorials on how to set up the project, can be found [here](https://under-the-oaks.github.io/ColdCase-Documentation/starter-topic.html).
+For the technical Javadocs, go [here](https://under-the-oaks.github.io/ColdCase-Client/index.html).
 
 ## LibGDX read me
 
