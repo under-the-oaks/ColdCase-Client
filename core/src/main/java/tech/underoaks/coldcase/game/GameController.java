@@ -203,6 +203,7 @@ public class GameController {
      *
      * @param chain           The interaction chain to use.
      * @param interaction     The interaction to trigger.
+     * @throws TimeoutException When the remote client is not responding
      */
     public static void triggerRemoteAction(InteractionChain chain, Interaction interaction) throws TimeoutException {
         try (RemoteGameController remote = new RemoteGameController()) {
@@ -234,10 +235,18 @@ public class GameController {
         return pendingUpdates.isEmpty();
     }
 
+    /**
+     * Gets the current 'live'-Map
+     * @return {@link Map}
+     */
     public Map getCurrentMap() {
         return currentMap;
     }
 
+    /**
+     * Sets the current 'live'-Map
+     * @param map {@link Map}
+     */
     public void setCurrentMap(Map map) {
         this.currentMap = map;
     }

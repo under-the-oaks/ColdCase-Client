@@ -9,8 +9,15 @@ import tech.underoaks.coldcase.state.tiles.Tile;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.MoveUpdate;
 
+/**
+ * Test Block for transcendent interactions
+ * @implNote Only for testing purposes
+ */
 public class TranscendentTestBlock extends TileContent{
 
+    /**
+     * Default-Constructor
+     */
     public TranscendentTestBlock() {
 
         super(TextureController.getInstance().getTranscendentTestBlockTexture(), false, false);

@@ -17,9 +17,6 @@ import tech.underoaks.coldcase.remote.WebSocketClient;
  * The JoinStage is a screen in the game where players can connect to a session using a session ID.
  * It allows players to input a session ID, view connection status, and navigate back to the main menu.
  * This screen is part of the game's user interface and extends the {@link AbstractStage}.
- *
- * @author mabe.edu
- * @coauthor jean874
  */
 public class JoinStage extends AbstractStage {
     private final Skin skin = UITextureController.getInstance().getSkin();

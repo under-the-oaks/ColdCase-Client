@@ -30,6 +30,10 @@ public enum UpdateTypes {
         this.hasConsequences = false;
     }
 
+    /**
+     * Checks whether this {@link UpdateTypes} has consequences or not
+     * @return true if it requires consecutive update calls; false otherwise
+     */
     public boolean hasConsequences() {
         return hasConsequences;
     }

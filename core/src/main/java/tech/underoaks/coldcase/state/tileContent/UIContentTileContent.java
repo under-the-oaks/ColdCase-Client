@@ -17,12 +17,24 @@ public class UIContentTileContent extends TileContent {
     private final String displayText;
     private final UIContentTileContentShift transformShift;
 
+    /**
+     * Constructs a new {@code UIContentTileContent} with an empty display text and the default transform shift.
+     * <p>
+     * The default transform shift used is {@link UIContentTileContentShift#SHIFT_BLOCKSIDE_LEFT}.
+     * </p>
+     */
     public UIContentTileContent() {
         super(null, false, false);
         this.displayText = "";
         this.transformShift = UIContentTileContentShift.SHIFT_BLOCKSIDE_LEFT;
     }
 
+    /**
+     * Constructs a new {@code UIContentTileContent} with the specified display text and transform shift.
+     *
+     * @param text  the text to display on the map
+     * @param shift the transform shift configuration to apply when rendering the text
+     */
     public UIContentTileContent(String text, UIContentTileContentShift shift) {
         super(null, false, false);
         this.displayText = text;
@@ -64,19 +76,52 @@ public class UIContentTileContent extends TileContent {
     /**
      * The different ways the text can be shifted and tilted.
      * <p>
-     *     The shift values are the x and y coordinates of the text relative to the tile.
-     *     The tilt values are the angles of rotation around the x, y, and z axes.
-     *     The text is rendered at the tile's position, then shifted and tilted according to these values.
+     * The shift values are the x and y coordinates of the text relative to the tile.
+     * The tilt values are the angles of rotation around the x, y, and z axes.
+     * The text is rendered at the tile's position, then shifted and tilted according to these values.
      */
     public enum UIContentTileContentShift {
+        /**
+         * Shift configuration for rendering text on the left side of a block.
+         * <p>
+         * Applies a horizontal shift of 690 and a vertical shift of 810 with no rotation.
+         * </p>
+         */
         SHIFT_BLOCKSIDE_LEFT(690, 810, 0, 0, 0),
+        /**
+         * Shift configuration for rendering text on the right side of a block.
+         * <p>
+         * Applies a horizontal shift of 210 and a vertical shift of 810 with no rotation.
+         * </p>
+         */
         SHIFT_BLOCKSIDE_RIGHT(210, 810, 0, 0, 0),
-        SHIFT_BLOCKTOP(400, 800, 0,0,45);
+        /**
+         * Shift configuration for rendering text at the top of a block.
+         * <p>
+         * Applies a horizontal shift of 400, a vertical shift of 800, and rotates the text 45 degrees around the z-axis.
+         * </p>
+         */
+        SHIFT_BLOCKTOP(400, 800, 0, 0, 45);
 
+        /**
+         * The horizontal shift applied to the text relative to the tile's position.
+         */
         public final int shiftX;
+        /**
+         * The vertical shift applied to the text relative to the tile's position.
+         */
         public final int shiftY;
+        /**
+         * The rotation angle applied around the x-axis.
+         */
         public final int tiltX;
+        /**
+         * The rotation angle applied around the y-axis.
+         */
         public final int tiltY;
+        /**
+         * The rotation angle applied around the z-axis.
+         */
         public final int tiltZ;
 
 

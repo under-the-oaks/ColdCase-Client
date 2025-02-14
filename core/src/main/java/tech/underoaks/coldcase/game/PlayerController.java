@@ -9,9 +9,6 @@ import tech.underoaks.coldcase.state.tileContent.TileContent;
 
 /**
  * Handles player input and movement
- *
- * @author MaxBecker, Toni Bingenheimer
- * @contributor Jean-Luc Wenserski, Jonathan Christe
  */
 public class PlayerController implements InputProcessor {
 
@@ -24,10 +21,21 @@ public class PlayerController implements InputProcessor {
     private int moveKeycode = -1;
     private static final float AUTO_MOVE_TIME = 0.04f;
 
+    /**
+     * Returns the player's inventory.
+     *
+     * @return the {@link TileContent} representing the player's inventory, or {@code null} if not set
+     */
     public TileContent getInventory() {
         return inventory;
     }
 
+    /**
+     * Sets the player's inventory.
+     * Additionally, prints the inventory to the console for debugging purposes if the inventory is not {@code null}.
+     *
+     * @param inventory the {@link TileContent} representing the new inventory
+     */
     public void setInventory(TileContent inventory) {
         this.inventory = inventory;
 
@@ -39,6 +47,12 @@ public class PlayerController implements InputProcessor {
 
     private TileContent inventory;
 
+    /**
+     * Returns the singleton instance of {@code PlayerController}.
+     * If the instance does not exist yet, it is created.
+     *
+     * @return the singleton {@code PlayerController} instance
+     */
     public static PlayerController getInstance() {
         if (instance == null) {
             instance = new PlayerController();
@@ -46,22 +60,46 @@ public class PlayerController implements InputProcessor {
         return instance;
     }
 
+    /**
+     * Destroys the singleton instance of {@code PlayerController} by setting it to {@code null}.
+     * This is typically used to reset the controller for a new game session.
+     */
     public static void destroy() {
         instance = null;
     }
 
+    /**
+     * Sets the player's current position.
+     *
+     * @param playerPosition a {@link Vector2} representing the new position of the player on the map
+     */
     public void setPlayerPosition(Vector2 playerPosition) {
         this.playerPosition = playerPosition;
     }
 
+    /**
+     * Retrieves the current position of the player.
+     *
+     * @return a {@link Vector2} representing the player's position on the map
+     */
     public Vector2 getPlayerPosition() {
         return playerPosition;
     }
 
+    /**
+     * Sets the direction the player is looking towards.
+     *
+     * @param lookDirection the new {@code Direction} for the player
+     */
     public void setPlayerDirection(Direction lookDirection) {
         this.lookDirection = lookDirection;
     }
 
+    /**
+     * Returns the current direction the player is looking towards.
+     *
+     * @return the {@code Direction} the player is currently facing
+     */
     public Direction getPlayerDirection() {
         return lookDirection;
     }
@@ -85,13 +123,20 @@ public class PlayerController implements InputProcessor {
         }
 
         // Interact
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (keycode == Input.Keys.E) {
             GameController.getInstance().triggerAction(new Interaction(playerPosition.cpy().add(lookDirection.getVector()), lookDirection, Player.class));
             return true;
         }
         return false;
     }
 
+    /**
+     * Updates the player's movement.
+     * <p>
+     * If the player is moving, this method increments the key hold time based on the frame's delta time and triggers an auto-move action
+     * if the hold time exceeds the defined auto-move threshold.
+     * </p>
+     */
     public void update() {
         if (!isMoving) return;
 
@@ -122,12 +167,15 @@ public class PlayerController implements InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        if ( keycode == moveKeycode) {
+        if (keycode == moveKeycode) {
             resetMovement();
         }
         return false;
     }
 
+    /**
+     * Resets the player's movement state, stopping any auto-move and resetting the key hold time.
+     */
     public void resetMovement() {
         isMoving = false;
         keyHoldTime = 0f;

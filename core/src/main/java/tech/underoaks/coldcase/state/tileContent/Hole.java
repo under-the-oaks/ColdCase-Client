@@ -5,15 +5,25 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import tech.underoaks.coldcase.game.Interaction;
+import tech.underoaks.coldcase.game.TextureController;
 import tech.underoaks.coldcase.state.InteractionChain;
 import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.updates.RemoveTileContentUpdate;
-
+/**
+ * HoleTest Class
+ * Represents a hole on the tile grid that can interact with movable blocks.
+ * This class handles the rendering of the hole texture and updates based on
+ * interactions with movable blocks. If a block is moved into the hole's
+ * position, it will remove both the hole and the block from the tile.
+ */
 public class Hole extends TileContent{
 
-    private static final Texture texture = new Texture("./sprites/tileContent_hole.png");
+    private static final Texture texture = TextureController.getInstance().holeTexture();
     private static final Sprite sprite = new Sprite(texture);
 
+    /**
+     * Default-Constructor
+     */
     public Hole() {
         super(texture,false,true);
     }
@@ -45,6 +55,7 @@ public class Hole extends TileContent{
 
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition,chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition,this)));
             chain.addGameStateUpdate(new RemoveTileContentUpdate(tilePosition,chain.getSnapshot().getSnapshotMap().getChildIndex(tilePosition,handler)));
+            return true;
         }
         return false;
     }

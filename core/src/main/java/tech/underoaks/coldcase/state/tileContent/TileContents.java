@@ -7,20 +7,35 @@ import java.lang.reflect.InvocationTargetException;
  * Used for mapping indices to tile content classes.
  */
 public enum TileContents {
+    /** {@link Wall} */
     WALL(1, Wall.class),
+    /** {@link TestContent} */
     TEST(2, TestContent.class),
+    /** {@link Player} */
     PLAYER(3, Player.class),
+    /** {@link MovableBlock} */
     MOVABLE_BLOCK(4, MovableBlock.class),
+    /** {@link TestItem} */
     TEST_ITEM(5, TestItem.class),
+    /** {@link TestItem02} */
     TEST_ITEM02(6, TestItem02.class),
+    /** {@link InvisibleWall} */
     INVISIBLE_WALL(7, InvisibleWall.class),
+    /** {@link GloveItem} */
     GLOVE_ITEM(8, GloveItem.class),
+    /** {@link GoalObject} */
     GOAL_OBJECT(9,GoalObject.class),
+    /** {@link MovableBlockTranscendent} */
     MOVABLE_BLOCK_TRANSCENDENT(10, MovableBlockTranscendent.class),
+    /** {@link TranscendentTestBlock} */
     TRANSCENDENT_TEST(11, TranscendentTestBlock.class),
+    /** {@link Door} */
     DOOR(12, Door.class),
+    /** {@link Door_Trigger} */
     DOOR_TRIGGER(13, Door_Trigger.class),
+    /** {@link Hole} */
     HOLE(14,Hole.class),
+    /** {@link PortalObject} */
     PORTAL(15,PortalObject.class);
 
     private final int index;
@@ -31,10 +46,19 @@ public enum TileContents {
         this.tileClass = tileClass;
     }
 
+    /**
+     * Gets the unique identifier of this TileContent
+     * @return unique identifier of this TileContent
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * Gets a {@link TileContent} by searching for its identifier
+     * @param tileClass A {@link Class} extending {@link TileContent} that will be the search target
+     * @return Index of the Class if found; -1 otherwise
+     */
     public static int getIndexByClass(Class<? extends TileContent> tileClass) {
         for (TileContents contents : TileContents.values()) {
 

@@ -14,13 +14,15 @@ import java.nio.file.Path;
  * Actor representing the game map in the stage.
  * The MapActor is responsible for loading and rendering the map and player onto the screen.
  * It also handles setting up the map based on a provided path.
- *
- * @author Max Becker, Jean-Luc Wenserski
  */
 public class MapActor extends Actor {
 
     private Map map;
 
+    /**
+     * Default-Constructor
+     * @param path The path that points to the map-file
+     */
     public MapActor(String path){
         setupMap(path);
     }

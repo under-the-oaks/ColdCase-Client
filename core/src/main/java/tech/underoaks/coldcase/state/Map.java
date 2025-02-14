@@ -10,9 +10,6 @@ import tech.underoaks.coldcase.state.updates.GameStateUpdateException;
 import tech.underoaks.coldcase.state.tileContent.TileContent;
 import tech.underoaks.coldcase.state.tiles.Tile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +18,10 @@ import java.util.List;
  * Provides methods for accessing and modifying the map, rendering, and updating the map state.
  */
 public class Map {
-
-    public Tile[][] tileArray;
-
     /**
-     * The size of each tile in pixels
+     * Tiles that store the State of this Map
      */
-    static float tileSize = 1080;
-
+    public Tile[][] tileArray;
 
     private boolean isSnapshotMap = false;
 
@@ -38,18 +31,48 @@ public class Map {
     public Map() {
     }
 
+    /**
+     * Default constructor for Map
+     *
+     * @param tileArray Initial Tile-Arrangement
+     */
     public Map(Tile[][] tileArray) {
         this.tileArray = tileArray;
     }
 
+    /**
+     * Retrieves the tile at the specified coordinates.
+     *
+     * @param x the x-coordinate (column index) of the tile
+     * @param y the y-coordinate (row index) of the tile
+     * @return the {@link Tile} located at {@code tileArray[y][x]}
+     */
     public Tile getTile(int x, int y) {
         return tileArray[y][x];
     }
 
+    /**
+     * Retrieves the tile at the given position.
+     * <p>
+     * Note that the y-coordinate of the provided position is used as the x-index
+     * and the x-coordinate as the y-index when accessing the tile array.
+     * </p>
+     *
+     * @param position the position of the tile as a {@link Vector2}
+     * @return the {@link Tile} at the specified position
+     */
     public Tile getTile(Vector2 position) {
         return this.getTile((int) position.y, (int) position.x);
     }
 
+    /**
+     * Searches the map for a tile containing a {@link TileContent} of the specified type.
+     *
+     * @param type the class type of the {@link TileContent} to locate
+     * @return a {@link Vector2} representing the position of the tile with the specified {@code TileContent},
+     * or {@code null} if no such tile is found
+     * @throws IllegalArgumentException if the provided type is {@code null}
+     */
     public Vector2 getTileContentByType(Class<? extends TileContent> type) {
         if (type == null) {
             throw new IllegalArgumentException("Type cannot be null");
@@ -67,63 +90,54 @@ public class Map {
         return null;
     }
 
+    /**
+     * Sets the tile at the specified coordinates to the given {@link Tile}.
+     *
+     * @param x    the x-coordinate (column index) of the tile position
+     * @param y    the y-coordinate (row index) of the tile position
+     * @param tile the {@link Tile} to set at the specified position
+     */
     public void setTile(int x, int y, Tile tile) {
         tileArray[y][x] = tile;
     }
 
+    /**
+     * Returns the width of the tile array.
+     *
+     * @return the number of columns in the tile array
+     */
     public int getTileArrayWidth() {
         return tileArray[0].length;
     }
 
+    /**
+     * Returns the height of the tile array.
+     *
+     * @return the number of rows in the tile array
+     */
     public int getTileArrayHeight() {
         return tileArray.length;
     }
 
     /**
-     * Reads a map file and returns a 2D List of integers representing the map
+     * Returns the child index of the specified {@link TileContent} within the tile at the given position.
      *
-     * @param path Path to the file
-     * @return 2D-List of integers representing the map
+     * @param tile        the position of the tile as a {@link Vector2} (with x as the first index and y as the second index in the tile array)
+     * @param tileContent the {@link TileContent} whose child index is to be retrieved
+     * @return the child index corresponding to the provided {@code TileContent}
      */
-    private static List<List<Integer>> readMapFile(Path path) {
-        List<List<Integer>> rawTiles = new ArrayList<>();
-        try {
-            List<String> lines = Files.readAllLines(path);
-            for (int i = 0; i < lines.size(); i++) {
-                String[] split = lines.get(i).split(" ");
-                rawTiles.add(new ArrayList<>());
-                for (String s : split) {
-                    rawTiles.get(i).add(Integer.parseInt(s));
-                }
-            }
-
-
-        } catch (IOException | IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return rawTiles;
-    }
-
-    /**
-     * Determines the maximum width of the matrix (the longest row).
-     *
-     * @param matrix A List of Tiles representing the matrix.
-     * @return The maximum width (length of the longest row).
-     */
-    private static int getMatrixWidth(List<List<Tile>> matrix) {
-        int max = Integer.MIN_VALUE;
-        for (List<Tile> row : matrix) {
-            int length = row.size();
-            max = Math.max(length, max);
-        }
-        return max;
-    }
-
     public int getChildIndex(Vector2 tile, TileContent tileContent) {
         return tileArray[(int) tile.x][(int) tile.y].getTileContent().getChildIndex(tileContent);
     }
 
+    /**
+     * Retrieves a child {@link TileContent} from the tile at the specified position based on the given index.
+     *
+     * @param position the position of the tile as a {@link Vector2}
+     * @param index    the index of the child {@link TileContent} to retrieve
+     * @return the child {@link TileContent} at the specified index
+     * @throws IllegalArgumentException if the index is -1 or if the tile does not contain any {@link TileContent}
+     */
     public TileContent getTileContentByIndex(Vector2 position, int index) {
         if (index == -1) {
             throw new IllegalArgumentException("Index out of bounds");
@@ -138,6 +152,12 @@ public class Map {
         return tileContent.getTileContentByIndex(index);
     }
 
+    /**
+     * Checks whether the specified position is out of bounds of the tile array.
+     *
+     * @param position the position to check
+     * @return {@code true} if the position is outside the bounds of the tile array, {@code false} otherwise
+     */
     public boolean isOutOfBounds(Vector2 position) {
         return position.x < 0 || position.y < 0 || position.x >= getTileArrayWidth() || position.y >= getTileArrayHeight();
     }
@@ -147,7 +167,9 @@ public class Map {
      * <br><br>
      * This calls twoDToIso() to convert the 2D coordinates to isometric coordinates
      *
-     * @param batch SpriteBatch to render the map
+     * @param batch   SpriteBatch to render the map
+     * @param originX X-Coordinate on Screen-Space
+     * @param originY Y-Coordinate on Screen-Space
      */
     public void render(Batch batch, float originX, float originY) {
         for (int y = 0; y < tileArray.length; y++) {
@@ -198,7 +220,14 @@ public class Map {
 
     }
 
-    public Vector2 twoDToIso45(int ex, int why) {
+    /**
+     * Converts 2D coordinates to isometric coordinates using a 45-degree rotation transformation.
+     *
+     * @param ex  the x-coordinate in 2D space
+     * @param why the y-coordinate in 2D space
+     * @return a {@link Vector2} representing the corresponding isometric coordinates
+     */
+    public static Vector2 twoDToIso45(int ex, int why) {
 
         Vector2 rotatedPt = new Vector2(0, 0);
 
@@ -209,13 +238,16 @@ public class Map {
     }
 
     /**
-     * FIXME JavaDoc
      * Continuously updates the map until no further updates are possible.
      *
      * <p>Keeps trying to update the map with the given {@code InteractionChain} until no more changes occur.</p>
      *
-     * @param chain the {@code InteractionChain} used to manage interactions and snapshots during updates
-     * @throws IllegalStateException if the maximum iteration limit is exceeded, suggesting a potential cyclic dependency in {@code TileContent}.
+     * @param chain       the {@code InteractionChain} used to manage interactions and snapshots during updates
+     * @param interaction Interaction that has caused the update
+     * @param handler     Handler that has accepted the interaction
+     * @throws IllegalStateException      if the maximum iteration limit is exceeded, suggesting a potential cyclic dependency in {@code TileContent}.
+     * @throws GameStateUpdateException   If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
      * @implNote This method has a limit on the number of iterations to prevent endless loops. If one {@code TileContent}
      * triggers another in a cyclic manner, the loop may otherwise never terminate.
      */
@@ -232,14 +264,17 @@ public class Map {
     }
 
     /**
-     * FIXME JavaDoc
      * Updates the map by attempting to perform an update on each {@code Tile} in {@code tileArray}.
      *
      * <p>For each Tile with non-null {@code TileContent}, the {@code handleUpdate} method
      * is invoked with the given {@code InteractionChain}.
      *
-     * @param chain the {@code InteractionChain} managing interactions and snapshots for updates
+     * @param chain       the {@code InteractionChain} managing interactions and snapshots for updates
+     * @param interaction Interaction that has caused the update
+     * @param handler     Handler that has accepted the interaction
      * @return List of {@code TileContents} that handled the update
+     * @throws GameStateUpdateException   If a GameStateUpdate has failed
+     * @throws UpdateTileContentException If a TileContent couldn't be updated (due to a failing validation)
      * @see TileContent#handleUpdate(InteractionChain, Vector2, Interaction, TileContent)
      */
     public List<TileContent> updateMap(InteractionChain chain, Interaction interaction, TileContent handler) throws GameStateUpdateException, UpdateTileContentException {
@@ -273,6 +308,12 @@ public class Map {
         return new Map(clonedTileArray);
     }
 
+    /**
+     * Disposes of resources held by all tiles in the map.
+     * <p>
+     * Iterates over the tile array and calls {@code dispose()} on each tile.
+     * </p>
+     */
     public void dispose() {
         for (Tile[] tiles : tileArray) {
             for (Tile tile : tiles) {

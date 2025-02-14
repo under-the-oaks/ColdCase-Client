@@ -14,8 +14,6 @@ import java.util.Objects;
  * <p>
  * This singleton class establishes and manages a WebSocket connection to the server,
  * providing methods for sending and receiving messages.
- * @author jean874
- * @coauthor mabe.edu, Danmyrer
  * </p>
  */
 @ClientEndpoint

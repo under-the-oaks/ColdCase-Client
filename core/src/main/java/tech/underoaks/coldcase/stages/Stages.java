@@ -9,6 +9,7 @@ import tech.underoaks.coldcase.game.Levels;
  * @author Max Becker, Jean-Luc Wenserski
  */
 public enum Stages {
+    /** The main menu that is selected when first opening the game */
     MAIN_MENU{
         public AbstractStage getScreen(Object... params) {
             return new MainMenuStage();
@@ -24,16 +25,19 @@ public enum Stages {
             return new GameStage(level);
         }
     },
+    /** This stage is responsible to connect to a remotely initialized instance */
     JOIN{
         public AbstractStage getScreen(Object... params) {
             return new JoinStage();
         }
     },
+    /** This stage is responsible to request a new game instance on the server */
     HOST{
         public AbstractStage getScreen(Object... params) {
             return new HostStage();
         }
     },
+    /** Settings */
     SETTINGS{
         public AbstractStage getScreen(Object... params) {
             return new SettingsStage();

@@ -1,10 +1,17 @@
-# Cold Case
+![ColdCase Banner](https://github.com/under-the-oaks/ColdCase-Documentation/blob/31e9dddb233c8022a4ec7349e4e7f3ec5c337de6/Design/Sketches/banner.png)
 
 [![CI für ColdCase](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml/badge.svg)](https://github.com/under-the-oaks/ColdCase-Client/actions/workflows/actions.yml)
 
+## Cold Case Documentation
+
+A detailed documentation of the specifications, including some tutorials on how to set up the project, can be found [here](https://under-the-oaks.github.io/ColdCase-Documentation/starter-topic.html).
+For the technical Javadocs, go [here](https://under-the-oaks.github.io/ColdCase-Client/index.html).
+
+---
+
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+This project was generated using LibGDX with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
 
 ## Platforms
 

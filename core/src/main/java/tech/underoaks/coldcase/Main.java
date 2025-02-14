@@ -70,6 +70,10 @@ public class Main extends Game {
         }
     }
 
+    /**
+     * Finds persistent {@link Properties} that are stored in a separate file.
+     * @return This game's {@link Properties}
+     */
     public static Properties getProperties() {
         return properties;
     }

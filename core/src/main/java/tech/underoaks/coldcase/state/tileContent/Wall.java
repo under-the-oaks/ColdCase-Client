@@ -10,6 +10,9 @@ import tech.underoaks.coldcase.state.InteractionChain;
  */
 public class Wall extends TileContent {
 
+    /**
+     * Default-Constructor
+     */
     public Wall() {
         super(TextureController.getInstance().getWallTexture(), false, false);
     }

@@ -48,7 +48,7 @@ public class TextureController {
     private Texture ghostTextureSouth;
     private Texture ghostTextureEast;
     private Texture ghostTextureWest;
-
+    private Texture holeTexture;
     private Texture trigger_closed;
     private Texture trigger_opened;
 
@@ -90,8 +90,14 @@ public class TextureController {
         this.trigger_closed = factory.create("./sprites/Trigger_closed.png");
         this.trigger_opened = factory.create("./sprites/Trigger_opened.png");
 
+        this.holeTexture = factory.create("./sprites/tileContent_hole.png");
     }
 
+    /**
+     * Creates a new singleton instance of this controller.
+     * @param factory {@link TextureFactory} that will be creating the {@link Texture} objects.
+     * @return The singleton
+     */
     public static TextureController create(TextureFactory factory) {
         if (instance != null) {
             throw new IllegalStateException("TextureController already initialized");
@@ -101,10 +107,20 @@ public class TextureController {
         return instance;
     }
 
+    /**
+     * Destroys the current singleton instance
+     * @see TextureController#getInstance()
+     */
     public static void destroy() {
         instance = null;
     }
 
+    /**
+     * Singleton-Caller for this Controller
+     * @return {@link TextureController} instance.
+     * @throws IllegalStateException if the TextureController has not been initialized yet.
+     * @see TextureController#create(TextureFactory)
+     */
     public static TextureController getInstance() {
         if (instance == null) {
             throw new IllegalStateException("TextureController not initialized");
@@ -112,111 +128,228 @@ public class TextureController {
         return instance;
     }
 
+    /**
+     * Checks if a singleton of this class already exists
+     * @return True if it exists; False otherwise
+     * @see TextureController#getInstance()
+     */
     public static boolean exists() {
         return instance != null;
     }
 
+    /**
+     * Sets whether this TextureController is configured to return detective or ghost textures
+     * @param isDetective True if detective; False if ghost
+     */
     public static void setIsDetective(boolean isDetective) {
         TextureController.isDetective = isDetective;
     }
 
+    /**
+     * Whether this TextureController is configured to return detective or ghost textures
+     * @return True if detective; False if ghost
+     */
     public static boolean getIsDetective() {
         return isDetective;
     }
 
+    /**
+     * Texture-Getter
+     * @return EmptyTileTexture
+     */
     public Texture getEmptyTileTexture() {
         return emptyTileTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return GroundTileTexture
+     */
     public Texture getGroundTileTexture() {
         return isDetective ? detectiveGroundTileTexture : ghostGroundTileTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return TestItemTexture
+     */
     public Texture getTestItemTexture() {
         return testItemTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return TestItem02Texture
+     */
     public Texture getTestItem02Texture() {
         return testItem02Texture;
     }
 
+    /**
+     * Texture-Getter
+     * @return DoorTriggerTexture
+     */
     public Texture getDoorTriggerTexture() {
         return doorTriggerTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return TestContentTexture
+     */
     public Texture getTestContentTexture() {
         return testContentTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return PortalObjectTexture
+     */
     public Texture getPortalObjectTexture() {
         return portalObjectTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return WallTexture
+     */
     public Texture getWallTexture() {
         return isDetective ? detectiveWallTexture : ghostWallTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return MovableBlockTexture
+     */
     public Texture getMovableBlockTexture() {
         return isDetective ? movableBlockTextureDetective :movableBlockTextureGhost ;
     }
 
+    /**
+     * Texture-Getter
+     * @return MovableBlockTranscendantTexture
+     */
     public Texture getMovableBlockTranscendantTexture() {
         return movableBlockTranscendantTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return TranscendentTestBlockTexture
+     */
     public Texture getTranscendentTestBlockTexture() {
         return transcendentTestBlockTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return GoalObjectTexture
+     */
     public Texture getGoalObjectTexture() {
         return goalObjectTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return DoorTexture_closed
+     */
     public Texture getDoorTexture_closed() {
         return doorTexture_closed;
     }
 
+    /**
+     * Texture-Getter
+     * @return DoorTexture_open
+     */
     public Texture getDoorTexture_open() {
         return doorTexture_open;
     }
 
+    /**
+     * Texture-Getter
+     * @return GloveTexture
+     */
     public Texture getGloveTexture() {
         return gloveTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return PlayerTexture
+     */
     public Texture getPlayerTexture() {
         return isDetective ? detectiveTexture : ghostTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return PlayerTextureNorth
+     */
     public Texture getPlayerTextureNorth() {
         return isDetective ? detectiveTextureNorth : ghostTextureNorth;
     }
 
+    /**
+     * Texture-Getter
+     * @return PlayerTextureSouth
+     */
     public Texture getPlayerTextureSouth() {
         return isDetective ? detectiveTextureSouth : ghostTextureSouth;
     }
 
+    /**
+     * Texture-Getter
+     * @return PlayerTextureEast
+     */
     public Texture getPlayerTextureEast() {
         return isDetective ? detectiveTextureEast : ghostTextureEast;
     }
 
+    /**
+     * Texture-Getter
+     * @return PlayerTextureWest
+     */
     public Texture getPlayerTextureWest() {
         return isDetective ? detectiveTextureWest : ghostTextureWest;
     }
 
+    /**
+     * Texture-Getter
+     * @return GhostTexture
+     */
     public Texture getGhostTexture() {
         return ghostTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return DetectiveTexture
+     */
     public Texture getDetectiveTexture() {
         return detectiveTexture;
     }
 
+    /**
+     * Texture-Getter
+     * @return Trigger_closed
+     */
     public Texture getTrigger_closed() {
         return trigger_closed;
     }
 
+    /**
+     * Texture-Getter
+     * @return Trigger_opened
+     */
     public Texture getTrigger_opened() {
         return trigger_opened;
+    }
+
+    /**
+     * Texture-Getter
+     * @return holeTexture
+     */
+    public Texture holeTexture() {
+        return holeTexture;
     }
 }

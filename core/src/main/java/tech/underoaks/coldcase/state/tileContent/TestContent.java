@@ -13,6 +13,9 @@ import tech.underoaks.coldcase.state.updates.TestUpdate;
  */
 public class TestContent extends TileContent {
 
+    /**
+     * Default-Constructor
+     */
     public TestContent() {
         super(TextureController.getInstance().getTestContentTexture(), false, false);
     }

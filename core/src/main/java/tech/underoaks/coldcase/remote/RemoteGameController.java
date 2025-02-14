@@ -33,6 +33,7 @@ public class RemoteGameController implements AutoCloseable {
      * <p>
      * blocks until timeout or responseMessage completes the futureObj.
      * </p>
+     * @throws TimeoutException if no response is being returned
      */
     public RemoteGameController() throws TimeoutException {
 

@@ -17,6 +17,11 @@ public class RemoveTileContentUpdate extends GameStateUpdate {
     private final int sourceIndex;
     private final Vector2 sourcePosition;
 
+    /**
+     * Default-Constructor
+     * @param sourcePosition The {@link Vector2} storing the positional information for the content being removed.
+     * @param sourceIndex The index (z-Axis) that specifies which TileContent (in a stack) should be removed.
+     */
     public RemoveTileContentUpdate(Vector2 sourcePosition, int sourceIndex) {
         super(UpdateTypes.MAP_MODIFICATION);
         this.sourceIndex = sourceIndex;
